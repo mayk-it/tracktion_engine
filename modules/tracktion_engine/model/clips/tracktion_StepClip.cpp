@@ -129,7 +129,7 @@ const StepClip::PatternInstance::Ptr StepClip::getPatternInstance (int i, bool r
 
 void StepClip::updatePatternList()
 {
-    auto newSequence = StringArray::fromTokens (state[IDs::sequence].toString(), ",", {});
+    auto newSequence = juce::StringArray::fromTokens (state[IDs::sequence].toString(), ",", {});
 
     PatternArray newArray (patternInstanceList);
     newArray.removeRange (newSequence.size(), newArray.size());
@@ -202,7 +202,7 @@ bool StepClip::canGoOnTrack (Track& t)
     return t.canContainMIDI();
 }
 
-String StepClip::getSelectableDescription()
+juce::String StepClip::getSelectableDescription()
 {
     return TRANS("Step Clip") + " - \"" + getName() + "\"";
 }
@@ -382,7 +382,7 @@ void StepClip::generateMidiSequenceForChannels (MidiMessageSequence& result,
                         jassert (c.channel.get().isValid());
                         auto chan = c.channel.get().getChannelNumber();
                         result.addEvent (MidiMessage::noteOn  (chan, c.noteNumber, vel * channelVelScale), start);
-                        result.addEvent (MidiMessage::noteOff (chan, c.noteNumber, (uint8) jlimit (0, 127, c.noteValue.get())), end);
+                        result.addEvent (MidiMessage::noteOff (chan, c.noteNumber, (uint8_t) jlimit (0, 127, c.noteValue.get())), end);
                     }
                 }
             }
@@ -482,12 +482,13 @@ void StepClip::insertNewChannel (int index)
     {
         auto* um = getUndoManager();
 
-        ValueTree v (IDs::CHANNEL);
-        v.setProperty (IDs::channel, defaultMidiChannel, nullptr);
-        v.setProperty (IDs::note, defaultNoteNumber, nullptr);
-        v.setProperty (IDs::velocity, defaultNoteValue, nullptr);
+        auto v = createValueTree (IDs::CHANNEL,
+                                  IDs::channel, defaultMidiChannel,
+                                  IDs::note, defaultNoteNumber,
+                                  IDs::velocity, defaultNoteValue);
 
-        state.getOrCreateChildWithName (IDs::CHANNELS, getUndoManager()).addChild (v, index, um);
+        state.getOrCreateChildWithName (IDs::CHANNELS, um)
+             .addChild (v, index, um);
 
         for (auto& p : getPatterns())
             p.insertChannel (index);
@@ -517,10 +518,10 @@ StepClip::PatternArray StepClip::getPatternSequence() const
 
 void StepClip::setPatternSequence (const StepClip::PatternArray& newSequence)
 {
-    StringArray s;
+    juce::StringArray s;
 
     for (auto* p : newSequence)
-        s.add (String (p->patternIndex));
+        s.add (juce::String (p->patternIndex));
 
     state.setProperty (IDs::sequence, s.joinIntoString (","), getUndoManager());
 }
@@ -601,9 +602,9 @@ int StepClip::insertPattern (const Pattern& p, int index)
 
 int StepClip::insertNewPattern (int index)
 {
-    ValueTree v (IDs::PATTERN);
-    v.setProperty (IDs::numNotes, getBeatsPerBar() * 4, nullptr);
-    v.setProperty (IDs::noteLength, 0.25, nullptr);
+    auto v = createValueTree (IDs::PATTERN,
+                              IDs::numNotes, getBeatsPerBar() * 4,
+                              IDs::noteLength, 0.25);
 
     state.getOrCreateChildWithName (IDs::PATTERNS, getUndoManager())
          .addChild (v, index, getUndoManager());
@@ -630,14 +631,14 @@ void StepClip::removeUnusedPatterns()
         if (! usedPatterns.contains (i))
             patterns.removeChild (i, um);
 
-    StringArray newSequence;
+    juce::StringArray newSequence;
 
     for (int i = 0; i < sequence.size(); ++i)
     {
         const int index = patterns.indexOf (sequence.getUnchecked (i));
 
         if (index != -1)
-            newSequence.add (String (index));
+            newSequence.add (juce::String (index));
     }
 
     state.setProperty (IDs::sequence, newSequence.joinIntoString (","), um);

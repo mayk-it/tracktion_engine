@@ -23,7 +23,7 @@ struct OldEditConversion
     {
         jassert (v.isValid());
         
-        if (auto xml = std::unique_ptr<juce::XmlElement> (v.createXml()))
+        if (auto xml = v.createXml())
         {
             convert (*xml);
             return juce::ValueTree::fromXml (*xml);
@@ -649,7 +649,7 @@ private:
     {
         renameLegacyIDs (xml);
 
-        juce::uint64 nextID = 1001;
+        uint64_t nextID = 1001;
         EditItemID::remapIDs (xml, [&] { return EditItemID::fromRawID (nextID++); });
 
         recurseDoingLegacyConversions (xml);

@@ -15,7 +15,7 @@ template<typename ObjectType>
 struct TempoAndTimeSigListBase  : public ValueTreeObjectList<ObjectType>,
                                   public AsyncUpdater
 {
-    TempoAndTimeSigListBase (TempoSequence& ts, const ValueTree& parentTree)
+    TempoAndTimeSigListBase (TempoSequence& ts, const juce::ValueTree& parentTree)
         : ValueTreeObjectList<ObjectType> (parentTree), sequence (ts)
     {
     }
@@ -42,7 +42,7 @@ struct TempoAndTimeSigListBase  : public ValueTreeObjectList<ObjectType>,
 //==============================================================================
 struct TempoSequence::TempoSettingList  : public TempoAndTimeSigListBase<TempoSetting>
 {
-    TempoSettingList (TempoSequence& ts, const ValueTree& parentTree)
+    TempoSettingList (TempoSequence& ts, const juce::ValueTree& parentTree)
         : TempoAndTimeSigListBase<TempoSetting> (ts, parentTree)
     {
         rebuildObjects();
@@ -53,12 +53,12 @@ struct TempoSequence::TempoSettingList  : public TempoAndTimeSigListBase<TempoSe
         freeObjects();
     }
 
-    bool isSuitableType (const ValueTree& v) const override
+    bool isSuitableType (const juce::ValueTree& v) const override
     {
         return v.hasType (IDs::TEMPO);
     }
 
-    TempoSetting* createNewObject (const ValueTree& v) override
+    TempoSetting* createNewObject (const juce::ValueTree& v) override
     {
         auto t = new TempoSetting (sequence, v);
         t->incReferenceCount();
@@ -75,7 +75,7 @@ struct TempoSequence::TempoSettingList  : public TempoAndTimeSigListBase<TempoSe
 //==============================================================================
 struct TempoSequence::TimeSigList  : public TempoAndTimeSigListBase<TimeSigSetting>
 {
-    TimeSigList (TempoSequence& ts, const ValueTree& parentTree)
+    TimeSigList (TempoSequence& ts, const juce::ValueTree& parentTree)
         : TempoAndTimeSigListBase<TimeSigSetting> (ts, parentTree)
     {
         rebuildObjects();
@@ -86,12 +86,12 @@ struct TempoSequence::TimeSigList  : public TempoAndTimeSigListBase<TimeSigSetti
         freeObjects();
     }
 
-    bool isSuitableType (const ValueTree& v) const override
+    bool isSuitableType (const juce::ValueTree& v) const override
     {
         return v.hasType (IDs::TIMESIG);
     }
 
-    TimeSigSetting* createNewObject (const ValueTree& v) override
+    TimeSigSetting* createNewObject (const juce::ValueTree& v) override
     {
         auto t = new TimeSigSetting (sequence, v);
         t->incReferenceCount();
@@ -122,7 +122,7 @@ void TempoSequence::TempoSections::swapWith (juce::Array<SectionDetails>& newTem
     tempos.swapWith (newTempos);
 }
 
-juce::uint32 TempoSequence::TempoSections::getChangeCount() const
+uint32_t TempoSequence::TempoSections::getChangeCount() const
 {
     return changeCounter;
 }
@@ -172,7 +172,7 @@ UndoManager* TempoSequence::getUndoManager() const noexcept
 }
 
 //==============================================================================
-void TempoSequence::setState (const ValueTree& v, bool remapEdit)
+void TempoSequence::setState (const juce::ValueTree& v, bool remapEdit)
 {
     EditTimecodeRemapperSnapshot snap;
 
@@ -276,9 +276,9 @@ TimeSigSetting::Ptr TempoSequence::insertTimeSig (double time, juce::UndoManager
     double beatNum = 0.0;
     int index = -1;
 
-    ValueTree newTree (IDs::TIMESIG);
-    newTree.setProperty (IDs::numerator, 4, nullptr);
-    newTree.setProperty (IDs::denominator, 4, nullptr);
+    auto newTree = createValueTree (IDs::TIMESIG,
+                                    IDs::numerator, 4,
+                                    IDs::denominator, 4);
 
     if (getNumTimeSigs() > 0)
     {
@@ -922,7 +922,7 @@ void TempoSequence::handleAsyncUpdate()
     changed();
 }
 
-String TempoSequence::getSelectableDescription()
+juce::String TempoSequence::getSelectableDescription()
 {
     return TRANS("Tempo Curve");
 }
@@ -938,9 +938,9 @@ int TempoSequence::countTemposInRegion (EditTimeRange range) const
     return count;
 }
 
-int64 TempoSequence::createHashForTemposInRange (EditTimeRange range) const
+HashCode TempoSequence::createHashForTemposInRange (EditTimeRange range) const
 {
-    int64 hash = 0;
+    HashCode hash = 0;
 
     for (auto t : tempos->objects)
         if (range.contains (t->getStartTime()))

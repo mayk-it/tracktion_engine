@@ -89,7 +89,7 @@ private:
         const Identifier valueProperty;
     };
 
-    void testPreset (const String& pluginName, std::initializer_list<ParamTest> params)
+    void testPreset (const juce::String& pluginName, std::initializer_list<ParamTest> params)
     {
         beginTest ("Testing plugin parameters: " + pluginName);
 
@@ -100,7 +100,7 @@ private:
         expect (pluginPtr != nullptr);
 
         // Create a state for restoration
-        ValueTree preset (IDs::PLUGIN);
+        juce::ValueTree preset (IDs::PLUGIN);
         preset.setProperty (IDs::type, pluginName, nullptr);
 
         for (auto param : params)

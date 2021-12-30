@@ -15,11 +15,11 @@ AutomationCurve::AutomationCurve()  : state (IDs::AUTOMATIONCURVE)
 {
 }
 
-AutomationCurve::AutomationCurve (const ValueTree& p, const ValueTree& v)
+AutomationCurve::AutomationCurve (const juce::ValueTree& p, const juce::ValueTree& v)
     : parentState (p), state (v)
 {
     if (! state.isValid())
-        state = ValueTree (IDs::AUTOMATIONCURVE);
+        state = juce::ValueTree (IDs::AUTOMATIONCURVE);
 }
 
 AutomationCurve::AutomationCurve (const AutomationCurve& other)
@@ -39,14 +39,14 @@ AutomationCurve& AutomationCurve::operator= (const AutomationCurve& other)
     return *this;
 }
 
-void AutomationCurve::setState (const ValueTree& v)
+void AutomationCurve::setState (const juce::ValueTree& v)
 {
     state = v;
     jassert (state.hasType (IDs::AUTOMATIONCURVE));
     jassert (state.getParent() == parentState);
 }
 
-void AutomationCurve::setParentState (const ValueTree& v)
+void AutomationCurve::setParentState (const juce::ValueTree& v)
 {
     parentState = v;
 }
@@ -273,11 +273,10 @@ int AutomationCurve::getNearestPoint (double& t, float& v, double xToYRatio) con
 //==============================================================================
 juce::ValueTree AutomationCurve::AutomationPoint::toValueTree() const
 {
-    juce::ValueTree v (IDs::POINT);
-    v.setProperty (IDs::t, time, nullptr);
-    v.setProperty (IDs::v, value, nullptr);
-    v.setProperty (IDs::c, curve, nullptr);
-    return v;
+    return createValueTree (IDs::POINT,
+                            IDs::t, time,
+                            IDs::v, value,
+                            IDs::c, curve);
 }
 
 int AutomationCurve::addPoint (double time, float value, float curve)
@@ -815,12 +814,12 @@ void AutomationCurve::getBezierEnds (int index, double& x1out, float& y1out, dou
     }
 }
 
-void AutomationCurve::removeAllAutomationCurvesRecursively (const ValueTree& v)
+void AutomationCurve::removeAllAutomationCurvesRecursively (const juce::ValueTree& v)
 {
     for (int i = v.getNumChildren(); --i >= 0;)
     {
         if (v.getChild (i).hasType (IDs::AUTOMATIONCURVE))
-            ValueTree (v).removeChild (i, nullptr);
+            juce::ValueTree (v).removeChild (i, nullptr);
         else
             removeAllAutomationCurvesRecursively (v.getChild (i));
     }

@@ -56,15 +56,15 @@ public:
             // can't use an AudioScratchBuffer yet
             AudioBuffer<float> buffer (numChannels, blockSize);
 
-            int64 numLeft = numSamples;
-            int64 startSample = 0;
+            auto numLeft = numSamples;
+            SampleCount startSample = 0;
 
             while (numLeft > 0)
             {
                 if (shouldExit())
                     return jobHasFinished;
 
-                const int numThisTime = (int) jmin (numLeft, (int64) blockSize);
+                auto numThisTime = (int) jmin (numLeft, (SampleCount) blockSize);
                 reader->read (&buffer, 0, numThisTime, startSample, true, useRightChan);
                 detector.processSection (buffer, numThisTime);
 
@@ -118,7 +118,7 @@ private:
     {
         CRASH_TRACER
 
-        AudioFile tempFile (engine, proxy.getFile().getSiblingFile ("temp_proxy_" + String::toHexString (Random().nextInt64()))
+        AudioFile tempFile (engine, proxy.getFile().getSiblingFile ("temp_proxy_" + juce::String::toHexString (Random().nextInt64()))
                             .withFileExtension (proxy.getFile().getFileExtension()));
 
         bool ok = render (tempFile);
@@ -165,12 +165,12 @@ private:
         if (reader == nullptr)
             return false;
 
-        int64 sourceSample = 0;
-        int64 samplesToDo = reader->lengthInSamples;
+        SampleCount sourceSample = 0;
+        auto samplesToDo = reader->lengthInSamples;
 
         while (! shouldExit())
         {
-            const int numThisTime = (int) jmin (samplesToDo, (int64) 65536);
+            const int numThisTime = (int) jmin (samplesToDo, (SampleCount) 65536);
 
             if (numThisTime <= 0)
                 return true;
@@ -340,7 +340,7 @@ void AudioClipBase::cloneFrom (Clip* c)
 
 void AudioClipBase::updateLeftRightChannelActivenessFlags()
 {
-    const String channelMask = channels;
+    juce::String channelMask = channels;
 
     if (channelMask.isEmpty())
         activeChannels = AudioChannelSet::disabled();
@@ -644,8 +644,8 @@ void AudioClipBase::reverseLoopPoints()
     }
 
     // red in/out markers
-    const int64 newIn = loopInfo.getOutMarker() > -1 ? (wi.lengthInSamples - loopInfo.getOutMarker()) : 0;
-    const int64 newOut = loopInfo.getInMarker() == 0 ? -1 : (wi.lengthInSamples - loopInfo.getInMarker());
+    const SampleCount newIn = loopInfo.getOutMarker() > -1 ? (wi.lengthInSamples - loopInfo.getOutMarker()) : 0;
+    const SampleCount newOut = loopInfo.getInMarker() == 0 ? -1 : (wi.lengthInSamples - loopInfo.getInMarker());
 
     loopInfo.setInMarker (newIn);
     loopInfo.setOutMarker (newOut);
@@ -1073,12 +1073,12 @@ void AudioClipBase::melodyneConvertToMIDI()
         {
             UndoManager* um = nullptr;
 
-            ValueTree midiClip (IDs::MIDICLIP);
+            juce::ValueTree midiClip (IDs::MIDICLIP);
             midiClip.setProperty (IDs::name, getName(), um);
             midiClip.setProperty (IDs::start, getPosition().getStart(), um);
             midiClip.setProperty (IDs::length, getPosition().getLength(), um);
 
-            ValueTree ms (IDs::SEQUENCE);
+            juce::ValueTree ms (IDs::SEQUENCE);
             ms.setProperty (IDs::ver, 1, um);
             ms.setProperty (IDs::channelNumber, 1, um);
 
@@ -1092,7 +1092,7 @@ void AudioClipBase::melodyneConvertToMIDI()
 
                 if (e.noteOffObject != nullptr)
                 {
-                    ValueTree note (IDs::NOTE);
+                    juce::ValueTree note (IDs::NOTE);
                     note.setProperty ("p", e.message.getNoteNumber(), um);
                     note.setProperty ("v", e.message.getVelocity(), um);
                     note.setProperty ("b", ts.timeToBeats (e.message.getTimeStamp()), um);
@@ -1163,48 +1163,34 @@ LoopInfo AudioClipBase::autoDetectBeatMarkers (const LoopInfo& current, bool aut
     {
         if (auto reader = std::unique_ptr<AudioFormatReader> (AudioFileUtils::createReaderFor (edit.engine, getCurrentSourceFile())))
         {
-            int64 out = (loopInfo.getOutMarker() == -1) ? reader->lengthInSamples
-                                                        : loopInfo.getOutMarker();
-            int64 in = loopInfo.getInMarker();
+            const auto start = loopInfo.getInMarker();
+            const auto end = (loopInfo.getOutMarker() == -1) ? reader->lengthInSamples
+                                                             : loopInfo.getOutMarker();
 
             BeatDetect detect;
             detect.setSensitivity (sens);
             detect.setSampleRate (reader->sampleRate);
 
-            int chans     = (int) reader->numChannels;
-            int blockSize = detect.getBlockSize();
-
-            HeapBlock<float*> buffers;
-            buffers.calloc ((size_t) chans + 2);
-
-            HeapBlock<float> buffer ((size_t) (blockSize * chans));
-            for (int i = 0; i < chans; ++i)
-                buffers[i] = buffer + i * blockSize;
-
-            int64 len = out - in;
-
-            if (len / reader->sampleRate >= 1)
+            if ((end - start) > reader->sampleRate)
             {
-                int blocks = int (len / blockSize);
+                auto blockLength = detect.getBlockSize();
+                auto blockSize = choc::buffer::Size::create (reader->numChannels, blockLength);
+                auto pos = start;
 
-                for (int i = 0; i < blocks; ++i)
+                choc::buffer::ChannelArrayBuffer<float> buffer (blockSize);
+
+                while (pos + blockLength < end)
                 {
-                    if (! reader->readSamples ((int**) buffers.getData(), chans, 0, in + i * blockSize, blockSize))
+                    if (! reader->read (buffer.getView().data.channels,
+                                        (int) reader->numChannels, pos, (int) blockLength))
                         break;
 
-                    if (! reader->usesFloatingPointData)
-                    {
-                        FloatVectorOperations::convertFixedToFloat (buffers[0], (const int*) buffers[0], 1.0f / 0x7fffffff, blockSize);
-
-                        if (chans > 1)
-                            FloatVectorOperations::convertFixedToFloat (buffers[1], (const int*) buffers[1], 1.0f / 0x7fffffff, blockSize);
-                    }
-
-                    detect.audioProcess (const_cast<const float**> (buffers.getData()), chans);
+                    detect.audioProcess (buffer);
+                    pos += blockLength;
                 }
 
-                for (int i = 0; i < detect.getNumBeats(); ++i)
-                    res.addLoopPoint (detect.getBeat(i) + in, LoopInfo::LoopPointType::automatic);
+                for (auto beat : detect.getBeats())
+                    res.addLoopPoint (start + beat, LoopInfo::LoopPointType::automatic);
             }
         }
     }
@@ -1227,9 +1213,9 @@ bool AudioClipBase::performTempoDetect()
     return true;
 }
 
-StringArray AudioClipBase::getRootNoteChoices (Engine& e)
+juce::StringArray AudioClipBase::getRootNoteChoices (Engine& e)
 {
-    StringArray s;
+    juce::StringArray s;
     s.add ("<" + TRANS("None") + ">");
 
     for (int i = 0; i < 12; ++i)
@@ -1238,9 +1224,9 @@ StringArray AudioClipBase::getRootNoteChoices (Engine& e)
     return s;
 }
 
-StringArray AudioClipBase::getPitchChoices()
+juce::StringArray AudioClipBase::getPitchChoices()
 {
-    StringArray s;
+    juce::StringArray s;
 
     const int numSemitones = isUsingMelodyne() ? 12 : 24;
 
@@ -1418,7 +1404,7 @@ bool AudioClipBase::canSnapToOriginalBWavTime()
 void AudioClipBase::snapToOriginalBWavTime()
 {
     auto f = getAudioFile();
-    const String bwavTime (f.getMetadata()[WavAudioFormat::bwavTimeReference]);
+    juce::String bwavTime (f.getMetadata()[WavAudioFormat::bwavTimeReference]);
 
     if (bwavTime.isNotEmpty())
     {
@@ -1513,7 +1499,7 @@ juce::Array<ProjectItemID> AudioClipBase::getTakes() const
 }
 
 //==============================================================================
-String AudioClipBase::canAddClipPlugin (const Plugin::Ptr& p) const
+juce::String AudioClipBase::canAddClipPlugin (const Plugin::Ptr& p) const
 {
     if (p != nullptr)
     {
@@ -1903,14 +1889,14 @@ struct StretchSegment
 
         if (loopRange.getStart() > editTime.getStart())
         {
-            int skip = jlimit (0, numSamples, (int) (numSamples * (loopRange.getStart() - editTime.getStart()) / editTime.getLength()));
+            auto skip = jlimit (0, numSamples, (int) (numSamples * (loopRange.getStart() - editTime.getStart()) / editTime.getLength()));
             start += skip;
             numSamples -= skip;
         }
 
         while (numSamples > 0)
         {
-            const int numReady = jmin (numSamples, readySamplesEnd - readySamplesStart);
+            auto numReady = jmin (numSamples, readySamplesEnd - readySamplesStart);
 
             if (numReady > 0)
             {
@@ -1923,7 +1909,7 @@ struct StretchSegment
             }
             else
             {
-                const int blockSize = fillNextBlock();
+                auto blockSize = fillNextBlock();
                 renderFades (blockSize);
 
                 readySampleOutputPos += blockSize;
@@ -1988,14 +1974,14 @@ struct StretchSegment
 
         if (segment.hasFadeOut())
         {
-            auto fadeOutStart = (int64) (segment.getSampleRange().getLength() / segment.getStretchRatio()) - crossfadeSamples;
+            auto fadeOutStart = (SampleCount) (segment.getSampleRange().getLength() / segment.getStretchRatio()) - crossfadeSamples;
 
             if (renderedEnd > fadeOutStart)
                 renderFade (fadeOutStart, fadeOutStart + crossfadeSamples + 2, true, numSamples);
         }
     }
 
-    void renderFade (int64 start, int64 end, bool isFadeOut, int numSamples)
+    void renderFade (SampleCount start, SampleCount end, bool isFadeOut, int numSamples)
     {
         float alpha1 = 0.0f, alpha2 = 1.0f;
         auto renderedEnd = readySampleOutputPos + numSamples;
@@ -2035,7 +2021,7 @@ struct StretchSegment
 
     const int outputBufferSize = 1024;
     int readySamplesStart = 0, readySamplesEnd = 0;
-    int64 readySampleOutputPos = 0;
+    SampleCount readySampleOutputPos = 0;
     const int crossfadeSamples, numChannelsToUse;
     juce::AudioBuffer<float> fifo { numChannelsToUse, outputBufferSize };
 
@@ -2129,21 +2115,21 @@ AudioFileInfo AudioClipBase::getWaveInfo()
     return getAudioFile().getInfo();
 }
 
-int64 AudioClipBase::getProxyHash()
+HashCode AudioClipBase::getProxyHash()
 {
     jassert (usesTimeStretchedProxy());
 
     auto clipPos = getPosition();
 
-    int64 hash = getHash()
-                    ^ (int) timeStretchMode
-                    ^ elastiqueProOptions->toString().hashCode64()
-                    ^ (7342847 * (int64) (pitchChange * 199.0))
-                    ^ ((int64) (clipPos.getLength() * 10005.0))
-                    ^ ((int64) (clipPos.getOffset() * 9997.0))
-                    ^ ((int64) (getLoopStart() * 8971.0))
-                    ^ ((int64) (getLoopLength() * 7733.0))
-                    ^ ((int64) (getSpeedRatio() * 877.0));
+    HashCode hash = getHash()
+                     ^ static_cast<HashCode> (timeStretchMode.get())
+                     ^ elastiqueProOptions->toString().hashCode64()
+                     ^ (7342847 * static_cast<HashCode> (pitchChange * 199.0))
+                     ^ static_cast<HashCode> (clipPos.getLength() * 10005.0)
+                     ^ static_cast<HashCode> (clipPos.getOffset() * 9997.0)
+                     ^ static_cast<HashCode> (getLoopStart() * 8971.0)
+                     ^ static_cast<HashCode> (getLoopLength() * 7733.0)
+                     ^ static_cast<HashCode> (getSpeedRatio() * 877.0);
 
     auto needsPlainStretch = [&]() { return std::abs (getSpeedRatio() - 1.0) > 0.00001 || (getPitchChange() != 0.0f); };
 
@@ -2154,7 +2140,7 @@ int64 AudioClipBase::getProxyHash()
             int i = 0;
 
             for (auto& segment : segmentList->getSegments())
-                hash ^= (int64) (segment.getHashCode() * (i++ + 0.1));
+                hash ^= static_cast<HashCode> (segment.getHashCode() * (i++ + 0.1));
         }
     }
 

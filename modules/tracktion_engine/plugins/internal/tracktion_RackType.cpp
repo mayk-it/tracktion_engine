@@ -13,20 +13,20 @@ namespace tracktion_engine
 
 static constexpr int maxRackAudioChans = 64;
 
-static String getDefaultInputName (int i)
+static juce::String getDefaultInputName (int i)
 {
     if (i == 0)  return TRANS("Left input");
     if (i == 1)  return TRANS("Right input");
 
-    return TRANS("Input") + " " + String (i + 1);
+    return TRANS("Input") + " " + juce::String (i + 1);
 }
 
-static String getDefaultOutputName (int i)
+static juce::String getDefaultOutputName (int i)
 {
     if (i == 0)  return TRANS("Left output");
     if (i == 1)  return TRANS("Right output");
 
-    return TRANS("Output") + " " + String (i + 1);
+    return TRANS("Output") + " " + juce::String (i + 1);
 }
 
 //==============================================================================
@@ -192,8 +192,8 @@ RackType::RackType (const juce::ValueTree& v, Edit& owner)
 
     if (! windowState.isValid())
     {
-        ValueTree ws (IDs::WINDOWSTATE);
-        ws.setProperty (IDs::windowPos, state[IDs::windowPos], nullptr);
+        auto ws = createValueTree (IDs::WINDOWSTATE,
+                                   IDs::windowPos, state[IDs::windowPos]);
 
         if (state.hasProperty (IDs::windowLocked))
             ws.setProperty (IDs::windowLocked, state[IDs::windowLocked], nullptr);
@@ -234,11 +234,10 @@ RackType::~RackType()
     windowStateList.reset();
 }
 
-static ValueTree createInOrOut (const juce::Identifier& type, const String& name)
+static juce::ValueTree createInOrOut (const juce::Identifier& type, const juce::String& name)
 {
-    ValueTree v (type);
-    v.setProperty (IDs::name, name, nullptr);
-    return v;
+    return createValueTree (type,
+                            IDs::name, name);
 }
 
 void RackType::removeAllInputsAndOutputs()
@@ -332,7 +331,7 @@ Result RackType::restoreStateFromValueTree (const juce::ValueTree& vt)
     return Result::ok();
 }
 
-ValueTree RackType::createStateCopy (bool includeAutomation)
+juce::ValueTree RackType::createStateCopy (bool includeAutomation)
 {
     saveWindowPosition();
 
@@ -394,14 +393,14 @@ RackType::Ptr RackType::createTypeToWrapPlugins (const Plugin::Array& plugins, E
         if (auto f = plugins[i])
             rack->addPlugin (f, Point<float> (1.0f / (plugins.size() + 1) * (i + 1), 0.5f), false);
 
-    StringArray ins, outs;
+    juce::StringArray ins, outs;
     plugins.getFirst()->getChannelNames (&ins, nullptr);
     plugins.getLast()->getChannelNames (nullptr, &outs);
 
     // connect the left side to the first plugin
     for (int i = 0; i < jmin (maxRackAudioChans, ins.size()); ++i)
     {
-        String name (ins[i]);
+        auto name = ins[i];
 
         if (name.isEmpty() || name.equalsIgnoreCase (TRANS("Unnamed")))
             name = getDefaultInputName (i);
@@ -413,7 +412,7 @@ RackType::Ptr RackType::createTypeToWrapPlugins (const Plugin::Array& plugins, E
     // connect the right side to the last plugin
     for (int i = 0; i < jmin (maxRackAudioChans, outs.size()); ++i)
     {
-        String name (outs[i]);
+        auto name = outs[i];
 
         if (name.isEmpty() || name.equalsIgnoreCase (TRANS("Unnamed")))
             name = getDefaultOutputName (i);
@@ -431,7 +430,7 @@ RackType::Ptr RackType::createTypeToWrapPlugins (const Plugin::Array& plugins, E
         auto fsrc = plugins[i];
         auto fdst = plugins[i + 1];
 
-        StringArray dstIns, srcOuts;
+        juce::StringArray dstIns, srcOuts;
         fsrc->getChannelNames (nullptr, &srcOuts);
         fdst->getChannelNames (&dstIns, nullptr);
 
@@ -444,9 +443,9 @@ RackType::Ptr RackType::createTypeToWrapPlugins (const Plugin::Array& plugins, E
     return rack;
 }
 
-StringArray RackType::getInputNames() const
+juce::StringArray RackType::getInputNames() const
 {
-    StringArray s;
+    juce::StringArray s;
 
     for (const auto& v : state)
         if (v.hasType (IDs::INPUT))
@@ -455,9 +454,9 @@ StringArray RackType::getInputNames() const
     return s;
 }
 
-StringArray RackType::getOutputNames() const
+juce::StringArray RackType::getOutputNames() const
 {
-    StringArray s;
+    juce::StringArray s;
 
     for (const auto& v : state)
         if (v.hasType (IDs::OUTPUT))
@@ -494,20 +493,20 @@ void RackType::addPlugin (const Plugin::Ptr& p, Point<float> pos, bool canAutoCo
 
             p->removeFromParent();
 
-            ValueTree v (IDs::PLUGININSTANCE);
-            v.setProperty (IDs::x, jlimit (0.0f, 1.0f, pos.x), nullptr);
-            v.setProperty (IDs::y, jlimit (0.0f, 1.0f, pos.y), nullptr);
+            auto v = createValueTree (IDs::PLUGININSTANCE,
+                                      IDs::x, jlimit (0.0f, 1.0f, pos.x),
+                                      IDs::y, jlimit (0.0f, 1.0f, pos.y));
             v.addChild (p->state, -1, getUndoManager());
 
             state.addChild (v, -1, getUndoManager());
 
             if (autoConnect)
             {
-                StringArray ins, outs;
+                juce::StringArray ins, outs;
                 p->getChannelNames (&ins, &outs);
 
                 while (outs.size() > getOutputNames().size() - 1)
-                    if (addOutput (getOutputNames().size(), TRANS("Output") + " " + String (getOutputNames().size())) == -1)
+                    if (addOutput (getOutputNames().size(), TRANS("Output") + " " + juce::String (getOutputNames().size())) == -1)
                         break;
 
                 for (int i = 0; i < ins.size(); ++i)   addConnection ({}, i + 1, p->itemID, i + 1);
@@ -590,7 +589,7 @@ bool RackType::isConnectionLegal (EditItemID source, int sourcePin,
     }
     else
     {
-        StringArray ins, outs;
+        juce::StringArray ins, outs;
 
         if (auto p = edit.getPluginCache().getPluginFor (source))
             p->getChannelNames (&ins, &outs);
@@ -606,7 +605,7 @@ bool RackType::isConnectionLegal (EditItemID source, int sourcePin,
     }
     else
     {
-        StringArray ins, outs;
+        juce::StringArray ins, outs;
 
         if (auto p = edit.getPluginCache().getPluginFor (dest))
             p->getChannelNames (&ins, &outs);
@@ -636,11 +635,11 @@ void RackType::addConnection (EditItemID srcId, int sourcePin,
                   && rc->sourceID == srcId && rc->sourcePin == sourcePin)
                 return;
 
-        ValueTree v (IDs::CONNECTION);
-        srcId.setProperty (v, IDs::src, nullptr);
-        dstId.setProperty (v, IDs::dst, nullptr);
-        v.setProperty (IDs::srcPin, sourcePin, nullptr);
-        v.setProperty (IDs::dstPin, destPin, nullptr);
+        auto v = createValueTree (IDs::CONNECTION,
+                                  IDs::src, srcId,
+                                  IDs::dst, dstId,
+                                  IDs::srcPin, sourcePin,
+                                  IDs::dstPin, destPin);
 
         state.addChild (v, -1, getUndoManager());
     }
@@ -802,7 +801,7 @@ void RackType::removeBrokenConnections (ValueTree& rack, UndoManager* um)
     }
 }
 
-void RackType::createInstanceForSideChain (Track& at, const BigInteger& channelMask,
+void RackType::createInstanceForSideChain (Track& at, const juce::BigInteger& channelMask,
                                            EditItemID pluginID, int pinIndex)
 {
     const bool connectLeft  = channelMask[0];
@@ -827,9 +826,9 @@ void RackType::createInstanceForSideChain (Track& at, const BigInteger& channelM
     if (rack != nullptr)
     {
         auto inputs = getInputNames();
-        const String leftName ("sidechain input (left)");
-        const String rightName ("sidechain input (right)");
-        const String noneName (rack->getNoPinName());
+        const juce::String leftName ("sidechain input (left)");
+        const juce::String rightName ("sidechain input (right)");
+        auto noneName = rack->getNoPinName();
 
         if (connectLeft)
         {
@@ -907,7 +906,7 @@ static int findIndexOfNthInstanceOf (ValueTree& parent, const juce::Identifier& 
     return -1;
 }
 
-int RackType::addInput (int index, const String& name)
+int RackType::addInput (int index, const juce::String& name)
 {
     int numNames = getInputNames().size();
 
@@ -935,7 +934,7 @@ int RackType::addInput (int index, const String& name)
     return -1;
 }
 
-int RackType::addOutput (int index, const String& name)
+int RackType::addOutput (int index, const juce::String& name)
 {
     int numNames = getOutputNames().size();
 
@@ -995,12 +994,12 @@ void RackType::removeOutput (int index)
     }
 }
 
-static String checkChannelName (const String& name)
+static juce::String checkChannelName (const juce::String& name)
 {
     return name.trim().isEmpty() ? TRANS("Unnamed") : name;
 }
 
-void RackType::renameInput (int index, const String& name)
+void RackType::renameInput (int index, const juce::String& name)
 {
     int toRename = findIndexOfNthInstanceOf (state, IDs::INPUT, index);
 
@@ -1008,7 +1007,7 @@ void RackType::renameInput (int index, const String& name)
         state.getChild (toRename).setProperty (IDs::name, checkChannelName (name), getUndoManager());
 }
 
-void RackType::renameOutput (int index, const String& name)
+void RackType::renameOutput (int index, const juce::String& name)
 {
     int toRename = findIndexOfNthInstanceOf (state, IDs::OUTPUT, index);
 
@@ -1075,24 +1074,23 @@ RackType::Ptr RackType::findRackTypeContaining (const Plugin& plugin)
 }
 
 //==============================================================================
-static StringArray stripAndPrependChannels (StringArray&& nms)
+static juce::StringArray stripAndPrependChannels (juce::StringArray names)
 {
-    StringArray names (nms);
     names.remove (0);
     int i = 0;
 
     for (auto&& n : names)
-        n = String (++i) + ". " + n;
+        n = juce::String (++i) + ". " + n;
 
     return names;
 }
 
-StringArray RackType::getAudioInputNamesWithChannels() const
+juce::StringArray RackType::getAudioInputNamesWithChannels() const
 {
     return stripAndPrependChannels (getInputNames());
 }
 
-StringArray RackType::getAudioOutputNamesWithChannels() const
+juce::StringArray RackType::getAudioOutputNamesWithChannels() const
 {
     return stripAndPrependChannels (getOutputNames());
 }
@@ -1317,7 +1315,7 @@ RackType::Ptr RackTypeList::addNewRack()
 {
     auto newID = edit.createNewItemID();
 
-    ValueTree v (IDs::RACK);
+    juce::ValueTree v (IDs::RACK);
     newID.writeID (v, nullptr);
     state.addChild (v, -1, &edit.getUndoManager());
 
@@ -1357,7 +1355,7 @@ void RackTypeList::importRackFiles (const Array<File>& files)
     int oldNumRacks = size();
 
     for (auto& f : files)
-        if (auto xml = std::unique_ptr<XmlElement> (XmlDocument::parse (f)))
+        if (auto xml = juce::parseXML (f))
             addRackTypeFrom (ValueTree::fromXml (*xml));
 
     if (oldNumRacks < size())

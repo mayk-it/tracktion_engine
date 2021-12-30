@@ -20,7 +20,7 @@ ExportJob::ExportJob (Edit* edit_,
                       bool keepEntireFiles_,
                       TracktionArchiveFile::CompressionType compressionType_,
                       Array<File>& filesForDeletion_,
-                      StringArray& failedFiles_,
+                      juce::StringArray& failedFiles_,
                       bool includeLibraryFiles_,
                       bool includeClips_)
     : ThreadPoolJobWithProgress (TRANS("Exporting") + "..."),
@@ -113,7 +113,7 @@ void ExportJob::copyProjectFilesToTempDir()
 
                 auto bytesFree = dest.getBytesFreeOnVolume();
                 auto bytesNeeded = jmax (2 * srcObject->getSourceFile().getSize(),
-                                         (int64) (1024 * 1024 * 50));
+                                         (int64_t) (1024 * 1024 * 50));
 
                 if (bytesFree > 0
                      && bytesFree < bytesNeeded

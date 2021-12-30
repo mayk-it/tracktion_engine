@@ -40,7 +40,7 @@ struct CompManager::RenderTrigger   : public ValueTreeAllEventListener,
 };
 
 //==============================================================================
-CompManager::CompManager (Clip& c, const ValueTree& v)
+CompManager::CompManager (Clip& c, const juce::ValueTree& v)
     : takesTree (v), clip (c)
 {
     clip.edit.engine.getCompFactory().addComp (*this);
@@ -75,12 +75,12 @@ void CompManager::initialise()
 }
 
 //==============================================================================
-ValueTree CompManager::getSection (int takeIndex, int sectionIndex) const
+juce::ValueTree CompManager::getSection (int takeIndex, int sectionIndex) const
 {
     return takesTree.getChild (takeIndex).getChild (sectionIndex);
 }
 
-ValueTree CompManager::findSectionAtTime (double time)
+juce::ValueTree CompManager::findSectionAtTime (double time)
 {
     auto activeTake = getActiveTakeTree();
 
@@ -134,7 +134,7 @@ int CompManager::findSectionWithEndTime (EditTimeRange timeRange, int takeIndex,
     return -1;
 }
 
-EditTimeRange CompManager::getSectionTimes (const ValueTree& section) const
+EditTimeRange CompManager::getSectionTimes (const juce::ValueTree& section) const
 {
     jassert (section.hasType (IDs::COMPSECTION));
 
@@ -167,7 +167,7 @@ int CompManager::getNumTakes() const
 }
 
 //==============================================================================
-String CompManager::getTakeName (int index) const
+juce::String CompManager::getTakeName (int index) const
 {
     return clip.getTakeDescriptions()[index].fromFirstOccurrenceOf (". ", false, false);
 }
@@ -188,7 +188,7 @@ double CompManager::getSpeedRatio() const
     return 1.0 / effectiveTimeMultiplier;
 }
 
-juce::int64 CompManager::getTakeHash (int takeIndex) const
+HashCode CompManager::getTakeHash (int takeIndex) const
 {
     auto takeTree = takesTree.getChild (takeIndex);
 
@@ -204,7 +204,10 @@ juce::int64 CompManager::getTakeHash (int takeIndex) const
         auto end = static_cast<double> (segment.getProperty (IDs::endTime));
         auto take = static_cast<int> (segment.getProperty (IDs::takeIndex));
 
-        hash = hash ^ (int64) take ^ (int64) ((end - lastTime) * 1000.0);
+        hash = hash
+                ^ static_cast<HashCode> (take)
+                ^ static_cast<HashCode> ((end - lastTime) * 1000.0);
+
         lastTime = end;
     }
 
@@ -320,7 +323,7 @@ void CompManager::moveSectionToEndAt (ValueTree& section, double newEndTime)
     }
 }
 
-ValueTree CompManager::addSection (int takeIndex, double endTime)
+juce::ValueTree CompManager::addSection (int takeIndex, double endTime)
 {
     if (! isTakeComp (getActiveTakeIndex()))
         addNewComp();
@@ -345,7 +348,7 @@ ValueTree CompManager::addSection (int takeIndex, double endTime)
     }
 
     auto* um = getUndoManager();
-    ValueTree newSection (IDs::COMPSECTION);
+    juce::ValueTree newSection (IDs::COMPSECTION);
     newSection.setProperty (IDs::takeIndex, takeIndex, um);
     newSection.setProperty (IDs::endTime, endTime, um);
     activeTake.addChild (newSection, insertIndex, um);
@@ -353,7 +356,7 @@ ValueTree CompManager::addSection (int takeIndex, double endTime)
     return newSection;
 }
 
-void CompManager::removeSection (const ValueTree& section)
+void CompManager::removeSection (const juce::ValueTree& section)
 {
     jassert (section.hasType (IDs::COMPSECTION));
     section.getParent().removeChild (section, getUndoManager());
@@ -466,14 +469,15 @@ void CompManager::keepSectionsSortedAndInRange()
     takeTree.sort (sorter, getUndoManager(), false);
 }
 
-ValueTree CompManager::getNewCompTree() const
+juce::ValueTree CompManager::getNewCompTree() const
 {
-    ValueTree newTake (IDs::TAKE);
+    juce::ValueTree newTake (IDs::TAKE);
 
     // Need to give the comp a blank section to draw onto
-    ValueTree newSection (IDs::COMPSECTION);
-    newSection.setProperty (IDs::takeIndex, -1, nullptr);
-    newSection.setProperty (IDs::endTime, getMaxCompLength(), nullptr);
+    auto newSection = createValueTree (IDs::COMPSECTION,
+                                       IDs::takeIndex, -1,
+                                       IDs::endTime, getMaxCompLength());
+
     newTake.addChild (newSection, -1, nullptr);
 
     return newTake;
@@ -783,7 +787,7 @@ double WaveCompManager::getSourceTempo()
     return clip.getLoopInfo().getBpm (info);
 }
 
-String WaveCompManager::getWarning()
+juce::String WaveCompManager::getWarning()
 {
     String message;
     const bool warnAboutReverse = clip.getIsReversed();
@@ -977,7 +981,7 @@ ProjectItem::Ptr WaveCompManager::getOrCreateProjectItemForTake (ValueTree& take
     return {};
 }
 
-ValueTree WaveCompManager::addNewComp()
+juce::ValueTree WaveCompManager::addNewComp()
 {
     auto newTake = getNewCompTree();
     auto newID = ProjectItemID::createNewID (clip.edit.getProjectItemID().getProjectID());
@@ -1098,14 +1102,14 @@ bool WaveCompManager::renderTake (CompRenderContext& context, AudioFileWriter& w
     // now perform the render
     auto streamTime = takeRange.getStart();
     auto blockLength = blockSize / writer.getSampleRate();
-    int64 samplesToWrite = roundToInt (takeRange.getLength() * writer.getSampleRate());
+    SampleCount samplesToWrite = roundToInt (takeRange.getLength() * writer.getSampleRate());
 
     for (;;)
     {
         auto blockEnd = jmin (streamTime + blockLength, takeRange.getEnd());
         rc.streamTime = { streamTime, blockEnd };
 
-        auto numSamplesDone = (int) jmin (samplesToWrite, (int64) blockSize);
+        auto numSamplesDone = (int) jmin (samplesToWrite, (SampleCount) blockSize);
         samplesToWrite -= numSamplesDone;
 
         rc.bufferNumSamples = numSamplesDone;
@@ -1161,7 +1165,7 @@ private:
     {
         CRASH_TRACER
         AudioFile tempFile (*proxy.engine,
-                            proxy.getFile().getSiblingFile ("temp_comp_" + String::toHexString (Random::getSystemRandom().nextInt64()))
+                            proxy.getFile().getSiblingFile ("temp_comp_" + juce::String::toHexString (Random::getSystemRandom().nextInt64()))
                             .withFileExtension (proxy.getFile().getFileExtension()));
 
         bool ok = render (tempFile);
@@ -1301,7 +1305,7 @@ void MidiCompManager::initialise()
         {
             if (auto ml = clip.getTakeSequence (i))
             {
-                ValueTree newTake (IDs::TAKE);
+                juce::ValueTree newTake (IDs::TAKE);
                 newTake.setProperty (IDs::isComp, ml->isCompList(), um);
                 takesTree.addChild (newTake, takeIndex, um);
             }
@@ -1335,11 +1339,11 @@ MidiList* MidiCompManager::getSequenceLooped (int index)
 }
 
 //==============================================================================
-juce::int64 MidiCompManager::getBaseTakeHash (int takeIndex) const
+HashCode MidiCompManager::getBaseTakeHash (int takeIndex) const
 {
     return takeIndex
-            ^ (int64) (clip.getLoopLengthBeats() * 153.0)
-            ^ (int64) (clip.getLoopStartBeats() * 264.0);
+             ^ static_cast<HashCode> (clip.getLoopLengthBeats() * 153.0)
+             ^ static_cast<HashCode> (clip.getLoopStartBeats() * 264.0);
 }
 
 double MidiCompManager::getTakeLength (int takeIndex) const
@@ -1402,7 +1406,7 @@ void MidiCompManager::flattenTake (int takeIndex, bool /*deleteSourceFiles*/)
     clip.deleteAllUnusedTakesConfirmingWithUser();
 }
 
-ValueTree MidiCompManager::addNewComp()
+juce::ValueTree MidiCompManager::addNewComp()
 {
     CRASH_TRACER
     auto newTake = getNewCompTree();
@@ -1423,7 +1427,7 @@ ValueTree MidiCompManager::addNewComp()
     return newTake;
 }
 
-void MidiCompManager::createComp (const ValueTree& takeTree)
+void MidiCompManager::createComp (const juce::ValueTree& takeTree)
 {
     CRASH_TRACER
 
