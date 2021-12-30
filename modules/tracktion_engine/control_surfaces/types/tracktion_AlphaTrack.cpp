@@ -13,10 +13,10 @@ namespace tracktion_engine
 
 namespace AlphaTrack
 {
-    static uint8 cmdInitNativeMode[] = { 0xf0, 0x00, 0x01, 0x40, 0x20, 0x01, 0x00, 0xf7 };
-    static uint8 cmdInquiry[]        = { 0xf0, 0x7e, 0x00, 0x06, 0x01, 0xf7 };
-    static uint8 rspInitAck[]        = { 0xf0, 0x7e, 0x00, 0x06, 0x02, 0x00, 0x01, 0x40, 0x20, 0x00, 0x01, 0x00 };
-    static uint8 cmdWrite[]          = { 0xf0, 0x00, 0x01, 0x40, 0x20, 0x00 };
+    static uint8_t cmdInitNativeMode[] = { 0xf0, 0x00, 0x01, 0x40, 0x20, 0x01, 0x00, 0xf7 };
+    static uint8_t cmdInquiry[]        = { 0xf0, 0x7e, 0x00, 0x06, 0x01, 0xf7 };
+    static uint8_t rspInitAck[]        = { 0xf0, 0x7e, 0x00, 0x06, 0x02, 0x00, 0x01, 0x40, 0x20, 0x00, 0x01, 0x00 };
+    static uint8_t cmdWrite[]          = { 0xf0, 0x00, 0x01, 0x40, 0x20, 0x00 };
 
     enum { TOUCH = 1, PARAM = 2 };
 }
@@ -505,11 +505,11 @@ void AlphaTrackControlSurface::moveFaderInt (float newSliderPos)
 
     if (newPos != physicalFaderPos)
     {
-        uint8 data[3];
+        uint8_t data[3];
 
         data[0] = 0xe0;
-        data[1] = (uint8) (((unsigned int) newPos & 3) << 4);
-        data[2] = (uint8) (((unsigned int) newPos & 0x3F8) >> 3);
+        data[1] = (uint8_t) (((unsigned int) newPos & 3) << 4);
+        data[2] = (uint8_t) (((unsigned int) newPos & 0x3F8) >> 3);
 
         sendMidiArray (data);
         physicalFaderPos = newPos;
@@ -575,13 +575,13 @@ void AlphaTrackControlSurface::automationWriteModeChanged (bool isWriting_)
         updateDisplay();
 }
 
-void AlphaTrackControlSurface::faderBankChanged (int newStartChannelNumber, const StringArray& trackNames)
+void AlphaTrackControlSurface::faderBankChanged (int newStartChannelNumber, const juce::StringArray& trackNames)
 {
     currentTrack = newStartChannelNumber;
     trackName = trackNames[0];
 
     if ((newStartChannelNumber + 1) == trackName.getIntValue() && trackName.containsOnly("0123456789"))
-        trackName = TRANS("Track") + " " + String (newStartChannelNumber + 1);
+        trackName = TRANS("Track") + " " + juce::String (newStartChannelNumber + 1);
 
     trackName = trackName.retainCharacters ("abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ1234567890 ()! \"#$%&\'*+,-./:;<=>?@^_`{|}");
 
@@ -660,9 +660,9 @@ void AlphaTrackControlSurface::currentSelectionChanged (juce::String)
 void AlphaTrackControlSurface::displayPrint (int line, int x, const char* const text)
 {
     const size_t len = strlen (text);
-    HeapBlock<uint8> buffer (len + 8);
+    HeapBlock<uint8_t> buffer (len + 8);
     memcpy (buffer, AlphaTrack::cmdWrite, sizeof (AlphaTrack::cmdWrite));
-    buffer [sizeof (AlphaTrack::cmdWrite)] = (uint8) (x + line * 16);
+    buffer [sizeof (AlphaTrack::cmdWrite)] = (uint8_t) (x + line * 16);
     memcpy (buffer + sizeof (AlphaTrack::cmdWrite) + 1, text, len);
     buffer [len + 8 - 1] = 0xf7;
     sendMidiCommandToController (buffer, (int) len + 8);
@@ -670,20 +670,20 @@ void AlphaTrackControlSurface::displayPrint (int line, int x, const char* const 
 
 void AlphaTrackControlSurface::setLed (int led, bool state)
 {
-    uint8 data[3];
+    uint8_t data[3];
     data[0] = 0x90;
-    data[1] = (uint8) led;
+    data[1] = (uint8_t) led;
     data[2] = state ? 0x7f : 0x00;
 
     sendMidiArray (data);
 }
 
-static String dbToString (double db, int chars)
+static juce::String dbToString (double db, int chars)
 {
     if (db >= -96.0f)
         return String::formatted ("%+.1f", db).substring (0, chars);
 
-    return String ("-INF").substring (0, chars);
+    return juce::String ("-INF").substring (0, chars);
 }
 
 void AlphaTrackControlSurface::handleAsyncUpdate()
@@ -721,7 +721,7 @@ void AlphaTrackControlSurface::handleAsyncUpdate()
                     name = edit->getAuxBusName (bus);
 
                     if (name.isEmpty())
-                        name = "Send #" + String (bus + 1);
+                        name = "Send #" + juce::String (bus + 1);
                 }
 
                 if (dynamic_cast<VolumeAndPanPlugin*> (param->getPlugin()) != nullptr
@@ -760,13 +760,15 @@ void AlphaTrackControlSurface::handleAsyncUpdate()
                     if (auto send = dynamic_cast<AuxSendPlugin*> (f))
                     {
                         int bus = send->getBusNumber();
-                        String name = edit->getAuxBusName(bus);
+
+                        auto name = edit->getAuxBusName(bus);
+
                         if (name.isEmpty())
-                            name = "snd" + String (bus + 1);
+                            name = "snd" + juce::String (bus + 1);
 
                         name = ExternalController::shortenName (name, sendCnt == 2 ? 4 : 5);
 
-                        String val = dbToString (send->getGainDb(), sendCnt == 2 ? 4 : 5);
+                        auto val = dbToString (send->getGainDb(), sendCnt == 2 ? 4 : 5);
 
                         if (sendCnt == 2)
                         {
@@ -831,8 +833,8 @@ void AlphaTrackControlSurface::handleAsyncUpdate()
 
                         if (auto p = params[i + offset])
                         {
-                            String name = ExternalController::shortenName (p->getParameterShortName (i == 2 ? 4 : 5), i == 2 ? 4 : 5);
-                            String val  = p->getLabelForValue (p->getCurrentValue()).substring(0, i == 2 ? 4 : 5);
+                            auto name = ExternalController::shortenName (p->getParameterShortName (i == 2 ? 4 : 5), i == 2 ? 4 : 5);
+                            auto val  = p->getLabelForValue (p->getCurrentValue()).substring(0, i == 2 ? 4 : 5);
 
                             if (val.isEmpty())
                                 val = p->getCurrentValueAsString().substring(0, i == 2 ? 4 : 5);

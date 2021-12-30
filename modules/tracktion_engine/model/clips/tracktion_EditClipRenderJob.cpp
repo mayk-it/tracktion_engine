@@ -75,13 +75,13 @@ EditRenderJob::~EditRenderJob()
             editDeleter->getTransport().editHasChanged();
 }
 
-String EditRenderJob::getLastError() const
+juce::String EditRenderJob::getLastError() const
 {
     const ScopedLock sl (errorLock);
     return lastError;
 }
 
-void EditRenderJob::setLastError (const String& e)
+void EditRenderJob::setLastError (const juce::String& e)
 {
     const ScopedLock sl (errorLock);
     lastError = e;
@@ -166,7 +166,9 @@ bool EditRenderJob::completeRender()
 }
 
 //==============================================================================
-EditRenderJob::RenderPass::RenderPass (EditRenderJob& j, Renderer::Parameters& renderParams, const String& description)
+EditRenderJob::RenderPass::RenderPass (EditRenderJob& j,
+                                       Renderer::Parameters& renderParams,
+                                       const juce::String& description)
     : owner (j), r (renderParams), desc (description), originalCategory (r.category),
       tempFile (r.destFile, TemporaryFile::useHiddenFile)
 {
@@ -176,7 +178,7 @@ EditRenderJob::RenderPass::RenderPass (EditRenderJob& j, Renderer::Parameters& r
 
 EditRenderJob::RenderPass::~RenderPass()
 {
-    const String errorMessage (task != nullptr ? task->errorMessage : String());
+    auto errorMessage (task != nullptr ? task->errorMessage : String());
     owner.setLastError (errorMessage);
     const bool completedOk = task != nullptr ? task->getCurrentTaskProgress() == 1.0f : false;
     task = nullptr;
@@ -410,9 +412,9 @@ bool EditRenderJob::generateSilence (const File& fileToWriteTo)
         return false;
 
     os.release();
-    auto numToDo = (int64) (params.time.getLength() * params.sampleRateForAudio);
+    auto numToDo = (SampleCount) (params.time.getLength() * params.sampleRateForAudio);
     auto blockSize = jmin (32758, (int) numToDo);
-    int64 numDone = 0;
+    SampleCount numDone = 0;
 
     // should probably use an AudioScratchBuffer here
     juce::AudioBuffer<float> buffer (numChans, blockSize);

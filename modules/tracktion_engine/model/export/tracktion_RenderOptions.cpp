@@ -58,9 +58,9 @@ static bool isParentTrackSelected (SelectionManager& sm, Track& t)
     return false;
 }
 
-static BigInteger getSelectedTracks (Edit& edit, SelectionManager& sm)
+static juce::BigInteger getSelectedTracks (Edit& edit, SelectionManager& sm)
 {
-    BigInteger b;
+    juce::BigInteger b;
     int i = 0;
 
     for (auto t : getAllTracks (edit))
@@ -704,7 +704,7 @@ void RenderOptions::setToDefault()
     addMetadata              = false;
 }
 
-void RenderOptions::updateLastUsedRenderPath (RenderOptions& renderOptions, const String& itemID)
+void RenderOptions::updateLastUsedRenderPath (RenderOptions& renderOptions, const juce::String& itemID)
 {
     auto& storage = renderOptions.engine.getPropertyStorage();
     auto lastEditID = storage.getProperty (SettingID::lastEditRender).toString();
@@ -820,11 +820,11 @@ std::unique_ptr<RenderOptions> RenderOptions::forEditClip (Clip& clip)
 
 //==============================================================================
 RenderOptions::RenderOptions (Engine& e)
-    : RenderOptions (e, ValueTree (IDs::RENDER), nullptr)
+    : RenderOptions (e, juce::ValueTree (IDs::RENDER), nullptr)
 {
 }
 
-RenderOptions::RenderOptions (Engine& e, const ValueTree& s, UndoManager* um)
+RenderOptions::RenderOptions (Engine& e, const juce::ValueTree& s, UndoManager* um)
     : engine (e), state (s)
 {
     state.addListener (this);
@@ -875,7 +875,7 @@ RenderOptions::TargetFileFormat RenderOptions::setFormat (TargetFileFormat f)
     return format;
 }
 
-void RenderOptions::setFormatType (const String& typeString)
+void RenderOptions::setFormatType (const juce::String& typeString)
 {
     auto& am = engine.getAudioFileFormatManager();
 
@@ -888,7 +888,7 @@ void RenderOptions::setFormatType (const String& typeString)
     else                                                           setFormat (wav);
 }
 
-String RenderOptions::getFormatTypeName (TargetFileFormat fmt)
+juce::String RenderOptions::getFormatTypeName (TargetFileFormat fmt)
 {
     auto& am = engine.getAudioFileFormatManager();
 
@@ -913,12 +913,12 @@ void RenderOptions::setTrackIDs (const juce::Array<EditItemID>& trackIDs)
         tracksProperty = EditItemID::listToString (trackIDs);
 }
 
-int64 RenderOptions::getTracksHash() const
+HashCode RenderOptions::getTracksHash() const
 {
-    int64 tracksHash = 0;
+    HashCode tracksHash = 0;
 
     for (auto& t : tracks)
-        tracksHash ^= static_cast<int64> (t.getRawID()); // TODO: this will probably be buggy if the IDs are all low sequential integers!
+        tracksHash ^= static_cast<HashCode> (t.getRawID()); // TODO: this will probably be buggy if the IDs are all low sequential integers!
 
     return tracksHash;
 }
@@ -936,9 +936,9 @@ void RenderOptions::setSampleRate (int sr)
     }
 }
 
-BigInteger RenderOptions::getTrackIndexes (const Edit& ed) const
+juce::BigInteger RenderOptions::getTrackIndexes (const Edit& ed) const
 {
-    BigInteger res;
+    juce::BigInteger res;
 
     auto trks = getAllTracks (ed);
 
@@ -955,7 +955,7 @@ void RenderOptions::setSelected (bool onlySelectedTrackAndClips)
     selectedClips = onlySelectedTrackAndClips;
 }
 
-void RenderOptions::setFilename (String value, bool canPromptToOverwriteExisting)
+void RenderOptions::setFilename (juce::String value, bool canPromptToOverwriteExisting)
 {
     RecentlyOpenedFilesList recent;
     auto recentList = engine.getPropertyStorage().getProperty (SettingID::renderRecentFilesList).toString();
@@ -981,7 +981,7 @@ void RenderOptions::setFilename (String value, bool canPromptToOverwriteExisting
 
         int i = recentOffset;
 
-        for (const String& s : recent.getAllFilenames())
+        for (auto& s : recent.getAllFilenames())
             m2.addItem (i++, s);
 
         if (recent.getNumFiles() > 0)
@@ -1048,11 +1048,11 @@ void RenderOptions::setFilename (String value, bool canPromptToOverwriteExisting
 }
 
 //==============================================================================
-StringArray RenderOptions::getFormatTypes()
+juce::StringArray RenderOptions::getFormatTypes()
 {
     auto& am = engine.getAudioFileFormatManager();
 
-    StringArray formats;
+    juce::StringArray formats;
     formats.add (am.getWavFormat()->getFormatName());
     formats.add (am.getAiffFormat()->getFormatName());
 
@@ -1075,7 +1075,7 @@ StringArray RenderOptions::getFormatTypes()
     return formats;
 }
 
-StringArray RenderOptions::getAddRenderOptionText()
+juce::StringArray RenderOptions::getAddRenderOptionText()
 {
     static const char* renderOptionsText[] = { NEEDS_TRANS("Replace Rendered Tracks"),
                                                NEEDS_TRANS("Add Rendered Tracks"),
@@ -1084,7 +1084,7 @@ StringArray RenderOptions::getAddRenderOptionText()
                                                NEEDS_TRANS("Replace Clips"),
                                                NEEDS_TRANS("None") };
 
-    StringArray renderOptions;
+    juce::StringArray renderOptions;
 
     renderOptions.add (TRANS(renderOptionsText[replaceTrack]));
     renderOptions.add (TRANS(renderOptionsText[addTrack]));
@@ -1106,7 +1106,7 @@ bool RenderOptions::isMarkedRegionBigEnough (EditTimeRange region)
     return region.getLength() > 0.05;
 }
 
-StringArray RenderOptions::getQualitiesList() const
+juce::StringArray RenderOptions::getQualitiesList() const
 {
     auto& af = engine.getAudioFileFormatManager();
 
@@ -1127,25 +1127,25 @@ StringArray RenderOptions::getQualitiesList() const
 void RenderOptions::updateHash()
 {
     hash = (tracks.isEmpty() ? 0 : getTracksHash())
-           ^ (((int64) createMidiFile)        << 0)
-           ^ (((int64) format)                << 1)
-           ^ (((int64) stereo)                << 2)
-           ^ (((int64) sampleRate)            << 3)
-           ^ (((int64) bitDepth)              << 4)
-           ^ (((int64) qualityIndex)          << 5)
-           ^ (((int64) removeSilence)         << 6)
-           ^ (((int64) normalise)             << 7)
-           ^ (((int64) dither)                << 8)
-           ^ (((int64) adjustBasedOnRMS)      << 9)
-           ^ ((int64) (rmsLevelDb * -4567.2))
-           ^ ((int64) (peakLevelDb * 2453.1))
-           ^ (((int64) markedRegion)          << 10)
-           ^ (((int64) selectedTracks)        << 12)
-           ^ (((int64) selectedClips)         << 12)
-           ^ (((int64) tracksToSeparateFiles) << 13)
-           ^ (((int64) realTime)              << 14)
-           ^ (((int64) usePlugins)            << 15)
-           ^ (((int64) addMetadata)           << 16);
+           ^ (((HashCode) createMidiFile)        << 0)
+           ^ (((HashCode) format)                << 1)
+           ^ (((HashCode) stereo)                << 2)
+           ^ (((HashCode) sampleRate)            << 3)
+           ^ (((HashCode) bitDepth)              << 4)
+           ^ (((HashCode) qualityIndex)          << 5)
+           ^ (((HashCode) removeSilence)         << 6)
+           ^ (((HashCode) normalise)             << 7)
+           ^ (((HashCode) dither)                << 8)
+           ^ (((HashCode) adjustBasedOnRMS)      << 9)
+           ^ ((HashCode) (rmsLevelDb * -4567.2))
+           ^ ((HashCode) (peakLevelDb * 2453.1))
+           ^ (((HashCode) markedRegion)          << 10)
+           ^ (((HashCode) selectedTracks)        << 12)
+           ^ (((HashCode) selectedClips)         << 12)
+           ^ (((HashCode) tracksToSeparateFiles) << 13)
+           ^ (((HashCode) realTime)              << 14)
+           ^ (((HashCode) usePlugins)            << 15)
+           ^ (((HashCode) addMetadata)           << 16);
 }
 
 void RenderOptions::updateFileName()
@@ -1167,10 +1167,10 @@ void RenderOptions::updateOptionsForFormat()
     {
         // sample rate
         auto rates = af->getPossibleSampleRates();
-        StringArray r;
+        juce::StringArray r;
 
         for (auto rate : rates)
-            r.add (String (rate));
+            r.add (juce::String (rate));
 
         if (! rates.contains ((int) sampleRate))
             sampleRate = 44100;
@@ -1183,7 +1183,7 @@ void RenderOptions::updateOptionsForFormat()
         auto depths = af->getPossibleBitDepths();
 
         for (auto depth : depths)
-            r.add (TRANS("32-bit").replace ("32", String (depth)));
+            r.add (TRANS("32-bit").replace ("32", juce::String (depth)));
 
         if (! depths.contains (bitDepth))
             bitDepth = 16;
@@ -1251,7 +1251,7 @@ void RenderOptions::updateDefaultFilename (Edit* edit)
     }
 }
 
-String RenderOptions::getCurrentFileExtension()
+juce::String RenderOptions::getCurrentFileExtension()
 {
     if (format == midi)
         return ".mid";

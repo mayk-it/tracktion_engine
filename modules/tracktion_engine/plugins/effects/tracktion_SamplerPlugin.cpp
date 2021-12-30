@@ -232,7 +232,7 @@ void SamplerPlugin::deinitialise()
 }
 
 //==============================================================================
-void SamplerPlugin::playNotes (const BigInteger& keysDown)
+void SamplerPlugin::playNotes (const juce::BigInteger& keysDown)
 {
     const ScopedLock sl (lock);
 
@@ -384,19 +384,19 @@ int SamplerPlugin::getNumSounds() const
                             [] (int total, auto v) { return total + (v.hasType (IDs::SOUND) ? 1 : 0); });
 }
 
-String SamplerPlugin::getSoundName (int index) const
+juce::String SamplerPlugin::getSoundName (int index) const
 {
     return getSound (index)[IDs::name];
 }
 
-void SamplerPlugin::setSoundName (int index, const String& n)
+void SamplerPlugin::setSoundName (int index, const juce::String& n)
 {
     getSound (index).setProperty (IDs::name, n, getUndoManager());
 }
 
-bool SamplerPlugin::hasNameForMidiNoteNumber (int note, int, String& noteName)
+bool SamplerPlugin::hasNameForMidiNoteNumber (int note, int, juce::String& noteName)
 {
-    String s;
+    juce::String s;
 
     {
         const ScopedLock sl (lock);
@@ -460,23 +460,24 @@ double SamplerPlugin::getSoundLength (int index) const
     return l;
 }
 
-String SamplerPlugin::addSound (const juce::String& source, const String& name, double startTime, double length, float gainDb)
+juce::String SamplerPlugin::addSound (const juce::String& source, const juce::String& name,
+                                      double startTime, double length, float gainDb)
 {
     const int maxNumSamples = 64;
 
     if (getNumSounds() >= maxNumSamples)
         return TRANS("Can't load any more samples");
 
-    ValueTree v (IDs::SOUND);
-    v.setProperty (IDs::source, source, nullptr);
-    v.setProperty (IDs::name, name, nullptr);
-    v.setProperty (IDs::startTime, startTime, nullptr);
-    v.setProperty (IDs::length, length, nullptr);
-    v.setProperty (IDs::keyNote, 72, nullptr);
-    v.setProperty (IDs::minNote, 72 - 24, nullptr);
-    v.setProperty (IDs::maxNote, 72 + 24, nullptr);
-    v.setProperty (IDs::gainDb, gainDb, nullptr);
-    v.setProperty (IDs::pan, (double) 0, nullptr);
+    auto v = createValueTree (IDs::SOUND,
+                              IDs::source, source,
+                              IDs::name, name,
+                              IDs::startTime, startTime,
+                              IDs::length, length,
+                              IDs::keyNote, 72,
+                              IDs::minNote, 72 - 24,
+                              IDs::maxNote, 72 + 24,
+                              IDs::gainDb, gainDb,
+                              IDs::pan, (double) 0);
 
     state.addChild (v, -1, getUndoManager());
     return {};
@@ -527,14 +528,14 @@ void SamplerPlugin::setSoundOpenEnded (int index, bool b)
     v.setProperty (IDs::openEnded, b, um);
 }
 
-void SamplerPlugin::setSoundMedia (int index, const String& source)
+void SamplerPlugin::setSoundMedia (int index, const juce::String& source)
 {
     auto v = getSound (index);
     v.setProperty (IDs::source, source, getUndoManager());
     triggerAsyncUpdate();
 }
 
-ValueTree SamplerPlugin::getSound (int soundIndex) const
+juce::ValueTree SamplerPlugin::getSound (int soundIndex) const
 {
     int index = 0;
 
@@ -599,8 +600,8 @@ void SamplerPlugin::restorePluginStateFromValueTree (const juce::ValueTree& v)
 
 //==============================================================================
 SamplerPlugin::SamplerSound::SamplerSound (SamplerPlugin& sf,
-                                           const String& source_,
-                                           const String& name_,
+                                           const juce::String& source_,
+                                           const juce::String& name_,
                                            const double startTime_,
                                            const double length_,
                                            const float gainDb_)

@@ -59,7 +59,7 @@ struct EditPlaybackContext::ContextSyncroniser
         
         const auto sourceTimelineTime = tracktion_graph::sampleToTime (sourcePlayHead.getPosition(), sampleRate);
         const auto millisecondsSinceEpoch = std::chrono::duration_cast<std::chrono::milliseconds> (sourcePlayHead.getLastUserInteractionTime().time_since_epoch()).count();
-        const juce::Time sourceLastInteractionTime (static_cast<int64> (millisecondsSinceEpoch));
+        const juce::Time sourceLastInteractionTime (static_cast<int64_t> (millisecondsSinceEpoch));
 
         const auto destTimelineTime = tracktion_graph::sampleToTime (destPlayHead.getPosition(), sampleRate);
         const auto destLoopDuration = tracktion_graph::sampleToTime (destPlayHead.getLoopRange().getLength(), sampleRate);
@@ -530,7 +530,7 @@ void EditPlaybackContext::startRecording (double start, double punchIn)
     auto sampleRate = dm.getSampleRate();
     auto blockSize  = dm.getBlockSize();
 
-    String error;
+    juce::String error;
 
     for (int i = waveInputs.size(); --i >= 0 && error.isEmpty();)
         if (auto wi = waveInputs.getUnchecked (i))

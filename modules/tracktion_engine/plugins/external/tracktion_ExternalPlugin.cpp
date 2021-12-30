@@ -13,8 +13,8 @@ namespace tracktion_engine
 
 static juce::String getDeprecatedPluginDescSuffix (const juce::PluginDescription& d)
 {
-    return "-" + String::toHexString (d.fileOrIdentifier.hashCode())
-         + "-" + String::toHexString (d.deprecatedUid);
+    return "-" + juce::String (d.fileOrIdentifier.hashCode())
+         + "-" + juce::String::toHexString (d.deprecatedUid);
 }
 
 juce::String createIdentifierString (const juce::PluginDescription& d)
@@ -25,8 +25,7 @@ juce::String createIdentifierString (const juce::PluginDescription& d)
 struct ExternalPlugin::ProcessorChangedManager  : public juce::AudioProcessorListener,
                                                   private juce::AsyncUpdater
 {
-    ProcessorChangedManager (ExternalPlugin& p)
-        : plugin (p)
+    ProcessorChangedManager (ExternalPlugin& p) : plugin (p)
     {
         if (auto pi = plugin.getAudioPluginInstance())
             pi->addListener (this);
@@ -235,10 +234,10 @@ struct ExtraVSTCallbacks  : public juce::VSTPluginFormat::ExtraFunctions
 {
     ExtraVSTCallbacks (Edit& ed) : edit (ed) {}
 
-    int64 getTempoAt (int64 samplePos) override
+    int64_t getTempoAt (SampleCount samplePos) override
     {
         auto sampleRate = edit.engine.getDeviceManager().getSampleRate();
-        return (int64) (10000.0 * edit.tempoSequence.getTempoAt (samplePos / sampleRate).getBpm());
+        return (int64_t) (10000.0 * edit.tempoSequence.getTempoAt (samplePos / sampleRate).getBpm());
     }
 
     // returns 0: not supported, 1: off, 2:read, 3:write, 4:read/write
@@ -315,7 +314,7 @@ public:
             result.ppqLoopEnd = loopEnd->getPPQTime();
         }
 
-        result.timeInSamples    = (int64) (localTime * plugin.sampleRate);
+        result.timeInSamples    = (int64_t) (localTime * plugin.sampleRate);
         result.timeInSeconds    = localTime;
 
         currentPos->setTime (localTime);
@@ -409,7 +408,7 @@ namespace
 
         if (auto* mb = layout.getBinaryData())
         {
-            auto v = ValueTree::readFromData (mb->getData(), mb->getSize());
+            auto v = juce::ValueTree::readFromData (mb->getData(), mb->getSize());
             readBusLayout (busesLayout, v, plugin, true);
             readBusLayout (busesLayout, v, plugin, false);
         }
@@ -417,28 +416,28 @@ namespace
         return busesLayout;
     }
 
-    ValueTree createBusLayout (const AudioProcessor::BusesLayout& layout, bool isInput)
+    juce::ValueTree createBusLayout (const AudioProcessor::BusesLayout& layout, bool isInput)
     {
         auto& buses = (isInput ? layout.inputBuses : layout.outputBuses);
 
-        ValueTree v (isInput ? IDs::INPUTS : IDs::OUTPUTS);
+        juce::ValueTree v (isInput ? IDs::INPUTS : IDs::OUTPUTS);
 
         for (int busIdx = 0; busIdx < buses.size(); ++busIdx)
         {
-            ValueTree bus (IDs::BUS);
-            bus.setProperty (IDs::index, busIdx, nullptr);
+            auto& set = buses.getReference (busIdx);
+            juce::String layoutName = set.isDisabled() ? "disabled" : set.getSpeakerArrangementAsString();
 
-            const AudioChannelSet& set = buses.getReference (busIdx);
-            const String layoutName = set.isDisabled() ? "disabled" : set.getSpeakerArrangementAsString();
-            bus.setProperty (IDs::layout, layoutName, nullptr);
+            auto bus = createValueTree (IDs::BUS,
+                                        IDs::index, busIdx,
+                                        IDs::layout, layoutName);
 
             v.addChild (bus, -1, nullptr);
         }
 
-        return v.getNumChildren() > 0 ? v : ValueTree();
+        return v.getNumChildren() > 0 ? v : juce::ValueTree();
     }
 
-    ValueTree createBusesLayout (const AudioProcessor::BusesLayout& layout)
+    juce::ValueTree createBusesLayout (const AudioProcessor::BusesLayout& layout)
     {
         auto inputs = createBusLayout (layout, true);
         auto outputs = createBusLayout (layout, false);
@@ -446,7 +445,7 @@ namespace
         if (inputs.getNumChildren() == 0 && outputs.getNumChildren() == 0)
             return {};
 
-        ValueTree v (IDs::LAYOUT);
+        juce::ValueTree v (IDs::LAYOUT);
         v.addChild (inputs, -1, nullptr);
         v.addChild (outputs, -1, nullptr);
 
@@ -545,15 +544,15 @@ ExternalPlugin::ExternalPlugin (PluginCreationInfo info)  : Plugin (info)
     initialiseFully();
 }
 
-ValueTree ExternalPlugin::create (Engine& e, const PluginDescription& desc)
+juce::ValueTree ExternalPlugin::create (Engine& e, const PluginDescription& desc)
 {
-    ValueTree v (IDs::PLUGIN);
-    v.setProperty (IDs::type, xmlTypeName, nullptr);
-    v.setProperty (IDs::uniqueId, String::toHexString (desc.uniqueId), nullptr);
-    v.setProperty (IDs::uid, String::toHexString (desc.deprecatedUid), nullptr);
-    v.setProperty (IDs::filename, desc.fileOrIdentifier, nullptr);
-    v.setProperty (IDs::name, desc.name, nullptr);
-    v.setProperty (IDs::manufacturer, desc.manufacturerName, nullptr);
+    auto v = createValueTree (IDs::PLUGIN,
+                              IDs::type, xmlTypeName,
+                              IDs::uniqueId, juce::String::toHexString (desc.uniqueId),
+                              IDs::uid, juce::String::toHexString (desc.deprecatedUid),
+                              IDs::filename, desc.fileOrIdentifier,
+                              IDs::name, desc.name,
+                              IDs::manufacturer, desc.manufacturerName);
 
     if (e.getPluginManager().areGUIsLockedByDefault())
         v.setProperty (IDs::windowLocked, true, nullptr);
@@ -645,7 +644,7 @@ void ExternalPlugin::buildParameterList()
                 }
 
                 // Just use the index for the ID for now until this has been added to JUCE
-                auto parameterID = String (i);
+                auto parameterID = juce::String (i);
 
                 if (auto paramWithID = dynamic_cast<AudioProcessorParameterWithID*> (parameter))
                     parameterID = paramWithID->paramID;
@@ -692,7 +691,7 @@ std::unique_ptr<PluginDescription> ExternalPlugin::findDescForUID (int uid, int 
     return {};
 }
 
-std::unique_ptr<PluginDescription> ExternalPlugin::findDescForFileOrID (const String& fileOrID) const
+std::unique_ptr<PluginDescription> ExternalPlugin::findDescForFileOrID (const juce::String& fileOrID) const
 {
     if (fileOrID.isNotEmpty())
     {
@@ -708,14 +707,14 @@ std::unique_ptr<PluginDescription> ExternalPlugin::findDescForFileOrID (const St
     return {};
 }
 
-static std::unique_ptr<PluginDescription> findDescForName (Engine& engine, const String& name, const String& format)
+static std::unique_ptr<PluginDescription> findDescForName (Engine& engine, const juce::String& name, const juce::String& format)
 {
     if (name.isEmpty())
         return {};
 
     auto& pm = engine.getPluginManager();
 
-    auto findName = [&pm, format] (const String& nameToFind) -> std::unique_ptr<PluginDescription>
+    auto findName = [&pm, format] (const juce::String& nameToFind) -> std::unique_ptr<PluginDescription>
     {
         for (auto d : pm.knownPluginList.getTypes())
             if (d.name == nameToFind && d.pluginFormatName == format)
@@ -822,7 +821,7 @@ void ExternalPlugin::doFullInitialisation()
                 return;
 
             CRASH_TRACER_PLUGIN (getDebugName());
-            String error;
+            juce::String error;
 
             callBlocking ([this, &error, &foundDesc]
             {
@@ -937,7 +936,7 @@ void ExternalPlugin::flushBusesLayoutToValueTree()
 
 void ExternalPlugin::restorePluginStateFromValueTree (const juce::ValueTree& v)
 {
-    String s;
+    juce::String s;
 
     if (v.hasProperty (IDs::state))
     {
@@ -1023,7 +1022,7 @@ struct ExternalPlugin::MPEChannelRemapper
         if (channel < lowChannel || channel > highChannel)
             return;
 
-        auto sourceAndChannelID = (((uint32) m.mpeSourceID << 5) | (uint32) (channel - 1));
+        auto sourceAndChannelID = (((uint32_t) m.mpeSourceID << 5) | (uint32_t) (channel - 1));
 
         if ((*m.getRawData() & 0xf0) != 0xf0)
         {
@@ -1050,9 +1049,9 @@ struct ExternalPlugin::MPEChannelRemapper
         }
     }
 
-    uint32 sourceAndChannel[17] = {};
-    uint32 lastUsed[17] = {};
-    uint32 counter = 0;
+    uint32_t sourceAndChannel[17] = {};
+    uint32_t lastUsed[17] = {};
+    uint32_t counter = 0;
 
     int getBestChanToReuse() const noexcept
     {
@@ -1075,7 +1074,7 @@ struct ExternalPlugin::MPEChannelRemapper
         return bestChan;
     }
 
-    bool applyRemapIfExisting (int channel, uint32 sourceAndChannelID, MidiMessageArray::MidiMessageWithSource& m) noexcept
+    bool applyRemapIfExisting (int channel, uint32_t sourceAndChannelID, MidiMessageArray::MidiMessageWithSource& m) noexcept
     {
         if (sourceAndChannel[channel] == sourceAndChannelID)
         {
@@ -1187,7 +1186,7 @@ void ExternalPlugin::prepareIncomingMidiMessages (MidiMessageArray& incoming, in
 {
     if (incoming.isAllNotesOff)
     {
-        uint32 eventsSentOnChannel = 0;
+        uint32_t eventsSentOnChannel = 0;
 
         activeNotes.iterate ([&eventsSentOnChannel, this, isPlaying] (int chan, int noteNumber)
         {
@@ -1260,13 +1259,13 @@ void ExternalPlugin::prepareIncomingMidiMessages (MidiMessageArray& incoming, in
    #if 0
     if (! incoming.isEmpty())
     {
-        const uint8* midiData;
+        const uint8_t* midiData;
         int numBytes, midiEventPos;
 
         DBG ("----------");
 
         for (MidiBuffer::Iterator iter (midiBuffer); iter.getNextEvent (midiData, numBytes, midiEventPos);)
-            DBG (String::toHexString (midiData, numBytes) << "   " << midiEventPos);
+            DBG (juce::String::toHexString (midiData, numBytes) << "   " << midiEventPos);
     }
    #endif
 
@@ -1430,7 +1429,8 @@ int ExternalPlugin::getNumOutputChannelsGivenInputs (int)
     return jmax (1, getNumOutputs());
 }
 
-void ExternalPlugin::getChannelNames (StringArray* ins, StringArray* outs)
+void ExternalPlugin::getChannelNames (juce::StringArray* ins,
+                                      juce::StringArray* outs)
 {
     if (pluginInstance != nullptr)
     {
@@ -1447,7 +1447,7 @@ void ExternalPlugin::getChannelNames (StringArray* ins, StringArray* outs)
 
             for (int i = 0; i < num; ++i)
             {
-                const String name (getChannelName (pluginInstance->getBus (true, 0), i));
+                auto name = getChannelName (pluginInstance->getBus (true, 0), i);
                 ins->add (name.isNotEmpty() ? name : TRANS("Unnamed"));
             }
         }
@@ -1458,7 +1458,7 @@ void ExternalPlugin::getChannelNames (StringArray* ins, StringArray* outs)
 
             for (int i = 0; i < num; ++i)
             {
-                const String name (getChannelName (pluginInstance->getBus (false, 0), i));
+                auto name = getChannelName (pluginInstance->getBus (false, 0), i);
                 outs->add (name.isNotEmpty() ? name : TRANS("Unnamed"));
             }
         }
@@ -1488,7 +1488,7 @@ File ExternalPlugin::getFile() const
     return {};
 }
 
-String ExternalPlugin::getSelectableDescription()
+juce::String ExternalPlugin::getSelectableDescription()
 {
     if (desc.pluginFormatName.isNotEmpty())
         return getName() + " (" + desc.pluginFormatName + " " + TRANS("Plugin") + ")";
@@ -1507,7 +1507,7 @@ int ExternalPlugin::getCurrentProgram() const
     return pluginInstance ? pluginInstance->getCurrentProgram() : 0;
 }
 
-String ExternalPlugin::getProgramName (int index)
+juce::String ExternalPlugin::getProgramName (int index)
 {
     if (index == getCurrentProgram())
         return getCurrentProgramName();
@@ -1530,7 +1530,7 @@ bool ExternalPlugin::hasNameForMidiNoteNumber (int note, int midiChannel, juce::
     return false;
 }
 
-bool ExternalPlugin::hasNameForMidiProgram (int programNum, int bank, String& name)
+bool ExternalPlugin::hasNameForMidiProgram (int programNum, int bank, juce::String& name)
 {
     if (takesMidiInput() && isSynth() && getNumPrograms() > 0)
     {
@@ -1547,21 +1547,22 @@ bool ExternalPlugin::hasNameForMidiProgram (int programNum, int bank, String& na
     return false;
 }
 
-String ExternalPlugin::getNumberedProgramName (int i)
+juce::String ExternalPlugin::getNumberedProgramName (int i)
 {
-    String s (getProgramName(i));
+    auto s = getProgramName(i);
+
     if (s.isEmpty())
         s = "(" + TRANS("Unnamed") + ")";
 
-    return String (i + 1) + " - " + s;
+    return juce::String (i + 1) + " - " + s;
 }
 
-String ExternalPlugin::getCurrentProgramName()
+juce::String ExternalPlugin::getCurrentProgramName()
 {
     return pluginInstance ? pluginInstance->getProgramName (pluginInstance->getCurrentProgram()) : String();
 }
 
-void ExternalPlugin::setCurrentProgramName (const String& name)
+void ExternalPlugin::setCurrentProgramName (const juce::String& name)
 {
     CRASH_TRACER_PLUGIN (getDebugName());
 
@@ -1669,13 +1670,13 @@ bool ExternalPlugin::setBusLayout (AudioChannelSet set, bool isInput, int busInd
 }
 
 //==============================================================================
-String ExternalPlugin::createPluginInstance (const PluginDescription& description)
+juce::String ExternalPlugin::createPluginInstance (const PluginDescription& description)
 {
     jassert (! pluginInstance); // This should have already been deleted!
 
     auto& dm = engine.getDeviceManager();
 
-    String error;
+    juce::String error;
     pluginInstance = engine.getPluginManager().createPluginInstance (description, dm.getSampleRate(), dm.getBlockSize(), error);
 
     if (pluginInstance != nullptr)

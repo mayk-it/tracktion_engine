@@ -69,7 +69,7 @@ namespace TransportHelpers
 /**
     Represents the state of an Edit's transport.
 */
-struct TransportControl::TransportState : private ValueTree::Listener
+struct TransportControl::TransportState : private juce::ValueTree::Listener
 {
     TransportState (TransportControl& tc, juce::ValueTree transportStateToUse)
         : state (transportStateToUse), transport (tc)
@@ -182,7 +182,7 @@ struct TransportControl::TransportState : private ValueTree::Listener
     CachedValue<double> startTime, endTime, cursorPosAtPlayStart, videoPosition;
     CachedValue<int> reallocationInhibitors, playbackContextAllocation, nudgeLeftCount, nudgeRightCount;
 
-    ValueTree state, transientState { IDs::TRANSPORT };
+    juce::ValueTree state, transientState { IDs::TRANSPORT };
     TransportControl& transport;
 
 private:
@@ -861,7 +861,7 @@ Array<File> TransportControl::getRetrospectiveRecordAsAudioFiles()
 
                     auto f = dir.getNonexistentChildFile (File::createLegalFileName (mc->getName()), ".wav");
 
-                    BigInteger tracksToDo;
+                    juce::BigInteger tracksToDo;
                     int idx = 0;
                     for (auto t : getAllTracks (edit))
                     {

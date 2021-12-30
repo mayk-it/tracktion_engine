@@ -140,7 +140,7 @@ void Plugin::selectableAboutToBeDeleted()
 
 int Plugin::getNumOutputChannelsGivenInputs (int)
 {
-    StringArray outs;
+    juce::StringArray outs;
     getChannelNames (nullptr, &outs);
     return outs.size();
 }
@@ -161,14 +161,14 @@ Plugin::Wire* Plugin::getWire (int index) const
     return {};
 }
 
-ValueTree Plugin::getConnectionsTree()
+juce::ValueTree Plugin::getConnectionsTree()
 {
     auto p = state.getChildWithName (IDs::SIDECHAINCONNECTIONS);
 
     if (p.isValid())
         return p;
 
-    p = ValueTree (IDs::SIDECHAINCONNECTIONS);
+    p = juce::ValueTree (IDs::SIDECHAINCONNECTIONS);
     state.addChild (p, -2, getUndoManager());
     return p;
 }
@@ -180,13 +180,11 @@ void Plugin::makeConnection (int srcChannel, int dstChannel, UndoManager* um)
             if (w->sourceChannelIndex == srcChannel && w->destChannelIndex == dstChannel)
                 return;
 
-    ValueTree w (IDs::SIDECHAINCONNECTION);
-    w.setProperty (IDs::srcChan, srcChannel, nullptr);
-    w.setProperty (IDs::dstChan, dstChannel, nullptr);
+    auto w = createValueTree (IDs::SIDECHAINCONNECTION,
+                              IDs::srcChan, srcChannel,
+                              IDs::dstChan, dstChannel);
 
-    auto p = getConnectionsTree();
-
-    p.addChild (w, -1, um);
+    getConnectionsTree().addChild (w, -1, um);
 }
 
 void Plugin::breakConnection (int srcChannel, int dstChannel)
@@ -213,7 +211,7 @@ bool Plugin::canSidechain()
 {
     if (! isInRack())
     {
-        StringArray ins, outs;
+        juce::StringArray ins, outs;
         getChannelNames (&ins, &outs);
         return ins.size() > 2 || ins.size() > outs.size();
     }
@@ -221,9 +219,9 @@ bool Plugin::canSidechain()
     return false;
 }
 
-StringArray Plugin::getSidechainSourceNames (bool allowNone)
+juce::StringArray Plugin::getSidechainSourceNames (bool allowNone)
 {
-    StringArray srcNames;
+    juce::StringArray srcNames;
 
     if (allowNone)
         srcNames.add (TRANS("<none>"));
@@ -235,20 +233,20 @@ StringArray Plugin::getSidechainSourceNames (bool allowNone)
         idx++;
 
         if (at != getOwnerTrack())
-            srcNames.add (String::formatted ("%d. ", idx) + at->getName());
+            srcNames.add (juce::String::formatted ("%d. ", idx) + at->getName());
     }
 
     return srcNames;
 }
 
-void Plugin::setSidechainSourceByName (const String& name)
+void Plugin::setSidechainSourceByName (const juce::String& name)
 {
     bool found = false;
     int idx = 0;
 
     for (AudioTrack* at : getAudioTracks (edit))
     {
-        if (String::formatted ("%d. ", ++idx) + at->getName() == name)
+        if (juce::String::formatted ("%d. ", ++idx) + at->getName() == name)
         {
             sidechainSourceID = at->itemID;
 
@@ -268,7 +266,7 @@ void Plugin::setSidechainSourceByName (const String& name)
 
 void Plugin::guessSidechainRouting()
 {
-    StringArray ins;
+    juce::StringArray ins;
     getChannelNames (&ins, nullptr);
 
     auto* um = getUndoManager();
@@ -304,7 +302,7 @@ void Plugin::guessSidechainRouting()
     }
 }
 
-String Plugin::getSidechainSourceName()
+juce::String Plugin::getSidechainSourceName()
 {
     if (sidechainSourceID->isValid())
         if (auto t = findTrackForID (edit, sidechainSourceID))
@@ -313,14 +311,14 @@ String Plugin::getSidechainSourceName()
     return {};
 }
 
-void Plugin::getChannelNames (StringArray* ins, StringArray* outs)
+void Plugin::getChannelNames (juce::StringArray* ins, juce::StringArray* outs)
 {
     getLeftRightChannelNames (ins, outs);
 }
 
-StringArray Plugin::getInputChannelNames()
+juce::StringArray Plugin::getInputChannelNames()
 {
-    StringArray ins;
+    juce::StringArray ins;
     getChannelNames (&ins, nullptr);
 
     return ins;
@@ -437,7 +435,7 @@ void Plugin::setFrozen (bool shouldBeFrozen)
         cpuUsageMs = 0.0;
 }
 
-String Plugin::getTooltip()
+juce::String Plugin::getTooltip()
 {
     return getName() + "$genericfilter";
 }
@@ -572,16 +570,18 @@ PluginList* Plugin::getOwnerList() const
 }
 
 //==============================================================================
-AutomatableParameter* Plugin::addParam (const String& paramID, const String& name,  juce::NormalisableRange<float> valueRange)
+AutomatableParameter* Plugin::addParam (const juce::String& paramID, const juce::String& name,
+                                        juce::NormalisableRange<float> valueRange)
 {
     auto p = new AutomatableParameter (paramID, name, *this, valueRange);
     addAutomatableParameter (*p);
     return p;
 }
 
-AutomatableParameter* Plugin::addParam (const String& paramID, const String& name, juce::NormalisableRange<float> valueRange,
+AutomatableParameter* Plugin::addParam (const juce::String& paramID, const juce::String& name,
+                                        juce::NormalisableRange<float> valueRange,
                                         std::function<String(float)> valueToStringFn,
-                                        std::function<float(const String&)> stringToValueFn)
+                                        std::function<float(const juce::String&)> stringToValueFn)
 {
     auto p = addParam (paramID, name, valueRange);
     p->valueToStringFunction = valueToStringFn;
@@ -591,7 +591,7 @@ AutomatableParameter* Plugin::addParam (const String& paramID, const String& nam
 
 AutomatableParameter::Ptr Plugin::getQuickControlParameter() const
 {
-    String currentID (quickParamName);
+    juce::String currentID = quickParamName;
 
     if (currentID.isEmpty())
     {
@@ -689,19 +689,19 @@ void Plugin::applyToBufferWithAutomation (const PluginRenderContext& pc)
 }
 
 //==============================================================================
-bool Plugin::hasNameForMidiNoteNumber (int, int midiChannel, String&)
+bool Plugin::hasNameForMidiNoteNumber (int, int midiChannel, juce::String&)
 {
     jassert (midiChannel >= 1 && midiChannel <= 16);
     juce::ignoreUnused (midiChannel);
     return false;
 }
 
-bool Plugin::hasNameForMidiProgram (int, int, String&)
+bool Plugin::hasNameForMidiProgram (int, int, juce::String&)
 {
     return false;
 }
 
-bool Plugin::hasNameForMidiBank (int, String&)
+bool Plugin::hasNameForMidiBank (int, juce::String&)
 {
     return false;
 }
@@ -783,8 +783,8 @@ static Plugin::Array getRackablePlugins (SelectionManager& selectionManager)
 {
     Plugin::Array result;
 
-    SortedSet<SelectedPluginIndex> pluginIndex;
-    ValueTree lastList;
+    juce::SortedSet<SelectedPluginIndex> pluginIndex;
+    juce::ValueTree lastList;
 
     for (auto plugin : selectionManager.getItemsOfType<Plugin>())
     {
@@ -881,7 +881,7 @@ void Plugin::sortPlugins (std::vector<Plugin*>& plugins)
                });
 }
 
-void Plugin::getLeftRightChannelNames (StringArray* chans)
+void Plugin::getLeftRightChannelNames (juce::StringArray* chans)
 {
     if (chans != nullptr)
     {
@@ -890,7 +890,8 @@ void Plugin::getLeftRightChannelNames (StringArray* chans)
     }
 }
 
-void Plugin::getLeftRightChannelNames (StringArray* ins, StringArray* outs)
+void Plugin::getLeftRightChannelNames (juce::StringArray* ins,
+                                       juce::StringArray* outs)
 {
     getLeftRightChannelNames (ins);
     getLeftRightChannelNames (outs);

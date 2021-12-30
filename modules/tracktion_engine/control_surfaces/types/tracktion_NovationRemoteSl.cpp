@@ -13,15 +13,15 @@ namespace tracktion_engine
 
 namespace NovationRemoteSL
 {
-    const uint8 PID = 0x03;
+    const uint8_t PID = 0x03;
 
-    static uint8 cmdOn[]         = { 0xF0, 0x00, 0x20, 0x29, 0x03, 0x03, 0x20, 0x02, 0x03, 0x00, 0x01, 0x01, 0xF7 };
-    static uint8 cmdOff[]        = { 0xF0, 0x00, 0x20, 0x29, 0x03, 0x03, 0x20, 0x02, 0x03, 0x00, 0x01, 0x00, 0xF7 };
+    static uint8_t cmdOn[]         = { 0xF0, 0x00, 0x20, 0x29, 0x03, 0x03, 0x20, 0x02, 0x03, 0x00, 0x01, 0x01, 0xF7 };
+    static uint8_t cmdOff[]        = { 0xF0, 0x00, 0x20, 0x29, 0x03, 0x03, 0x20, 0x02, 0x03, 0x00, 0x01, 0x00, 0xF7 };
 
-    static uint8 cmdClearLeft[]  = { 0xF0, 0x00, 0x20, 0x29, 0x03, 0x03, 0x11, 0x04, PID, 0x00, 0x02, 0x02, 0x04, 0xF7 };
-    static uint8 cmdClearRight[] = { 0xF0, 0x00, 0x20, 0x29, 0x03, 0x03, 0x11, 0x04, PID, 0x00, 0x02, 0x02, 0x05, 0xF7 };
+    static uint8_t cmdClearLeft[]  = { 0xF0, 0x00, 0x20, 0x29, 0x03, 0x03, 0x11, 0x04, PID, 0x00, 0x02, 0x02, 0x04, 0xF7 };
+    static uint8_t cmdClearRight[] = { 0xF0, 0x00, 0x20, 0x29, 0x03, 0x03, 0x11, 0x04, PID, 0x00, 0x02, 0x02, 0x05, 0xF7 };
 
-    static uint8 cmdWrite[]      = { 0xF0, 0x00, 0x20, 0x29, 0x03, 0x03, 0x11, 0x04, PID, 0x00, 0x02, 0x01 };
+    static uint8_t cmdWrite[]      = { 0xF0, 0x00, 0x20, 0x29, 0x03, 0x03, 0x11, 0x04, PID, 0x00, 0x02, 0x01 };
 
     static const char* panLetter (float p) noexcept
     {
@@ -471,7 +471,7 @@ void NovationRemoteSl::recordStateChanged (bool isRecording)
 void NovationRemoteSl::automationReadModeChanged (bool) {}
 void NovationRemoteSl::automationWriteModeChanged (bool) {}
 
-void NovationRemoteSl::faderBankChanged (int, const StringArray& newNames)
+void NovationRemoteSl::faderBankChanged (int, const juce::StringArray& newNames)
 {
     for (int i = 0; i < 8; ++i)
         trackNames[i] = newNames[i];
@@ -644,7 +644,7 @@ void NovationRemoteSl::handleAsyncUpdate()
     {
         if (leftTopDirty)
         {
-            String s;
+            juce::String s;
 
             if (leftMode == lmTracks)
             {
@@ -680,13 +680,13 @@ void NovationRemoteSl::handleAsyncUpdate()
             if (leftMode == lmParam1)
             {
                 for (int i = 0; i < 8; ++i)
-                    s += padAndLimit (String::fromUTF8 (param[i].label), 9);
+                    s += padAndLimit (juce::String::fromUTF8 (param[i].label), 9);
             }
 
             if (leftMode == lmParam2)
             {
                 for (int i = 0; i < 8; ++i)
-                    s += padAndLimit (String::fromUTF8 (param[i + 8].label), 9);
+                    s += padAndLimit (juce::String::fromUTF8 (param[i + 8].label), 9);
             }
 
             drawString(s, 1);
@@ -694,18 +694,18 @@ void NovationRemoteSl::handleAsyncUpdate()
 
         if (leftBottomDirty)
         {
-            String s;
+            juce::String s;
 
             if (leftMode == lmParam1)
             {
                 for (int i = 0; i < 8; ++i)
-                    s += padAndLimit (String::fromUTF8 (param[i].valueDescription), 9);
+                    s += padAndLimit (juce::String::fromUTF8 (param[i].valueDescription), 9);
             }
 
             if (leftMode == lmParam2)
             {
                 for (int i = 0; i < 8; ++i)
-                    s += padAndLimit (String::fromUTF8 (param[i + 8].valueDescription), 9);
+                    s += padAndLimit (juce::String::fromUTF8 (param[i + 8].valueDescription), 9);
             }
 
             if (leftMode == lmTracks || leftMode == lmPlugins)
@@ -716,7 +716,7 @@ void NovationRemoteSl::handleAsyncUpdate()
 
         if (rightTopDirty)
         {
-            String s;
+            juce::String s;
 
             for (int i = 0; i < 8; ++i)
                 s += padAndLimit (trackNames[i], 9);
@@ -726,7 +726,7 @@ void NovationRemoteSl::handleAsyncUpdate()
 
         if (rightBottomDirty)
         {
-            String s;
+            juce::String s;
 
             for (int i = 0; i < 8; ++i)
             {
@@ -773,7 +773,7 @@ void NovationRemoteSl::handleAsyncUpdate()
     rightBottomDirty  = false;
 }
 
-void NovationRemoteSl::drawString (const String& s, int panel)
+void NovationRemoteSl::drawString (const juce::String& s, int panel)
 {
     jassert (s.length() == 9 * 8);
 
@@ -802,12 +802,12 @@ void NovationRemoteSl::drawString (const String& s, int panel)
     auto prnt = s.substring (startMatch, s.length() - endMatch);
 
     auto len = sizeof (NovationRemoteSL::cmdWrite) + 3 + (size_t) prnt.length() + 1;
-    HeapBlock<uint8> buffer (len);
+    HeapBlock<uint8_t> buffer (len);
 
     memcpy (buffer, NovationRemoteSL::cmdWrite, sizeof (NovationRemoteSL::cmdWrite));
-    buffer[sizeof (NovationRemoteSL::cmdWrite) + 0] = (uint8) startMatch;
-    buffer[sizeof (NovationRemoteSL::cmdWrite) + 1] = (uint8) panel;
-    buffer[sizeof (NovationRemoteSL::cmdWrite) + 2] = (uint8) 0x04;
+    buffer[sizeof (NovationRemoteSL::cmdWrite) + 0] = (uint8_t) startMatch;
+    buffer[sizeof (NovationRemoteSL::cmdWrite) + 1] = (uint8_t) panel;
+    buffer[sizeof (NovationRemoteSL::cmdWrite) + 2] = (uint8_t) 0x04;
 
     memcpy (buffer + sizeof (NovationRemoteSL::cmdWrite) + 3, (const char*) prnt.toUTF8(),
             (size_t) prnt.length());
@@ -819,7 +819,7 @@ void NovationRemoteSl::drawString (const String& s, int panel)
     screenContents[panel - 1] = s;
 }
 
-juce::String NovationRemoteSl::padAndLimit (const String& s, int max)
+juce::String NovationRemoteSl::padAndLimit (const juce::String& s, int max)
 {
     if (s.length() == max)
         return s;

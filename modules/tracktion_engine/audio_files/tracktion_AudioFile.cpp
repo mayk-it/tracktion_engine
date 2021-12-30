@@ -11,7 +11,7 @@
 namespace tracktion_engine
 {
 
-static inline juce::int64 getAudioFileHash (const juce::File& file) noexcept
+static inline HashCode getAudioFileHash (const juce::File& file) noexcept
 {
     return file.getFullPathName().hashCode64();
 }
@@ -88,7 +88,7 @@ juce::String AudioFileInfo::getLongDescription() const
 }
 
 bool AudioFile::isValid() const                         { return hash != 0 && getSampleRate() > 0; }
-juce::int64 AudioFile::getLengthInSamples() const       { return getInfo().lengthInSamples; }
+SampleCount AudioFile::getLengthInSamples() const       { return getInfo().lengthInSamples; }
 double AudioFile::getLength() const                     { return getInfo().getLengthInSeconds(); }
 int AudioFile::getNumChannels() const                   { return getInfo().numChannels; }
 double AudioFile::getSampleRate() const                 { return getInfo().sampleRate; }
@@ -202,8 +202,8 @@ bool AudioFileWriter::appendBuffer (const int** buffer, int num)
 }
 
 bool AudioFileWriter::writeFromAudioReader (juce::AudioFormatReader& reader,
-                                            juce::int64 startSample,
-                                            juce::int64 numSamples)
+                                            SampleCount startSample,
+                                            SampleCount numSamples)
 {
     const juce::ScopedLock sl (writerLock);
     return writer != nullptr && writer->writeFromAudioReader (reader, startSample, numSamples);
@@ -440,7 +440,7 @@ private:
         return engine.getTemporaryFileManager().getThumbnailsFolder();
     }
 
-    juce::File getThumbFile (const SmartThumbnail* st, juce::int64 hash) const
+    juce::File getThumbFile (const SmartThumbnail* st, HashCode hash) const
     {
         auto thumbFolder = getThumbFolder (st != nullptr ? st->edit : nullptr);
 
@@ -626,13 +626,13 @@ void AudioFileManager::clearFiles()
     CRASH_TRACER
     const juce::ScopedLock sl (knownFilesLock);
 
-    for (juce::HashMap<juce::int64, KnownFile*>::Iterator i (knownFiles); i.next();)
-        delete i.getValue();
+    for (auto f : knownFiles)
+        delete f;
 
     knownFiles.clear();
 }
 
-void AudioFileManager::removeFile (juce::int64 hash)
+void AudioFileManager::removeFile (HashCode hash)
 {
     const juce::ScopedLock sl (knownFilesLock);
 
@@ -695,10 +695,9 @@ void AudioFileManager::checkFilesForChanges()
     {
         const juce::ScopedLock sl (knownFilesLock);
 
-        for (juce::HashMap<juce::int64, KnownFile*>::Iterator i (knownFiles); i.next();)
-            if (auto f = i.getValue())
-                if (checkFileTime (*f))
-                    changedFiles.add (f->file);
+        for (auto f : knownFiles)
+            if (checkFileTime (*f))
+                changedFiles.add (f->file);
     }
 
     for (auto& f : changedFiles)

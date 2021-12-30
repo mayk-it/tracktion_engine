@@ -11,16 +11,15 @@
 namespace tracktion_engine
 {
 
-inline int64 hashDouble (double d) noexcept
+inline HashCode hashDouble (double d) noexcept
 {
-    static_assert (sizeof (double) == sizeof (int64), "double and int64 different sizes");
-    union Val { double asDouble; int64 asInt; } v;
+    static_assert (sizeof (double) == sizeof (int64_t), "double and int64 different sizes");
+    union Val { double asDouble; int64_t asInt; } v;
     v.asDouble = d;
-
     return v.asInt;
 }
 
-int64 WarpMarker::getHash() const noexcept    { return hashDouble (sourceTime) ^ hashDouble (warpTime); }
+HashCode WarpMarker::getHash() const noexcept    { return hashDouble (sourceTime) ^ hashDouble (warpTime); }
 
 template <typename FloatingPointType>
 struct Differentiator
@@ -102,8 +101,8 @@ protected:
     bool renderNextBlock() override
     {
         CRASH_TRACER
-        const int64 numLeft = totalNumSamples - numSamplesRead;
-        const int numToDo = (int) jmin ((int64) 32768, numLeft);
+        auto numLeft = totalNumSamples - numSamplesRead;
+        auto numToDo = (int) jmin ((SampleCount) 32768, numLeft);
 
         AudioScratchBuffer scratch (numChannels, numToDo);
         AudioChannelSet schannels = AudioChannelSet::canonicalChannelSet(numChannels);
@@ -134,7 +133,7 @@ private:
     AudioFile file;
     Config config;
 
-    int64 numSamplesRead = 0, totalNumSamples;
+    SampleCount numSamplesRead = 0, totalNumSamples;
     int numChannels;
     double sampleRate = 0;
     AudioFileCache::Reader::Ptr reader;
@@ -215,7 +214,7 @@ private:
         }
     }
 
-    double sampleToSeconds (int64 sample) const
+    double sampleToSeconds (SampleCount sample) const
     {
         return sampleRate > 0.0 ? sample / sampleRate : 0.0;
     }
@@ -246,7 +245,7 @@ WarpTimeManager::WarpTimeManager (AudioClipBase& c)
     edit.engine.getWarpTimeFactory().addWarpTimeManager (*this);
 }
 
-WarpTimeManager::WarpTimeManager (Edit& e, const AudioFile& f, ValueTree parentTree)
+WarpTimeManager::WarpTimeManager (Edit& e, const AudioFile& f, juce::ValueTree parentTree)
     : edit (e), sourceFile (f), endMarkerEnabled (false), endMarkersLimited (true)
 {
     state = parentTree.getOrCreateChildWithName (IDs::WARPTIME, &edit.getUndoManager());
@@ -304,9 +303,10 @@ int WarpTimeManager::insertMarker (WarpMarker marker)
     while (index < markers->objects.size() && markers->objects.getUnchecked (index)->warpTime < marker.warpTime)
         index++;
 
-    ValueTree v (IDs::WARPMARKER);
-    v.setProperty (IDs::sourceTime, marker.sourceTime, nullptr);
-    v.setProperty (IDs::warpTime, marker.warpTime, nullptr);
+    auto v = createValueTree (IDs::WARPMARKER,
+                              IDs::sourceTime, marker.sourceTime,
+                              IDs::warpTime, marker.warpTime);
+
     markers->state.addChild (v, index, getUndoManager());
 
     return index;
@@ -527,9 +527,9 @@ double WarpTimeManager::getWarpedEnd() const
     return markers->objects.getLast()->warpTime;
 }
 
-int64 WarpTimeManager::getHash() const
+HashCode WarpTimeManager::getHash() const
 {
-    int64 h = 0;
+    HashCode h = 0;
 
     for (auto wm : markers->objects)
         h ^= wm->getHash();
