@@ -79,7 +79,7 @@ public:
         If you want to support scanning out of process, the allowing should be added
         to you JUCEApplication::initialise() function:
 
-        void initialise (const String& commandLine) override
+        void initialise (const juce::String& commandLine) override
         {
             if (PluginManager::startChildProcessPluginScan (commandLine))
                 return;
@@ -194,6 +194,23 @@ public:
 
     /** If this returns true, it means that newly inserted clips will automatically have a fade-in and fade-out of 3ms applied. */
     virtual bool autoAddClipEdgeFades()                                             { return false; }
+    
+    
+    struct ControlSurfaces
+    {
+        bool mackieMCU = true;
+        bool mackieC4 = true;
+        bool iconProG2 = true;
+        bool tranzport = true;
+        bool alphaTrack = true;
+        bool remoteSL = true;
+        bool remoteSLCompact = true;
+        bool automap = true;
+    };
+    
+    /** Return the control surfaces you want enabled in the engine */
+    
+    virtual ControlSurfaces getDesiredControlSurfaces()                             { return {}; }
 };
 
 } // namespace tracktion_engine

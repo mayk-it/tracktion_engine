@@ -61,14 +61,14 @@ Edit* ControlSurface::getEditIfOnEditScreen() const
     return {};
 }
 
-void ControlSurface::sendMidiCommandToController (const void* midiData, int numBytes)
+void ControlSurface::sendMidiCommandToController (int idx, const void* midiData, int numBytes)
 {
-    sendMidiCommandToController (MidiMessage (midiData, numBytes));
+    sendMidiCommandToController (idx, juce::MidiMessage (midiData, numBytes));
 }
 
-void ControlSurface::sendMidiCommandToController (const MidiMessage& m)
+void ControlSurface::sendMidiCommandToController (int idx, const juce::MidiMessage& m)
 {
-    if (auto dev = owner->outputDevice)
+    if (auto dev = owner->outputDevices[idx])
         dev->fireMessage (m);
 }
 
@@ -76,6 +76,11 @@ bool ControlSurface::isSafeRecording() const
 {
     return edit != nullptr && edit->getTransport().isSafeRecording();
 }
+
+int ControlSurface::getMarkerBankOffset() const { return owner->getMarkerBankOffset();  }
+int ControlSurface::getFaderBankOffset() const  { return owner->getFaderBankOffset();   }
+int ControlSurface::getAuxBankOffset() const    { return owner->getAuxBankOffset();     }
+int ControlSurface::getParamBankOffset() const  { return owner->getParamBankOffset();   }
 
 #define RETURN_IF_SAFE_RECORDING  if (isSafeRecording()) return;
 
@@ -85,16 +90,16 @@ void ControlSurface::performIfNotSafeRecording (const std::function<void()>& f)
     f();
 }
 
-void ControlSurface::userMovedFader (int channelNum, float newSliderPos)
+void ControlSurface::userMovedFader (int channelNum, float newSliderPos, bool delta)
 {
     RETURN_IF_SAFE_RECORDING
-    externalControllerManager.userMovedFader (owner->channelStart + channelNum, newSliderPos);
+    externalControllerManager.userMovedFader (owner->channelStart + channelNum, newSliderPos, delta);
 }
 
-void ControlSurface::userMovedMasterLevelFader (float newLevel)
+void ControlSurface::userMovedMasterLevelFader (float newLevel, bool delta)
 {
     RETURN_IF_SAFE_RECORDING
-    externalControllerManager.userMovedMasterFader (getEdit(), newLevel);
+    externalControllerManager.userMovedMasterFader (getEdit(), newLevel, delta);
 }
 
 void ControlSurface::userMovedMasterPanPot (float newLevel)
@@ -109,10 +114,10 @@ void ControlSurface::userMovedQuickParam (float newLevel)
     externalControllerManager.userMovedQuickParam(newLevel);
 }
 
-void ControlSurface::userMovedPanPot (int channelNum, float newPan)
+void ControlSurface::userMovedPanPot (int channelNum, float newPan, bool delta)
 {
     RETURN_IF_SAFE_RECORDING
-    externalControllerManager.userMovedPanPot (owner->channelStart + channelNum, newPan);
+    externalControllerManager.userMovedPanPot (owner->channelStart + channelNum, newPan, delta);
 }
 
 void ControlSurface::userMovedAux (int channelNum, float newPosition)
@@ -191,7 +196,7 @@ void ControlSurface::userPressedRecEnable (int channelNum, bool enableEtoE)
 
         if (externalControllerManager.getChannelTrack (channelNum) != nullptr)
         {
-            Array<InputDeviceInstance*> activeDev, inactiveDev;
+            juce::Array<InputDeviceInstance*> activeDev, inactiveDev;
 
             for (auto in : ed->getAllInputDevices())
             {
@@ -239,9 +244,16 @@ void ControlSurface::userPressedRecEnable (int channelNum, bool enableEtoE)
 
 void ControlSurface::userPressedHome()         { performIfNotSafeRecording (&AppFunctions::goToStart); }
 void ControlSurface::userPressedEnd()          { performIfNotSafeRecording (&AppFunctions::goToEnd); }
-void ControlSurface::userPressedMarkIn()       { performIfNotSafeRecording (&AppFunctions::markIn); }
-void ControlSurface::userPressedMarkOut()      { performIfNotSafeRecording (&AppFunctions::markOut); }
-
+void ControlSurface::userPressedMarkIn()
+{
+    RETURN_IF_SAFE_RECORDING
+    AppFunctions::markIn (true);
+}
+void ControlSurface::userPressedMarkOut()
+{
+    RETURN_IF_SAFE_RECORDING
+    AppFunctions::markOut (true);
+}
 void ControlSurface::userPressedPlay()         { performIfNotSafeRecording (&AppFunctions::startStopPlay); }
 void ControlSurface::userPressedRecord()       { performIfNotSafeRecording (&AppFunctions::record); }
 
@@ -420,14 +432,32 @@ void ControlSurface::userPressedDelete (bool marked)
                                       : &AppFunctions::deleteSelected);
 }
 
-void ControlSurface::userPressedZoomFitToTracks()      { performIfNotSafeRecording (&AppFunctions::zoomToFitVertically); }
-void ControlSurface::userPressedInsertTempoChange()    { performIfNotSafeRecording (&AppFunctions::insertTempoChange); }
-void ControlSurface::userPressedInsertPitchChange()    { performIfNotSafeRecording (&AppFunctions::insertPitchChange); }
-void ControlSurface::userPressedInsertTimeSigChange()  { performIfNotSafeRecording (&AppFunctions::insertTimeSigChange); }
+void ControlSurface::userPressedZoomFitToTracks()       { performIfNotSafeRecording (&AppFunctions::zoomToFitVertically); }
+void ControlSurface::userPressedInsertTempoChange()     { performIfNotSafeRecording (&AppFunctions::insertTempoChange); }
+void ControlSurface::userPressedInsertPitchChange()     { performIfNotSafeRecording (&AppFunctions::insertPitchChange); }
+void ControlSurface::userPressedInsertTimeSigChange()   { performIfNotSafeRecording (&AppFunctions::insertTimeSigChange); }
 
-void ControlSurface::userToggledVideoWindow()          { performIfNotSafeRecording (&AppFunctions::showHideVideo); }
+void ControlSurface::userToggledVideoWindow()           { performIfNotSafeRecording (&AppFunctions::showHideVideo); }
+void ControlSurface::userToggledMixerWindow (bool fs)
+{
+    RETURN_IF_SAFE_RECORDING
+    AppFunctions::showHideMixer (fs);
+}
+void ControlSurface::userToggledMidiEditorWindow (bool fs)
+{
+    RETURN_IF_SAFE_RECORDING
+    AppFunctions::showHideMidiEditor (fs);
+}
+void ControlSurface::userToggledTrackEditorWindow()     { performIfNotSafeRecording (&AppFunctions::showHideTrackEditor); }
+void ControlSurface::userToggledBrowserWindow()         { performIfNotSafeRecording (&AppFunctions::showHideBrowser); }
+void ControlSurface::userToggledActionsWindow()         { performIfNotSafeRecording (&AppFunctions::showHideActions); }
+void ControlSurface::userPressedUserAction (int action)
+{
+    RETURN_IF_SAFE_RECORDING
+    AppFunctions::performUserAction (action);
+}
 
-void ControlSurface::redrawSelectedPlugin()            { owner->repaintParamSource(); }
-void ControlSurface::redrawSelectedTracks()            { owner->redrawTracks(); }
+void ControlSurface::redrawSelectedPlugin()             { owner->repaintParamSource(); }
+void ControlSurface::redrawSelectedTracks()             { owner->redrawTracks(); }
 
 }

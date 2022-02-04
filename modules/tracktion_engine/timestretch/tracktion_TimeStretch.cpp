@@ -22,6 +22,10 @@
  #pragma comment (lib, "ippvm_l.lib")
 #endif
 
+#if JUCE_WINDOWS
+ #define NOMINMAX
+#endif
+
 namespace tracktion_engine
 {
 
@@ -282,7 +286,7 @@ private:
     int readOutput (float* const* outChannels, int offset, int numNeeded)
     {
         float* interleaved = ptrBegin();
-        const int num = jmin (numNeeded, (int) numSamples());
+        auto num = std::min (numNeeded, (int) numSamples());
 
         for (int chan = 0; chan < numChannels; ++chan)
         {
@@ -473,7 +477,7 @@ struct RubberBandStretcher  : public TimeStretcher::Stretcher
         
         if (numSamplesToDrop > 0)
         {
-            const int numToDropThisTime = juce::jmin (numSamplesToDrop, numAvailable, samplesPerOutputBuffer);
+            auto numToDropThisTime = std::min (numSamplesToDrop, std::min (numAvailable, samplesPerOutputBuffer));
             rubberBandStretcher.retrieve (outChannels, (size_t) numToDropThisTime);
             numSamplesToDrop -= numToDropThisTime;
             jassert (numSamplesToDrop >= 0);

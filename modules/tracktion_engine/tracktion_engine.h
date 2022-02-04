@@ -19,7 +19,7 @@
 
   ID:               tracktion_engine
   vendor:           Tracktion Corporation
-  version:          1.1.0
+  version:          1.2.0
   name:             The Tracktion audio engine
   description:      Classes for manipulating and playing Tracktion projects
   website:          http://www.tracktion.com
@@ -619,6 +619,7 @@ namespace tracktion_engine
  #include "control_surfaces/types/tracktion_MackieC4.h"
  #include "control_surfaces/types/tracktion_MackieMCU.h"
  #include "control_surfaces/types/tracktion_MackieXT.h"
+ #include "control_surfaces/types/tracktion_IconProG2.h"
  #include "control_surfaces/types/tracktion_NovationRemoteSl.h"
  #include "control_surfaces/types/tracktion_RemoteSLCompact.h"
  #include "control_surfaces/types/tracktion_Tranzport.h"
