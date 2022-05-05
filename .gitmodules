@@ -1,4 +1,3 @@
 [submodule "modules/juce"]
-	path = modules/juce
-url=https://github.com/mayk-it/JUCE.git
-	branch = update-develop-upstream
+    path = modules/juce
+    url=https://github.com/mayk-it/JUCE/tree/update-develop-upstream
