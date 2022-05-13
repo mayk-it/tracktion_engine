@@ -100,9 +100,9 @@ Static Public Member Functions</h2></td></tr>
 <tr class="memitem:a3b813e010dcea26184bf50faffc9a74f"><td class="memItemLeft" align="right" valign="top">static juce::File&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classtracktion__engine_1_1Renderer.html#a3b813e010dcea26184bf50faffc9a74f">renderToFile</a> (const juce::String &amp;taskDescription, const <a class="el" href="structtracktion__engine_1_1Renderer_1_1Parameters.html">Parameters</a> &amp;params)</td></tr>
 <tr class="memdesc:a3b813e010dcea26184bf50faffc9a74f"><td class="mdescLeft">&#160;</td><td class="mdescRight">Renders an <a class="el" href="classtracktion__engine_1_1Edit.html" title="The Tracktion Edit class!">Edit</a> to a file given by the <a class="el" href="structtracktion__engine_1_1Renderer_1_1Parameters.html">Parameters</a>.  <a href="classtracktion__engine_1_1Renderer.html#a3b813e010dcea26184bf50faffc9a74f">More...</a><br /></td></tr>
 <tr class="separator:a3b813e010dcea26184bf50faffc9a74f"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ab62f93b98e3c184a246b575c6da9bc92"><td class="memItemLeft" align="right" valign="top">static bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classtracktion__engine_1_1Renderer.html#ab62f93b98e3c184a246b575c6da9bc92">renderToFile</a> (const juce::String &amp;taskDescription, const juce::File &amp;outputFile, <a class="el" href="classtracktion__engine_1_1Edit.html">Edit</a> &amp;edit, <a class="el" href="structtracktion__engine_1_1EditTimeRange.html">EditTimeRange</a> range, const juce::BigInteger &amp;tracksToDo, bool usePlugins=true, juce::Array&lt; <a class="el" href="classtracktion__engine_1_1Clip.html">Clip</a> * &gt; clips={}, bool useThread=true)</td></tr>
-<tr class="memdesc:ab62f93b98e3c184a246b575c6da9bc92"><td class="mdescLeft">&#160;</td><td class="mdescRight">Renders an <a class="el" href="classtracktion__engine_1_1Edit.html" title="The Tracktion Edit class!">Edit</a> to a file within the given time range and the track indicies described by the BigInteger.  <a href="classtracktion__engine_1_1Renderer.html#ab62f93b98e3c184a246b575c6da9bc92">More...</a><br /></td></tr>
-<tr class="separator:ab62f93b98e3c184a246b575c6da9bc92"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a536f95b1958313d4b88b0131f4dd0234"><td class="memItemLeft" align="right" valign="top">static bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classtracktion__engine_1_1Renderer.html#a536f95b1958313d4b88b0131f4dd0234">renderToFile</a> (const juce::String &amp;taskDescription, const juce::File &amp;outputFile, <a class="el" href="classtracktion__engine_1_1Edit.html">Edit</a> &amp;edit, <a class="el" href="structtracktion__engine_1_1EditTimeRange.html">EditTimeRange</a> range, const juce::BigInteger &amp;tracksToDo, bool usePlugins=true, juce::Array&lt; <a class="el" href="classtracktion__engine_1_1Clip.html">Clip</a> * &gt; clips={}, bool useThread=true, std::atomic&lt; float &gt; *progressToUpdate=nullptr, std::atomic&lt; bool &gt; *cancelRender=nullptr)</td></tr>
+<tr class="memdesc:a536f95b1958313d4b88b0131f4dd0234"><td class="mdescLeft">&#160;</td><td class="mdescRight">Renders an <a class="el" href="classtracktion__engine_1_1Edit.html" title="The Tracktion Edit class!">Edit</a> to a file within the given time range and the track indicies described by the BigInteger.  <a href="classtracktion__engine_1_1Renderer.html#a536f95b1958313d4b88b0131f4dd0234">More...</a><br /></td></tr>
+<tr class="separator:a536f95b1958313d4b88b0131f4dd0234"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a8687157e8ef6da42517b252254c5ff21"><td class="memItemLeft" align="right" valign="top">static <a class="el" href="structtracktion__engine_1_1Renderer_1_1Statistics.html">Statistics</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classtracktion__engine_1_1Renderer.html#a8687157e8ef6da42517b252254c5ff21">measureStatistics</a> (const juce::String &amp;taskDescription, <a class="el" href="classtracktion__engine_1_1Edit.html">Edit</a> &amp;edit, <a class="el" href="structtracktion__engine_1_1EditTimeRange.html">EditTimeRange</a> range, const juce::BigInteger &amp;tracksToDo, int blockSizeForAudio)</td></tr>
 <tr class="memdesc:a8687157e8ef6da42517b252254c5ff21"><td class="mdescLeft">&#160;</td><td class="mdescRight">Renders a section of an edit to measure various details about its audio content.  <a href="classtracktion__engine_1_1Renderer.html#a8687157e8ef6da42517b252254c5ff21">More...</a><br /></td></tr>
 <tr class="separator:a8687157e8ef6da42517b252254c5ff21"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -251,8 +251,8 @@ Static Public Member Functions</h2></td></tr>
 
 </div>
 </div>
-<a id="ab62f93b98e3c184a246b575c6da9bc92"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#ab62f93b98e3c184a246b575c6da9bc92">&#9670;&nbsp;</a></span>renderToFile() <span class="overload">[2/2]</span></h2>
+<a id="a536f95b1958313d4b88b0131f4dd0234"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a536f95b1958313d4b88b0131f4dd0234">&#9670;&nbsp;</a></span>renderToFile() <span class="overload">[2/2]</span></h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -306,7 +306,19 @@ Static Public Member Functions</h2></td></tr>
           <td class="paramkey"></td>
           <td></td>
           <td class="paramtype">bool&#160;</td>
-          <td class="paramname"><em>useThread</em> = <code>true</code>&#160;</td>
+          <td class="paramname"><em>useThread</em> = <code>true</code>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">std::atomic&lt; float &gt; *&#160;</td>
+          <td class="paramname"><em>progressToUpdate</em> = <code>nullptr</code>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">std::atomic&lt; bool &gt; *&#160;</td>
+          <td class="paramname"><em>cancelRender</em> = <code>nullptr</code>&#160;</td>
         </tr>
         <tr>
           <td></td>
@@ -387,7 +399,7 @@ Static Public Member Functions</h2></td></tr>
 </div><!-- contents -->
 <!-- start footer part -->
 <hr class="footer"/><address class="footer"><small>
-Generated on Mon Oct 25 2021 16:12:58 for TracktionEngine by &#160;<a href="http://www.doxygen.org/index.html">
+Generated on Fri May 13 2022 01:53:22 for TracktionEngine by &#160;<a href="http://www.doxygen.org/index.html">
 <img class="footer" src="doxygen.png" alt="doxygen"/>
 </a> 1.8.17
 </small></address>

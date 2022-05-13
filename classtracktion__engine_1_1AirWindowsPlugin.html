@@ -120,8 +120,8 @@ Public Types</h2></td></tr>
 Public Member Functions</h2></td></tr>
 <tr class="memitem:a83753d1ffd222e0a13430946c7c99c8c"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classtracktion__engine_1_1AirWindowsPlugin.html#a83753d1ffd222e0a13430946c7c99c8c">AirWindowsPlugin</a> (<a class="el" href="structtracktion__engine_1_1PluginCreationInfo.html">PluginCreationInfo</a>, std::unique_ptr&lt; AirWindowsBase &gt;)</td></tr>
 <tr class="separator:a83753d1ffd222e0a13430946c7c99c8c"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a06be76049677730a0c3e6c4805cb8680"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classtracktion__engine_1_1AirWindowsPlugin.html#a06be76049677730a0c3e6c4805cb8680">~AirWindowsPlugin</a> ()</td></tr>
-<tr class="separator:a06be76049677730a0c3e6c4805cb8680"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aad90abe165b6ce72d4c3fc5f58070c31"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classtracktion__engine_1_1AirWindowsPlugin.html#aad90abe165b6ce72d4c3fc5f58070c31">~AirWindowsPlugin</a> () override</td></tr>
+<tr class="separator:aad90abe165b6ce72d4c3fc5f58070c31"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ae32d29e9368683559b9093f6034d1f0e"><td class="memItemLeft" align="right" valign="top">virtual <a class="el" href="classtracktion__engine_1_1AirWindowsPlugin.html#a22dc62d9680045e5f07a5e829f39ffd8">Type</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classtracktion__engine_1_1AirWindowsPlugin.html#ae32d29e9368683559b9093f6034d1f0e">getPluginCategory</a> ()=0</td></tr>
 <tr class="separator:ae32d29e9368683559b9093f6034d1f0e"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a2f09fb3db6c06087ed445a89f73615c2"><td class="memItemLeft" align="right" valign="top">juce::String&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classtracktion__engine_1_1AirWindowsPlugin.html#a2f09fb3db6c06087ed445a89f73615c2">getSelectableDescription</a> () override</td></tr>
@@ -518,8 +518,6 @@ Protected Attributes</h2></td></tr>
 <tr class="separator:aeecde9bd3ec082621cfe7266c88220d7"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a38891afd03d5f2fff8bea81524779416"><td class="memItemLeft" align="right" valign="top">std::unique_ptr&lt; AirWindowsBase &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classtracktion__engine_1_1AirWindowsPlugin.html#a38891afd03d5f2fff8bea81524779416">impl</a></td></tr>
 <tr class="separator:a38891afd03d5f2fff8bea81524779416"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ad9a317d5039cdfde35189fc833343b9a"><td class="memItemLeft" align="right" valign="top">double&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classtracktion__engine_1_1AirWindowsPlugin.html#ad9a317d5039cdfde35189fc833343b9a">sampleRate</a> = 44100.0</td></tr>
-<tr class="separator:ad9a317d5039cdfde35189fc833343b9a"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="inherit_header pro_attribs_classtracktion__engine_1_1Plugin"><td colspan="2" onclick="javascript:toggleInherit('pro_attribs_classtracktion__engine_1_1Plugin')"><img src="closed.png" alt="-"/>&#160;Protected Attributes inherited from <a class="el" href="classtracktion__engine_1_1Plugin.html">tracktion_engine::Plugin</a></td></tr>
 <tr class="memitem:aa67513f32682c1cfc6dfb7cf6367ef47 inherit pro_attribs_classtracktion__engine_1_1Plugin"><td class="memItemLeft" align="right" valign="top">juce::CachedValue&lt; bool &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classtracktion__engine_1_1Plugin.html#aa67513f32682c1cfc6dfb7cf6367ef47">enabled</a></td></tr>
 <tr class="separator:aa67513f32682c1cfc6dfb7cf6367ef47 inherit pro_attribs_classtracktion__engine_1_1Plugin"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -622,11 +620,14 @@ Additional Inherited Members</h2></td></tr>
 
 </div>
 </div>
-<a id="a06be76049677730a0c3e6c4805cb8680"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a06be76049677730a0c3e6c4805cb8680">&#9670;&nbsp;</a></span>~AirWindowsPlugin()</h2>
+<a id="aad90abe165b6ce72d4c3fc5f58070c31"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#aad90abe165b6ce72d4c3fc5f58070c31">&#9670;&nbsp;</a></span>~AirWindowsPlugin()</h2>
 
 <div class="memitem">
 <div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
       <table class="memname">
         <tr>
           <td class="memname">tracktion_engine::AirWindowsPlugin::~AirWindowsPlugin </td>
@@ -635,6 +636,11 @@ Additional Inherited Members</h2></td></tr>
           <td></td>
         </tr>
       </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">override</span></span>  </td>
+  </tr>
+</table>
 </div><div class="memdoc">
 
 </div>
@@ -1227,28 +1233,6 @@ Additional Inherited Members</h2></td></tr>
 
 </div>
 </div>
-<a id="ad9a317d5039cdfde35189fc833343b9a"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#ad9a317d5039cdfde35189fc833343b9a">&#9670;&nbsp;</a></span>sampleRate</h2>
-
-<div class="memitem">
-<div class="memproto">
-<table class="mlabels">
-  <tr>
-  <td class="mlabels-left">
-      <table class="memname">
-        <tr>
-          <td class="memname">double tracktion_engine::AirWindowsPlugin::sampleRate = 44100.0</td>
-        </tr>
-      </table>
-  </td>
-  <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel">protected</span></span>  </td>
-  </tr>
-</table>
-</div><div class="memdoc">
-
-</div>
-</div>
 <a id="ae729e58d449ef78578583ff05b7846fd"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#ae729e58d449ef78578583ff05b7846fd">&#9670;&nbsp;</a></span>parameters</h2>
 
@@ -1325,7 +1309,7 @@ Additional Inherited Members</h2></td></tr>
 </div><!-- contents -->
 <!-- start footer part -->
 <hr class="footer"/><address class="footer"><small>
-Generated on Mon Oct 25 2021 16:12:56 for TracktionEngine by &#160;<a href="http://www.doxygen.org/index.html">
+Generated on Fri May 13 2022 01:53:21 for TracktionEngine by &#160;<a href="http://www.doxygen.org/index.html">
 <img class="footer" src="doxygen.png" alt="doxygen"/>
 </a> 1.8.17
 </small></address>

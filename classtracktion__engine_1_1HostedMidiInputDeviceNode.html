@@ -84,7 +84,7 @@ Inheritance diagram for tracktion_engine::HostedMidiInputDeviceNode:</div>
 <table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pub-methods"></a>
 Public Member Functions</h2></td></tr>
-<tr class="memitem:ad625a746f8104b620053fb9f71051efb"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classtracktion__engine_1_1HostedMidiInputDeviceNode.html#ad625a746f8104b620053fb9f71051efb">HostedMidiInputDeviceNode</a> (<a class="el" href="classtracktion__engine_1_1InputDeviceInstance.html">InputDeviceInstance</a> &amp;, <a class="el" href="classtracktion__engine_1_1MidiInputDevice.html">MidiInputDevice</a> &amp;, <a class="el" href="structtracktion__engine_1_1MidiMessageArray.html#a36e4be4a072539ee901334469a9d40ca">MidiMessageArray::MPESourceID</a>, <a class="el" href="classtracktion__graph_1_1PlayHeadState.html">tracktion_graph::PlayHeadState</a> &amp;)</td></tr>
+<tr class="memitem:ad625a746f8104b620053fb9f71051efb"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classtracktion__engine_1_1HostedMidiInputDeviceNode.html#ad625a746f8104b620053fb9f71051efb">HostedMidiInputDeviceNode</a> (<a class="el" href="classtracktion__engine_1_1InputDeviceInstance.html">InputDeviceInstance</a> &amp;, <a class="el" href="classtracktion__engine_1_1MidiInputDevice.html">MidiInputDevice</a> &amp;, <a class="el" href="structtracktion__engine_1_1MidiMessageArray.html#ac9cbb3e80daa08e67ddd980ccc8b6a85">MidiMessageArray::MPESourceID</a>, <a class="el" href="classtracktion__graph_1_1PlayHeadState.html">tracktion_graph::PlayHeadState</a> &amp;)</td></tr>
 <tr class="separator:ad625a746f8104b620053fb9f71051efb"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ad426dfa6726b8e546b5a938ab2010d15"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classtracktion__engine_1_1HostedMidiInputDeviceNode.html#ad426dfa6726b8e546b5a938ab2010d15">~HostedMidiInputDeviceNode</a> () override</td></tr>
 <tr class="separator:ad426dfa6726b8e546b5a938ab2010d15"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -144,6 +144,9 @@ Public Member Functions</h2></td></tr>
 <tr class="memitem:ac08aa72d65c80763b4b38d243780d238 inherit pub_methods_structtracktion__engine_1_1InputDeviceInstance_1_1Consumer"><td class="memItemLeft" align="right" valign="top">virtual void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structtracktion__engine_1_1InputDeviceInstance_1_1Consumer.html#ac08aa72d65c80763b4b38d243780d238">acceptInputBuffer</a> (choc::buffer::ChannelArrayView&lt; float &gt;)</td></tr>
 <tr class="memdesc:ac08aa72d65c80763b4b38d243780d238 inherit pub_methods_structtracktion__engine_1_1InputDeviceInstance_1_1Consumer"><td class="mdescLeft">&#160;</td><td class="mdescRight">Override this to receive audio input from the device if it has any.  <a href="structtracktion__engine_1_1InputDeviceInstance_1_1Consumer.html#ac08aa72d65c80763b4b38d243780d238">More...</a><br /></td></tr>
 <tr class="separator:ac08aa72d65c80763b4b38d243780d238 inherit pub_methods_structtracktion__engine_1_1InputDeviceInstance_1_1Consumer"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a927618459c9ab2f21a1b9095eb2ffe52 inherit pub_methods_structtracktion__engine_1_1InputDeviceInstance_1_1Consumer"><td class="memItemLeft" align="right" valign="top">virtual void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structtracktion__engine_1_1InputDeviceInstance_1_1Consumer.html#a927618459c9ab2f21a1b9095eb2ffe52">discardRecordings</a> ()</td></tr>
+<tr class="memdesc:a927618459c9ab2f21a1b9095eb2ffe52 inherit pub_methods_structtracktion__engine_1_1InputDeviceInstance_1_1Consumer"><td class="mdescLeft">&#160;</td><td class="mdescRight">This is called when a recording is aborted so listeners should trash their temp data.  <a href="structtracktion__engine_1_1InputDeviceInstance_1_1Consumer.html#a927618459c9ab2f21a1b9095eb2ffe52">More...</a><br /></td></tr>
+<tr class="separator:a927618459c9ab2f21a1b9095eb2ffe52 inherit pub_methods_structtracktion__engine_1_1InputDeviceInstance_1_1Consumer"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="inherited"></a>
 Additional Inherited Members</h2></td></tr>
@@ -187,7 +190,7 @@ Additional Inherited Members</h2></td></tr>
         <tr>
           <td class="paramkey"></td>
           <td></td>
-          <td class="paramtype"><a class="el" href="structtracktion__engine_1_1MidiMessageArray.html#a36e4be4a072539ee901334469a9d40ca">MidiMessageArray::MPESourceID</a>&#160;</td>
+          <td class="paramtype"><a class="el" href="structtracktion__engine_1_1MidiMessageArray.html#ac9cbb3e80daa08e67ddd980ccc8b6a85">MidiMessageArray::MPESourceID</a>&#160;</td>
           <td class="paramname">, </td>
         </tr>
         <tr>
@@ -390,7 +393,7 @@ Additional Inherited Members</h2></td></tr>
 </div><!-- contents -->
 <!-- start footer part -->
 <hr class="footer"/><address class="footer"><small>
-Generated on Mon Oct 25 2021 16:12:57 for TracktionEngine by &#160;<a href="http://www.doxygen.org/index.html">
+Generated on Fri May 13 2022 01:53:22 for TracktionEngine by &#160;<a href="http://www.doxygen.org/index.html">
 <img class="footer" src="doxygen.png" alt="doxygen"/>
 </a> 1.8.17
 </small></address>

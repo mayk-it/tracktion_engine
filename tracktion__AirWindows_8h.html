@@ -497,7 +497,7 @@ Functions</h2></td></tr>
 <div class="line">{ \</div>
 <div class="line">public: \</div>
 <div class="line">    className (PluginCreationInfo); \</div>
-<div class="line">    ~className()                                                            { notifyListenersOfDeletion(); } \</div>
+<div class="line">    ~className()<span class="keyword"> override                                                   </span>{ notifyListenersOfDeletion(); } \</div>
 <div class="line">    \</div>
 <div class="line">    virtual juce::String <a class="code" href="namespacetracktion__graph_1_1test__utilities.html#aed97ccb88dfa8204a9ec8d765489d02b">getName</a>()<span class="keyword"> override                                 </span>{ <span class="keywordflow">return</span> TRANS(pluginName); } \</div>
 <div class="line">    juce::String getPluginType()<span class="keyword"> override                                   </span>{ <span class="keywordflow">return</span> xmlTypeName; } \</div>
@@ -508,7 +508,7 @@ Functions</h2></td></tr>
 <div class="line">    static <span class="keyword">const</span> <span class="keywordtype">char</span>* xmlTypeName; \</div>
 <div class="line">    \</div>
 <div class="line">    static Type pluginType; \</div>
-<div class="line">}; \</div>
+<div class="line">} \</div>
 </div><!-- fragment -->
 </div>
 </div>
@@ -516,7 +516,7 @@ Functions</h2></td></tr>
 <div class="ttc" id="anamespacetracktion__graph_1_1test__utilities_html_aed97ccb88dfa8204a9ec8d765489d02b"><div class="ttname"><a href="namespacetracktion__graph_1_1test__utilities.html#aed97ccb88dfa8204a9ec8d765489d02b">tracktion_graph::test_utilities::getName</a></div><div class="ttdeci">juce::String getName(ThreadPoolStrategy type)</div><div class="ttdoc">Returns the ammount of internal memory allocated for buffers.</div><div class="ttdef"><b>Definition:</b> tracktion_graph_TestUtilities.h:152</div></div>
 <!-- start footer part -->
 <hr class="footer"/><address class="footer"><small>
-Generated on Mon Oct 25 2021 16:12:56 for TracktionEngine by &#160;<a href="http://www.doxygen.org/index.html">
+Generated on Fri May 13 2022 01:53:21 for TracktionEngine by &#160;<a href="http://www.doxygen.org/index.html">
 <img class="footer" src="doxygen.png" alt="doxygen"/>
 </a> 1.8.17
 </small></address>
