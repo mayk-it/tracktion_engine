@@ -81277,6 +81277,11 @@
     <subgroup>tracktion_engine-utilities</subgroup>
   </compound>
   <compound kind="group">
+    <name>tracktion_graph-tracktion_graph</name>
+    <title>tracktion_graph</title>
+    <filename>group__tracktion__graph-tracktion__graph.html</filename>
+  </compound>
+  <compound kind="group">
     <name>tracktion_graph</name>
     <title>tracktion_graph</title>
     <filename>group__tracktion__graph.html</filename>
@@ -81375,11 +81380,6 @@
       <anchor>gae3e5970d378b2f2f040f436880b586c8</anchor>
       <arglist></arglist>
     </member>
-  </compound>
-  <compound kind="group">
-    <name>tracktion_graph-tracktion_graph</name>
-    <title>tracktion_graph</title>
-    <filename>group__tracktion__graph-tracktion__graph.html</filename>
   </compound>
   <compound kind="group">
     <name>tracktion_graph-utilities</name>
