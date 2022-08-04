@@ -25543,6 +25543,20 @@
       <anchor>a86281eae5059a1e830f5544045879825</anchor>
       <arglist>() const</arglist>
     </member>
+    <member kind="function">
+      <type>int</type>
+      <name>getNumCpuOverloads</name>
+      <anchorfile>classtracktion__engine_1_1DeviceManager.html</anchorfile>
+      <anchor>af9700fbbcea375f3c49c43faff069fc8</anchor>
+      <arglist>()</arglist>
+    </member>
+    <member kind="function">
+      <type>void</type>
+      <name>resetNumCpuOverloads</name>
+      <anchorfile>classtracktion__engine_1_1DeviceManager.html</anchorfile>
+      <anchor>af7a891775b82a1311021555e07c65cc2</anchor>
+      <arglist>()</arglist>
+    </member>
     <member kind="function" static="yes">
       <type>static juce::String</type>
       <name>getDefaultAudioOutDeviceName</name>
@@ -81382,13 +81396,13 @@
     </member>
   </compound>
   <compound kind="group">
-    <name>tracktion_graph-utilities</name>
-    <title>utilities</title>
-    <filename>group__tracktion__graph-utilities.html</filename>
-  </compound>
-  <compound kind="group">
     <name>tracktion_engine-utilities</name>
     <title>utilities</title>
     <filename>group__tracktion__engine-utilities.html</filename>
+  </compound>
+  <compound kind="group">
+    <name>tracktion_graph-utilities</name>
+    <title>utilities</title>
+    <filename>group__tracktion__graph-utilities.html</filename>
   </compound>
 </tagfile>
