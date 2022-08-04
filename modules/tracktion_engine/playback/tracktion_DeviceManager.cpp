@@ -1122,6 +1122,9 @@ void DeviceManager::audioDeviceIOCallbackInternal (const float** inputChannelDat
                     juce::FloatVectorOperations::clear (dest, numSamples);
 
             currentCpuUsage = std::min (0.9, currentCpuUsage * 0.99);
+
+            numCpuOverloads++;
+            std::cout << "CPU OVERLOAD!\n";
         }
         else
         {
