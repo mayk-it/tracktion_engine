@@ -186,6 +186,25 @@ public:
     /** Returns true if the Edit's not yet fully loaded */
     bool isLoading() const                                              { return isLoadInProgress; }
 
+    void setIsLoading(bool isLoading)                                   { isLoadInProgress = isLoading; }
+
+    /** A helper class that sets isLoadInProgress to true if it isn't already, and reverts it's action when it goes out
+     * of scope. This can be helpful for letting the engine know when you are setting state or otherwise initializing
+     * things!*/
+    class ScopedEditLoadSetter {
+    public:
+      ScopedEditLoadSetter(Edit& e) : edit(e) {
+        previousState = edit.isLoading();
+        edit.setIsLoading(true);
+      }
+
+      ~ScopedEditLoadSetter() { edit.setIsLoading(previousState); }
+
+    private:
+      Edit& edit;
+      bool previousState;
+    };
+
     /** Creates an Edit for previewing a file. */
     static std::unique_ptr<Edit> createEditForPreviewingFile (Engine&, const juce::File&, const Edit* editToMatch,
                                                               bool tryToMatchTempo, bool tryToMatchPitch, bool* couldMatchTempo,
