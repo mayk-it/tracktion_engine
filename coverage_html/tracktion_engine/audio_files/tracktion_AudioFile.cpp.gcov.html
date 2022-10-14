@@ -37,7 +37,7 @@
           </tr>
           <tr>
             <td class="headerItem">Date:</td>
-            <td class="headerValue">2022-09-26 18:21:57</td>
+            <td class="headerValue">2022-10-14 18:05:48</td>
             <td></td>
             <td class="headerItem">Functions:</td>
             <td class="headerCovTableEntry">46</td>
@@ -247,22 +247,22 @@
 <a name="185"><span class="lineNum">     185 </span><span class="lineCov">        202 :     audioFileManager.checkFileForChanges (file);</span></a>
 <a name="186"><span class="lineNum">     186 </span><span class="lineCov">        202 : }</span></a>
 <a name="187"><span class="lineNum">     187 </span>            : </a>
-<a name="188"><span class="lineNum">     188 </span><span class="lineCov">      56272 : bool AudioFileWriter::appendBuffer (juce::AudioBuffer&lt;float&gt;&amp; buffer, int num)</span></a>
+<a name="188"><span class="lineNum">     188 </span><span class="lineCov">      56570 : bool AudioFileWriter::appendBuffer (juce::AudioBuffer&lt;float&gt;&amp; buffer, int num)</span></a>
 <a name="189"><span class="lineNum">     189 </span>            : {</a>
-<a name="190"><span class="lineNum">     190 </span><span class="lineCov">      56272 :     num = std::min (num, buffer.getNumSamples());</span></a>
-<a name="191"><span class="lineNum">     191 </span><span class="lineCov">      56272 :     const juce::ScopedLock sl (writerLock);</span></a>
+<a name="190"><span class="lineNum">     190 </span><span class="lineCov">      56570 :     num = std::min (num, buffer.getNumSamples());</span></a>
+<a name="191"><span class="lineNum">     191 </span><span class="lineCov">      56570 :     const juce::ScopedLock sl (writerLock);</span></a>
 <a name="192"><span class="lineNum">     192 </span>            : </a>
-<a name="193"><span class="lineNum">     193 </span><span class="lineCov">      56272 :     if (writer != nullptr &amp;&amp; writer-&gt;writeFromAudioSampleBuffer (buffer, 0, num))</span></a>
+<a name="193"><span class="lineNum">     193 </span><span class="lineCov">      56570 :     if (writer != nullptr &amp;&amp; writer-&gt;writeFromAudioSampleBuffer (buffer, 0, num))</span></a>
 <a name="194"><span class="lineNum">     194 </span>            :     {</a>
-<a name="195"><span class="lineNum">     195 </span><span class="lineCov">      56272 :         samplesUntilFlush -= num;</span></a>
+<a name="195"><span class="lineNum">     195 </span><span class="lineCov">      56570 :         samplesUntilFlush -= num;</span></a>
 <a name="196"><span class="lineNum">     196 </span>            : </a>
-<a name="197"><span class="lineNum">     197 </span><span class="lineCov">      56272 :         if (samplesUntilFlush &lt;= 0)</span></a>
+<a name="197"><span class="lineNum">     197 </span><span class="lineCov">      56570 :         if (samplesUntilFlush &lt;= 0)</span></a>
 <a name="198"><span class="lineNum">     198 </span>            :         {</a>
 <a name="199"><span class="lineNum">     199 </span><span class="lineNoCov">          0 :             samplesUntilFlush = numSamplesPerFlush;</span></a>
 <a name="200"><span class="lineNum">     200 </span><span class="lineNoCov">          0 :             writer-&gt;flush();</span></a>
 <a name="201"><span class="lineNum">     201 </span>            :         }</a>
 <a name="202"><span class="lineNum">     202 </span>            : </a>
-<a name="203"><span class="lineNum">     203 </span><span class="lineCov">      56272 :         return true;</span></a>
+<a name="203"><span class="lineNum">     203 </span><span class="lineCov">      56570 :         return true;</span></a>
 <a name="204"><span class="lineNum">     204 </span>            :     }</a>
 <a name="205"><span class="lineNum">     205 </span>            : </a>
 <a name="206"><span class="lineNum">     206 </span>            :     return false;</a>

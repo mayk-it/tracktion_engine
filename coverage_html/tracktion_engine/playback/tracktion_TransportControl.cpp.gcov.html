@@ -37,7 +37,7 @@
           </tr>
           <tr>
             <td class="headerItem">Date:</td>
-            <td class="headerValue">2022-09-26 18:21:57</td>
+            <td class="headerValue">2022-10-14 18:05:48</td>
             <td></td>
             <td class="headerItem">Functions:</td>
             <td class="headerCovTableEntry">42</td>
@@ -689,9 +689,9 @@
 <a name="627"><span class="lineNum">     627 </span><span class="lineCov">        254 :     return controls;</span></a>
 <a name="628"><span class="lineNum">     628 </span>            : }</a>
 <a name="629"><span class="lineNum">     629 </span>            : </a>
-<a name="630"><span class="lineNum">     630 </span><span class="lineCov">        944 : int TransportControl::getNumPlayingTransports (Engine&amp; engine)</span></a>
+<a name="630"><span class="lineNum">     630 </span><span class="lineCov">        968 : int TransportControl::getNumPlayingTransports (Engine&amp; engine)</span></a>
 <a name="631"><span class="lineNum">     631 </span>            : {</a>
-<a name="632"><span class="lineNum">     632 </span><span class="lineCov">        944 :     return engine.getActiveEdits().numTransportsPlaying;</span></a>
+<a name="632"><span class="lineNum">     632 </span><span class="lineCov">        968 :     return engine.getActiveEdits().numTransportsPlaying;</span></a>
 <a name="633"><span class="lineNum">     633 </span>            : }</a>
 <a name="634"><span class="lineNum">     634 </span>            : </a>
 <a name="635"><span class="lineNum">     635 </span><span class="lineCov">        155 : void TransportControl::stopAllTransports (Engine&amp; engine, bool discardRecordings, bool clearDevices)</span></a>
@@ -1005,12 +1005,12 @@
 <a name="943"><span class="lineNum">     943 </span><span class="lineCov">        271 : }</span></a>
 <a name="944"><span class="lineNum">     944 </span>            : </a>
 <a name="945"><span class="lineNum">     945 </span>            : //==============================================================================</a>
-<a name="946"><span class="lineNum">     946 </span><span class="lineCov">       1717 : void TransportControl::timerCallback()</span></a>
+<a name="946"><span class="lineNum">     946 </span><span class="lineCov">       1722 : void TransportControl::timerCallback()</span></a>
 <a name="947"><span class="lineNum">     947 </span>            : {</a>
-<a name="948"><span class="lineNum">     948 </span><span class="lineCov">       1717 :     CRASH_TRACER</span></a>
+<a name="948"><span class="lineNum">     948 </span><span class="lineCov">       1722 :     CRASH_TRACER</span></a>
 <a name="949"><span class="lineNum">     949 </span>            : </a>
-<a name="950"><span class="lineNum">     950 </span><span class="lineCov">       1717 :     if (playbackContext == nullptr)</span></a>
-<a name="951"><span class="lineNum">     951 </span><span class="lineCov">       1717 :         return;</span></a>
+<a name="950"><span class="lineNum">     950 </span><span class="lineCov">       1722 :     if (playbackContext == nullptr)</span></a>
+<a name="951"><span class="lineNum">     951 </span><span class="lineCov">       1722 :         return;</span></a>
 <a name="952"><span class="lineNum">     952 </span>            : </a>
 <a name="953"><span class="lineNum">     953 </span><span class="lineNoCov">          0 :     if (isDelayedChangePending)</span></a>
 <a name="954"><span class="lineNum">     954 </span><span class="lineNoCov">          0 :         editHasChanged();</span></a>
