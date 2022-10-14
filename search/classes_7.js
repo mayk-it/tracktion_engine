@@ -1,5 +1,5 @@
 var searchData=
 [
-  ['hostedaudiodeviceinterface_6610',['HostedAudioDeviceInterface',['../classtracktion__engine_1_1HostedAudioDeviceInterface.html',1,'tracktion_engine']]],
-  ['hostedmidiinputdevicenode_6611',['HostedMidiInputDeviceNode',['../classtracktion__engine_1_1HostedMidiInputDeviceNode.html',1,'tracktion_engine']]]
+  ['hostedaudiodeviceinterface_6634',['HostedAudioDeviceInterface',['../classtracktion_1_1engine_1_1HostedAudioDeviceInterface.html',1,'tracktion::engine::HostedAudioDeviceInterface'],['../classtracktion_1_1engine_1_1HostedAudioDeviceInterface.html',1,'tracktion::engine::HostedAudioDeviceInterface']]],
+  ['hostedmidiinputdevicenode_6635',['HostedMidiInputDeviceNode',['../classtracktion_1_1engine_1_1HostedMidiInputDeviceNode.html',1,'tracktion::engine::HostedMidiInputDeviceNode'],['../classtracktion_1_1engine_1_1HostedMidiInputDeviceNode.html',1,'tracktion::engine::HostedMidiInputDeviceNode']]]
 ];
