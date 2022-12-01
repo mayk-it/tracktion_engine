@@ -195,10 +195,8 @@ struct AsyncPluginDeleter  : private juce::Timer,
 
         const juce::ScopedValueSetter<bool> setter (recursive, true, false);
 
-#if !TRACKTION_FORCE_HEADLESS
         juce::Component modal;
         modal.enterModalState (false);
-#endif
 
         plugins.removeLast();
     }
@@ -219,10 +217,8 @@ void cleanUpDanglingPlugins()
     {
         for (int count = 400; --count > 0 && d->releaseNextDanglingPlugin();)
         {
-        #if !TRACKTION_FORCE_HEADLESS
             juce::Component modal;
             modal.enterModalState (false);
-        #endif
 
             juce::MessageManager::getInstance()->runDispatchLoopUntil (10);
         }
@@ -279,7 +275,7 @@ public:
     {
         if (rc != nullptr)
         {
-            time        = rc->editTime;
+            time        = rc->editTime.getStart();
             isPlaying   = rc->isPlaying;
 
             const auto loopTimeRange = plugin.edit.getTransport().getLoopRange();
@@ -560,6 +556,17 @@ juce::ValueTree ExternalPlugin::create (Engine& e, const juce::PluginDescription
     return v;
 }
 
+juce::String ExternalPlugin::getLoadError()
+{
+    if (pluginInstance != nullptr)
+        return {};
+
+    if (loadError.isEmpty())
+        return TRANS("ERROR! - This plugin couldn't be loaded!");
+
+    return loadError;
+}
+
 const char* ExternalPlugin::xmlTypeName = "vst";
 
 void ExternalPlugin::initialiseFully()
@@ -822,12 +829,12 @@ void ExternalPlugin::doFullInitialisation()
                 return;
 
             CRASH_TRACER_PLUGIN (getDebugName());
-            juce::String error;
+            loadError = {};
 
-            callBlocking ([this, &error, &foundDesc]
+            callBlocking ([this, &foundDesc]
             {
                 CRASH_TRACER_PLUGIN (getDebugName());
-                error = createPluginInstance (*foundDesc);
+                loadError = createPluginInstance (*foundDesc);
             });
 
             if (pluginInstance != nullptr)
@@ -846,10 +853,27 @@ void ExternalPlugin::doFullInitialisation()
             }
             else
             {
-                TRACKTION_LOG_ERROR (error);
+                TRACKTION_LOG_ERROR (loadError);
             }
         }
     }
+}
+
+void ExternalPlugin::trackPropertiesChanged()
+{
+    juce::MessageManager::callAsync ([this, pluginRef = getWeakRef()]
+    {
+        if (pluginRef == nullptr)
+            return;
+
+        if (auto t = getOwnerTrack(); t != nullptr && pluginInstance != nullptr)
+        {
+            auto n = t->getName();
+            auto c = t->getColour();
+
+            pluginInstance->updateTrackProperties ({n, c});
+        }
+    });
 }
 
 //==============================================================================

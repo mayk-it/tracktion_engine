@@ -309,7 +309,7 @@ void Renderer::RenderTask::flushAllPlugins (const Plugin::Array& plugins,
 
                     ep->applyToBuffer (PluginRenderContext (&buffer, channels, 0, samplesPerBlock,
                                                             nullptr, 0.0,
-                                                            TimePosition(), false, false, true, true));
+                                                            TimeRange(), false, false, true, true));
 
                     if (isAudioDataAlmostSilent (buffer.getReadPointer (0), samplesPerBlock))
                         break;
@@ -406,9 +406,7 @@ bool Renderer::renderToFile (const juce::String& taskDescription,
                              const juce::BigInteger& tracksToDo,
                              bool usePlugins,
                              juce::Array<Clip*> clips,
-                             bool useThread,
-                             std::atomic<float>* progressToUpdate,
-                             std::atomic<bool>* cancelRenderTask)
+                             bool useThread)
 {
     CRASH_TRACER
     auto& engine = edit.engine;
@@ -441,7 +439,7 @@ bool Renderer::renderToFile (const juce::String& taskDescription,
 
         addAcidInfo (edit, r);
         
-        if (auto task = render_utils::createRenderTask (r, taskDescription, progressToUpdate, nullptr))
+        if (auto task = render_utils::createRenderTask (r, taskDescription, nullptr, nullptr))
         {
             if (useThread)
             {
@@ -449,16 +447,8 @@ bool Renderer::renderToFile (const juce::String& taskDescription,
             }
             else
             {
-                while (true) {
-                    if (cancelRenderTask && *cancelRenderTask) {
-                        DBG("Cancelling rendering task!!!");
-                        turnOffAllPlugins (edit);
-                        return false;
-                    }
-                    if (task->runJob() != juce::ThreadPoolJob::jobNeedsRunningAgain) {
-                        break;
-                    }
-                }
+                while (task->runJob() == juce::ThreadPoolJob::jobNeedsRunningAgain)
+                {}
             }
         }
     }

@@ -156,9 +156,7 @@ public:
                               const juce::BigInteger& tracksToDo,
                               bool usePlugins = true,
                               juce::Array<Clip*> clips = {},
-                              bool useThread = true,
-                              std::atomic<float>* progressToUpdate = nullptr,
-                              std::atomic<bool>* cancelRender = nullptr);
+                              bool useThread = true);
 
     //==============================================================================
     /** @see measureStatistics()

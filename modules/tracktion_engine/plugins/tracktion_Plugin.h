@@ -50,7 +50,7 @@ struct PluginRenderContext
                          const juce::AudioChannelSet& bufferChannels,
                          int bufferStart, int bufferSize,
                          MidiMessageArray* midiBuffer, double midiOffset,
-                         TimePosition editTime, bool playing, bool scrubbing, bool rendering,
+                         TimeRange editTime, bool playing, bool scrubbing, bool rendering,
                          bool allowBypassedProcessing) noexcept;
 
     /** Creates a copy of another PluginRenderContext. */
@@ -83,8 +83,8 @@ struct PluginRenderContext
     /** A time offset to add to the timestamp of any events in the MIDI buffer. */
     double midiBufferOffset = 0.0;
 
-    /** The time in seconds that the start of this context represents. */
-    TimePosition editTime;
+    /** The edit time range this context represents. */
+    TimeRange editTime;
 
     /** True if the the playhead is currently playing. */
     bool isPlaying = false;
@@ -165,7 +165,7 @@ public:
 
         The sample rate and the average block size - although the blocks
         won't always be the same, and may be bigger.
-        
+
         Don't call this directly or the initialise count will become out of sync.
         @see baseClassInitialise
     */
@@ -185,6 +185,9 @@ public:
 
     /** Should reset synth voices, tails, clear delay buffers, etc. */
     virtual void reset();
+
+    /** Track name or colour has changed. */
+    virtual void trackPropertiesChanged()                    {}
 
     //==============================================================================
     /** Process the next block of data.

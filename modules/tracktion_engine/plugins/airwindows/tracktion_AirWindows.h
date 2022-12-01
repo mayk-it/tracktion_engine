@@ -46,7 +46,7 @@ public:
 
     //==============================================================================
     AirWindowsPlugin (PluginCreationInfo, std::unique_ptr<AirWindowsBase>);
-    ~AirWindowsPlugin() override;
+    ~AirWindowsPlugin();
 
     virtual Type getPluginCategory() = 0;
 
@@ -85,6 +85,8 @@ protected:
     AirWindowsCallback callback;
     std::unique_ptr<AirWindowsBase> impl;
 
+    double sampleRate = 44100.0;
+
 public:
     //==============================================================================
     juce::ReferenceCountedArray<AutomatableParameter> parameters;
@@ -103,7 +105,7 @@ class className :   public AirWindowsPlugin \
 { \
 public: \
     className (PluginCreationInfo); \
-    ~className() override                                                   { notifyListenersOfDeletion(); } \
+    ~className()                                                            { notifyListenersOfDeletion(); } \
     \
     virtual juce::String getName() override                                 { return TRANS(pluginName); } \
     juce::String getPluginType() override                                   { return xmlTypeName; } \
@@ -114,7 +116,7 @@ public: \
     static const char* xmlTypeName; \
     \
     static Type pluginType; \
-} \
+}; \
 
 AIRWINDOWSPLUGIN(AirWindowsADClip7, "ADClip 7");
 AIRWINDOWSPLUGIN(AirWindowsADT, "ADT");
