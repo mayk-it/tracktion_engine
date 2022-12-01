@@ -31,18 +31,18 @@
             <td class="headerValue">coverage.info</td>
             <td></td>
             <td class="headerItem">Lines:</td>
-            <td class="headerCovTableEntry">15</td>
-            <td class="headerCovTableEntry">22</td>
-            <td class="headerCovTableEntryLo">68.2 %</td>
+            <td class="headerCovTableEntry">23</td>
+            <td class="headerCovTableEntry">33</td>
+            <td class="headerCovTableEntryLo">69.7 %</td>
           </tr>
           <tr>
             <td class="headerItem">Date:</td>
-            <td class="headerValue">2022-10-20 23:55:22</td>
+            <td class="headerValue">2022-12-01 19:30:47</td>
             <td></td>
             <td class="headerItem">Functions:</td>
-            <td class="headerCovTableEntry">0</td>
-            <td class="headerCovTableEntry">0</td>
-            <td class="headerCovTableEntryHi">-</td>
+            <td class="headerCovTableEntry">1</td>
+            <td class="headerCovTableEntry">2</td>
+            <td class="headerCovTableEntryLo">50.0 %</td>
           </tr>
           <tr><td><img src="../../glass.png" width=3 height=3 alt=""></td></tr>
         </table>
@@ -270,15 +270,15 @@
 <a name="208"><span class="lineNum">     208 </span>            : }</a>
 <a name="209"><span class="lineNum">     209 </span>            : </a>
 <a name="210"><span class="lineNum">     210 </span>            : template&lt;typename PositionType&gt;</a>
-<a name="211"><span class="lineNum">     211 </span><span class="lineCov">   14747104 : inline RangeType&lt;PositionType&gt;::RangeType (Position s, Position e)</span></a>
-<a name="212"><span class="lineNum">     212 </span><span class="lineCov">       3747 :     : start (s), end (e)</span></a>
+<a name="211"><span class="lineNum">     211 </span><span class="lineCov">   14747814 : inline RangeType&lt;PositionType&gt;::RangeType (Position s, Position e)</span></a>
+<a name="212"><span class="lineNum">     212 </span><span class="lineCov">        272 :     : start (s), end (e)</span></a>
 <a name="213"><span class="lineNum">     213 </span>            : {</a>
 <a name="214"><span class="lineNum">     214 </span>            :     checkInvariants();</a>
 <a name="215"><span class="lineNum">     215 </span>            : }</a>
 <a name="216"><span class="lineNum">     216 </span>            : </a>
 <a name="217"><span class="lineNum">     217 </span>            : template&lt;typename PositionType&gt;</a>
-<a name="218"><span class="lineNum">     218 </span><span class="lineCov">        200 : inline RangeType&lt;PositionType&gt;::RangeType (Position s, Duration d)</span></a>
-<a name="219"><span class="lineNum">     219 </span><span class="lineCov">        200 :     : start (s), end (s + d)</span></a>
+<a name="218"><span class="lineNum">     218 </span><span class="lineCov">        248 : inline RangeType&lt;PositionType&gt;::RangeType (Position s, Duration d)</span></a>
+<a name="219"><span class="lineNum">     219 </span><span class="lineCov">        248 :     : start (s), end (s + d)</span></a>
 <a name="220"><span class="lineNum">     220 </span>            : {</a>
 <a name="221"><span class="lineNum">     221 </span>            :     checkInvariants();</a>
 <a name="222"><span class="lineNum">     222 </span>            : }</a>
@@ -296,9 +296,9 @@
 <a name="234"><span class="lineNum">     234 </span>            :     return { p, p };</a>
 <a name="235"><span class="lineNum">     235 </span>            : }</a>
 <a name="236"><span class="lineNum">     236 </span>            : </a>
-<a name="237"><span class="lineNum">     237 </span>            : template&lt;typename PositionType&gt; inline constexpr typename RangeType&lt;PositionType&gt;::Position RangeType&lt;PositionType&gt;::getStart() const                          { return start; }</a>
-<a name="238"><span class="lineNum">     238 </span>            : template&lt;typename PositionType&gt; inline constexpr typename RangeType&lt;PositionType&gt;::Position RangeType&lt;PositionType&gt;::getEnd() const                            { return end; }</a>
-<a name="239"><span class="lineNum">     239 </span>            : template&lt;typename PositionType&gt; inline constexpr typename RangeType&lt;PositionType&gt;::Duration RangeType&lt;PositionType&gt;::getLength() const                         { return end - start; }</a>
+<a name="237"><span class="lineNum">     237 </span><span class="lineCov">   60560578 : template&lt;typename PositionType&gt; inline constexpr typename RangeType&lt;PositionType&gt;::Position RangeType&lt;PositionType&gt;::getStart() const                          { return start; }</span></a>
+<a name="238"><span class="lineNum">     238 </span><span class="lineCov">   68568666 : template&lt;typename PositionType&gt; inline constexpr typename RangeType&lt;PositionType&gt;::Position RangeType&lt;PositionType&gt;::getEnd() const                            { return end; }</span></a>
+<a name="239"><span class="lineNum">     239 </span><span class="lineNoCov">          0 : template&lt;typename PositionType&gt; inline constexpr typename RangeType&lt;PositionType&gt;::Duration RangeType&lt;PositionType&gt;::getLength() const                         { return end - start; }</span></a>
 <a name="240"><span class="lineNum">     240 </span><span class="lineCov">          2 : template&lt;typename PositionType&gt; inline constexpr typename RangeType&lt;PositionType&gt;::Position RangeType&lt;PositionType&gt;::getCentre() const                         { return fromUnderlyingType&lt;Position&gt; ((toUnderlyingType (start) + toUnderlyingType (end)) * 0.5); }</span></a>
 <a name="241"><span class="lineNum">     241 </span>            : template&lt;typename PositionType&gt; inline typename RangeType&lt;PositionType&gt;::Position RangeType&lt;PositionType&gt;::clipPosition (Position position) const    { return juce::jlimit (start, end, position); }</a>
 <a name="242"><span class="lineNum">     242 </span>            : </a>
@@ -307,21 +307,21 @@
 <a name="245"><span class="lineNum">     245 </span><span class="lineNoCov">          0 : template&lt;typename PositionType&gt; inline bool RangeType&lt;PositionType&gt;::contains (const RangeType&amp; other) const                  { return other.start &gt;= start &amp;&amp; other.end &lt;= end; }</span></a>
 <a name="246"><span class="lineNum">     246 </span><span class="lineCov">       3102 : template&lt;typename PositionType&gt; inline bool RangeType&lt;PositionType&gt;::intersects (const RangeType&amp; other) const                { return other.start &lt; end &amp;&amp; start &lt; other.end; }</span></a>
 <a name="247"><span class="lineNum">     247 </span>            : </a>
-<a name="248"><span class="lineNum">     248 </span><span class="lineCov">    3515884 : template&lt;typename PositionType&gt; inline bool RangeType&lt;PositionType&gt;::contains (Position time) const                           { return time &gt;= start &amp;&amp; time &lt; end; }</span></a>
+<a name="248"><span class="lineNum">     248 </span><span class="lineCov">    3517207 : template&lt;typename PositionType&gt; inline bool RangeType&lt;PositionType&gt;::contains (Position time) const                           { return time &gt;= start &amp;&amp; time &lt; end; }</span></a>
 <a name="249"><span class="lineNum">     249 </span><span class="lineCov">     512256 : template&lt;typename PositionType&gt; inline bool RangeType&lt;PositionType&gt;::containsInclusive (Position time) const                  { return time &gt;= start &amp;&amp; time &lt;= end; }</span></a>
 <a name="250"><span class="lineNum">     250 </span>            : </a>
 <a name="251"><span class="lineNum">     251 </span>            : template&lt;typename PositionType&gt;</a>
 <a name="252"><span class="lineNum">     252 </span>            : inline RangeType&lt;PositionType&gt; RangeType&lt;PositionType&gt;::getUnionWith (RangeType o) const</a>
 <a name="253"><span class="lineNum">     253 </span>            : {</a>
 <a name="254"><span class="lineNum">     254 </span><span class="lineNoCov">          0 :     return { std::min (start, o.start),</span></a>
-<a name="255"><span class="lineNum">     255 </span><span class="lineNoCov">          0 :              std::max (end, o.end) };</span></a>
+<a name="255"><span class="lineNum">     255 </span><span class="lineCov">      12980 :              std::max (end, o.end) };</span></a>
 <a name="256"><span class="lineNum">     256 </span>            : }</a>
 <a name="257"><span class="lineNum">     257 </span>            : </a>
 <a name="258"><span class="lineNum">     258 </span>            : template&lt;typename PositionType&gt;</a>
 <a name="259"><span class="lineNum">     259 </span>            : inline RangeType&lt;PositionType&gt; RangeType&lt;PositionType&gt;::getIntersectionWith (RangeType o) const</a>
 <a name="260"><span class="lineNum">     260 </span>            : {</a>
 <a name="261"><span class="lineNum">     261 </span><span class="lineCov">     512250 :     auto newStart = std::max (start, o.start);</span></a>
-<a name="262"><span class="lineNum">     262 </span><span class="lineNoCov">          0 :     return { newStart, std::max (newStart, std::min (end, o.end)) };</span></a>
+<a name="262"><span class="lineNum">     262 </span><span class="lineCov">     512250 :     return { newStart, std::max (newStart, std::min (end, o.end)) };</span></a>
 <a name="263"><span class="lineNum">     263 </span>            : }</a>
 <a name="264"><span class="lineNum">     264 </span>            : </a>
 <a name="265"><span class="lineNum">     265 </span>            : template&lt;typename PositionType&gt;</a>
@@ -381,7 +381,7 @@
 <a name="319"><span class="lineNum">     319 </span>            : inline RangeType&lt;PositionType&gt; RangeType&lt;PositionType&gt;::withEnd (Position newEnd) const</a>
 <a name="320"><span class="lineNum">     320 </span>            : {</a>
 <a name="321"><span class="lineNum">     321 </span>            :     jassert (newEnd &gt;= start);</a>
-<a name="322"><span class="lineNum">     322 </span><span class="lineCov">         84 :     return { std::min (start, newEnd), newEnd };</span></a>
+<a name="322"><span class="lineNum">     322 </span><span class="lineCov">        168 :     return { std::min (start, newEnd), newEnd };</span></a>
 <a name="323"><span class="lineNum">     323 </span>            : }</a>
 <a name="324"><span class="lineNum">     324 </span>            : </a>
 <a name="325"><span class="lineNum">     325 </span>            : template&lt;typename PositionType&gt;</a>
@@ -405,7 +405,7 @@
 <a name="343"><span class="lineNum">     343 </span>            : }</a>
 <a name="344"><span class="lineNum">     344 </span>            : </a>
 <a name="345"><span class="lineNum">     345 </span>            : template&lt;typename PositionType&gt;</a>
-<a name="346"><span class="lineNum">     346 </span><span class="lineCov">          5 : inline bool operator== (const RangeType&lt;PositionType&gt;&amp; r1, const RangeType&lt;PositionType&gt;&amp; r2)  { return r1.getStart() == r2.getStart() &amp;&amp; r1.getEnd() == r2.getEnd(); }</span></a>
+<a name="346"><span class="lineNum">     346 </span><span class="lineCov">          4 : inline bool operator== (const RangeType&lt;PositionType&gt;&amp; r1, const RangeType&lt;PositionType&gt;&amp; r2)  { return r1.getStart() == r2.getStart() &amp;&amp; r1.getEnd() == r2.getEnd(); }</span></a>
 <a name="347"><span class="lineNum">     347 </span>            : template&lt;typename PositionType&gt;</a>
 <a name="348"><span class="lineNum">     348 </span>            : inline bool operator!= (const RangeType&lt;PositionType&gt;&amp; r1, const RangeType&lt;PositionType&gt;&amp; r2)  { return ! operator== (r1, r2); }</a>
 <a name="349"><span class="lineNum">     349 </span>            : </a>
@@ -422,22 +422,22 @@
 <a name="360"><span class="lineNum">     360 </span>            : template&lt;&gt;</a>
 <a name="361"><span class="lineNum">     361 </span>            : struct std::hash&lt;tracktion::TimeRange&gt;</a>
 <a name="362"><span class="lineNum">     362 </span>            : {</a>
-<a name="363"><span class="lineNum">     363 </span>            :     std::size_t operator()(const tracktion::TimeRange tr) const noexcept</a>
+<a name="363"><span class="lineNum">     363 </span><span class="lineCov">        336 :     std::size_t operator()(const tracktion::TimeRange tr) const noexcept</span></a>
 <a name="364"><span class="lineNum">     364 </span>            :     {</a>
-<a name="365"><span class="lineNum">     365 </span>            :         std::size_t h1 = std::hash&lt;double&gt;{} (tr.getStart().inSeconds());</a>
-<a name="366"><span class="lineNum">     366 </span>            :         std::size_t h2 = std::hash&lt;double&gt;{} (tr.getEnd().inSeconds());</a>
-<a name="367"><span class="lineNum">     367 </span>            :         return h1 ^ (h2 &lt;&lt; 1); // or use boost::hash_combine</a>
+<a name="365"><span class="lineNum">     365 </span><span class="lineCov">        336 :         std::size_t h1 = std::hash&lt;double&gt;{} (tr.getStart().inSeconds());</span></a>
+<a name="366"><span class="lineNum">     366 </span><span class="lineCov">        336 :         std::size_t h2 = std::hash&lt;double&gt;{} (tr.getEnd().inSeconds());</span></a>
+<a name="367"><span class="lineNum">     367 </span><span class="lineCov">        336 :         return h1 ^ (h2 &lt;&lt; 1); // or use boost::hash_combine</span></a>
 <a name="368"><span class="lineNum">     368 </span>            :     }</a>
 <a name="369"><span class="lineNum">     369 </span>            : };</a>
 <a name="370"><span class="lineNum">     370 </span>            : </a>
 <a name="371"><span class="lineNum">     371 </span>            : template&lt;&gt;</a>
 <a name="372"><span class="lineNum">     372 </span>            : struct std::hash&lt;tracktion::BeatRange&gt;</a>
 <a name="373"><span class="lineNum">     373 </span>            : {</a>
-<a name="374"><span class="lineNum">     374 </span>            :     std::size_t operator()(const tracktion::BeatRange tr) const noexcept</a>
+<a name="374"><span class="lineNum">     374 </span><span class="lineNoCov">          0 :     std::size_t operator()(const tracktion::BeatRange tr) const noexcept</span></a>
 <a name="375"><span class="lineNum">     375 </span>            :     {</a>
-<a name="376"><span class="lineNum">     376 </span>            :         std::size_t h1 = std::hash&lt;double&gt;{} (tr.getStart().inBeats());</a>
-<a name="377"><span class="lineNum">     377 </span>            :         std::size_t h2 = std::hash&lt;double&gt;{} (tr.getEnd().inBeats());</a>
-<a name="378"><span class="lineNum">     378 </span>            :         return h1 ^ (h2 &lt;&lt; 1); // or use boost::hash_combine</a>
+<a name="376"><span class="lineNum">     376 </span><span class="lineNoCov">          0 :         std::size_t h1 = std::hash&lt;double&gt;{} (tr.getStart().inBeats());</span></a>
+<a name="377"><span class="lineNum">     377 </span><span class="lineNoCov">          0 :         std::size_t h2 = std::hash&lt;double&gt;{} (tr.getEnd().inBeats());</span></a>
+<a name="378"><span class="lineNum">     378 </span><span class="lineNoCov">          0 :         return h1 ^ (h2 &lt;&lt; 1); // or use boost::hash_combine</span></a>
 <a name="379"><span class="lineNum">     379 </span>            :     }</a>
 <a name="380"><span class="lineNum">     380 </span>            : };</a>
 </pre>

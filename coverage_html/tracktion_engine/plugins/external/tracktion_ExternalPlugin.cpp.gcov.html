@@ -32,16 +32,16 @@
             <td></td>
             <td class="headerItem">Lines:</td>
             <td class="headerCovTableEntry">4</td>
-            <td class="headerCovTableEntry">782</td>
+            <td class="headerCovTableEntry">826</td>
             <td class="headerCovTableEntryLo">0.5 %</td>
           </tr>
           <tr>
             <td class="headerItem">Date:</td>
-            <td class="headerValue">2022-10-20 23:55:22</td>
+            <td class="headerValue">2022-12-01 19:30:47</td>
             <td></td>
             <td class="headerItem">Functions:</td>
             <td class="headerCovTableEntry">1</td>
-            <td class="headerCovTableEntry">97</td>
+            <td class="headerCovTableEntry">98</td>
             <td class="headerCovTableEntryLo">1.0 %</td>
           </tr>
           <tr><td><img src="../../../glass.png" width=3 height=3 alt=""></td></tr>
@@ -263,7 +263,7 @@
 <a name="201"><span class="lineNum">     201 </span>            : #endif</a>
 <a name="202"><span class="lineNum">     202 </span>            : </a>
 <a name="203"><span class="lineNum">     203 </span><span class="lineNoCov">          0 :         plugins.removeLast();</span></a>
-<a name="204"><span class="lineNum">     204 </span>            :     }</a>
+<a name="204"><span class="lineNum">     204 </span><span class="lineNoCov">          0 :     }</span></a>
 <a name="205"><span class="lineNum">     205 </span>            : </a>
 <a name="206"><span class="lineNum">     206 </span>            : private:</a>
 <a name="207"><span class="lineNum">     207 </span>            :     juce::OwnedArray&lt;juce::AudioPluginInstance&gt; plugins;</a>
@@ -287,7 +287,7 @@
 <a name="225"><span class="lineNum">     225 </span>            :         #endif</a>
 <a name="226"><span class="lineNum">     226 </span>            : </a>
 <a name="227"><span class="lineNum">     227 </span><span class="lineNoCov">          0 :             juce::MessageManager::getInstance()-&gt;runDispatchLoopUntil (10);</span></a>
-<a name="228"><span class="lineNum">     228 </span>            :         }</a>
+<a name="228"><span class="lineNum">     228 </span><span class="lineNoCov">          0 :         }</span></a>
 <a name="229"><span class="lineNum">     229 </span>            :     }</a>
 <a name="230"><span class="lineNum">     230 </span>            :    #endif</a>
 <a name="231"><span class="lineNum">     231 </span>            : </a>
@@ -368,7 +368,7 @@
 <a name="306"><span class="lineNum">     306 </span>            :         result.setIsPlaying (isPlaying);</a>
 <a name="307"><span class="lineNum">     307 </span><span class="lineNoCov">          0 :         result.setIsRecording (transport.isRecording());</span></a>
 <a name="308"><span class="lineNum">     308 </span><span class="lineNoCov">          0 :         result.setEditOriginTime (transport.getTimeWhenStarted().inSeconds());</span></a>
-<a name="309"><span class="lineNum">     309 </span><span class="lineNoCov">          0 :         result.setIsLooping (transport.looping);</span></a>
+<a name="309"><span class="lineNum">     309 </span>            :         result.setIsLooping (transport.looping);</a>
 <a name="310"><span class="lineNum">     310 </span>            : </a>
 <a name="311"><span class="lineNum">     311 </span><span class="lineNoCov">          0 :         if (transport.looping)</span></a>
 <a name="312"><span class="lineNum">     312 </span>            :             result.setLoopPoints (juce::AudioPlayHead::LoopPoints ({ loopStart.getPPQTime(), loopEnd.getPPQTime() }));</a>
@@ -376,7 +376,7 @@
 <a name="314"><span class="lineNum">     314 </span>            :         result.setTimeInSeconds (localTime.inSeconds());</a>
 <a name="315"><span class="lineNum">     315 </span><span class="lineNoCov">          0 :         result.setTimeInSamples (toSamples (localTime, plugin.sampleRate));</span></a>
 <a name="316"><span class="lineNum">     316 </span>            : </a>
-<a name="317"><span class="lineNum">     317 </span><span class="lineNoCov">          0 :         const auto timeSig = currentPos.getTimeSignature();</span></a>
+<a name="317"><span class="lineNum">     317 </span>            :         const auto timeSig = currentPos.getTimeSignature();</a>
 <a name="318"><span class="lineNum">     318 </span>            :         result.setBpm (currentPos.getTempo());</a>
 <a name="319"><span class="lineNum">     319 </span>            :         result.setTimeSignature (juce::AudioPlayHead::TimeSignature ({ timeSig.numerator, timeSig.denominator }));</a>
 <a name="320"><span class="lineNum">     320 </span>            : </a>
@@ -395,9 +395,9 @@
 <a name="333"><span class="lineNum">     333 </span>            :     std::atomic&lt;TimePosition&gt; time { TimePosition() };</a>
 <a name="334"><span class="lineNum">     334 </span>            :     std::atomic&lt;bool&gt; isPlaying { false };</a>
 <a name="335"><span class="lineNum">     335 </span>            : </a>
-<a name="336"><span class="lineNum">     336 </span>            :     AudioPlayHead::FrameRateType getFrameRate() const</a>
+<a name="336"><span class="lineNum">     336 </span><span class="lineNoCov">          0 :     AudioPlayHead::FrameRateType getFrameRate() const</span></a>
 <a name="337"><span class="lineNum">     337 </span>            :     {</a>
-<a name="338"><span class="lineNum">     338 </span>            :         switch (plugin.edit.getTimecodeFormat().getFPS())</a>
+<a name="338"><span class="lineNum">     338 </span><span class="lineNoCov">          0 :         switch (plugin.edit.getTimecodeFormat().getFPS())</span></a>
 <a name="339"><span class="lineNum">     339 </span>            :         {</a>
 <a name="340"><span class="lineNum">     340 </span>            :             case 24:    return AudioPlayHead::fps24;</a>
 <a name="341"><span class="lineNum">     341 </span>            :             case 25:    return AudioPlayHead::fps25;</a>
@@ -431,7 +431,7 @@
 <a name="369"><span class="lineNum">     369 </span><span class="lineNoCov">          0 :             for (auto v : buses)</span></a>
 <a name="370"><span class="lineNum">     370 </span>            :             {</a>
 <a name="371"><span class="lineNum">     371 </span><span class="lineNoCov">          0 :                 if (! v.hasType (IDs::BUS))</span></a>
-<a name="372"><span class="lineNum">     372 </span><span class="lineNoCov">          0 :                     continue;</span></a>
+<a name="372"><span class="lineNum">     372 </span>            :                     continue;</a>
 <a name="373"><span class="lineNum">     373 </span>            : </a>
 <a name="374"><span class="lineNum">     374 </span><span class="lineNoCov">          0 :                 const int busIdx = v[IDs::index];</span></a>
 <a name="375"><span class="lineNum">     375 </span><span class="lineNoCov">          0 :                 maxNumBuses = std::max (maxNumBuses, busIdx + 1);</span></a>
@@ -449,7 +449,7 @@
 <a name="387"><span class="lineNum">     387 </span>            : </a>
 <a name="388"><span class="lineNum">     388 </span><span class="lineNoCov">          0 :                 if (layout.isNotEmpty())</span></a>
 <a name="389"><span class="lineNum">     389 </span><span class="lineNoCov">          0 :                     targetBuses.getReference (busIdx) = juce::AudioChannelSet::fromAbbreviatedString (layout);</span></a>
-<a name="390"><span class="lineNum">     390 </span>            :             }</a>
+<a name="390"><span class="lineNum">     390 </span><span class="lineNoCov">          0 :             }</span></a>
 <a name="391"><span class="lineNum">     391 </span>            :         }</a>
 <a name="392"><span class="lineNum">     392 </span>            : </a>
 <a name="393"><span class="lineNum">     393 </span>            :         // If the plugin has more buses than specified in the xml, then try to remove them!</a>
@@ -471,10 +471,10 @@
 <a name="409"><span class="lineNum">     409 </span><span class="lineNoCov">          0 :             auto v = juce::ValueTree::readFromData (mb-&gt;getData(), mb-&gt;getSize());</span></a>
 <a name="410"><span class="lineNum">     410 </span><span class="lineNoCov">          0 :             readBusLayout (busesLayout, v, plugin, true);</span></a>
 <a name="411"><span class="lineNum">     411 </span><span class="lineNoCov">          0 :             readBusLayout (busesLayout, v, plugin, false);</span></a>
-<a name="412"><span class="lineNum">     412 </span>            :         }</a>
+<a name="412"><span class="lineNum">     412 </span><span class="lineNoCov">          0 :         }</span></a>
 <a name="413"><span class="lineNum">     413 </span>            : </a>
 <a name="414"><span class="lineNum">     414 </span><span class="lineNoCov">          0 :         return busesLayout;</span></a>
-<a name="415"><span class="lineNum">     415 </span>            :     }</a>
+<a name="415"><span class="lineNum">     415 </span><span class="lineNoCov">          0 :     }</span></a>
 <a name="416"><span class="lineNum">     416 </span>            : </a>
 <a name="417"><span class="lineNum">     417 </span><span class="lineNoCov">          0 :     juce::ValueTree createBusLayout (const juce::AudioProcessor::BusesLayout&amp; layout, bool isInput)</span></a>
 <a name="418"><span class="lineNum">     418 </span>            :     {</a>
@@ -492,10 +492,10 @@
 <a name="430"><span class="lineNum">     430 </span><span class="lineNoCov">          0 :                                         IDs::layout, layoutName);</span></a>
 <a name="431"><span class="lineNum">     431 </span>            : </a>
 <a name="432"><span class="lineNum">     432 </span><span class="lineNoCov">          0 :             v.addChild (bus, -1, nullptr);</span></a>
-<a name="433"><span class="lineNum">     433 </span>            :         }</a>
+<a name="433"><span class="lineNum">     433 </span><span class="lineNoCov">          0 :         }</span></a>
 <a name="434"><span class="lineNum">     434 </span>            : </a>
 <a name="435"><span class="lineNum">     435 </span><span class="lineNoCov">          0 :         return v.getNumChildren() &gt; 0 ? v : juce::ValueTree();</span></a>
-<a name="436"><span class="lineNum">     436 </span>            :     }</a>
+<a name="436"><span class="lineNum">     436 </span><span class="lineNoCov">          0 :     }</span></a>
 <a name="437"><span class="lineNum">     437 </span>            : </a>
 <a name="438"><span class="lineNum">     438 </span><span class="lineNoCov">          0 :     juce::ValueTree createBusesLayout (const juce::AudioProcessor::BusesLayout&amp; layout)</span></a>
 <a name="439"><span class="lineNum">     439 </span>            :     {</a>
@@ -510,7 +510,7 @@
 <a name="448"><span class="lineNum">     448 </span><span class="lineNoCov">          0 :         v.addChild (outputs, -1, nullptr);</span></a>
 <a name="449"><span class="lineNum">     449 </span>            : </a>
 <a name="450"><span class="lineNum">     450 </span><span class="lineNoCov">          0 :         return v;</span></a>
-<a name="451"><span class="lineNum">     451 </span>            :     }</a>
+<a name="451"><span class="lineNum">     451 </span><span class="lineNoCov">          0 :     }</span></a>
 <a name="452"><span class="lineNum">     452 </span>            : </a>
 <a name="453"><span class="lineNum">     453 </span><span class="lineNoCov">          0 :     juce::MemoryBlock createBusesLayoutProperty (const juce::AudioProcessor::BusesLayout&amp; layout)</span></a>
 <a name="454"><span class="lineNum">     454 </span>            :     {</a>
@@ -522,10 +522,10 @@
 <a name="460"><span class="lineNum">     460 </span>            :         {</a>
 <a name="461"><span class="lineNum">     461 </span><span class="lineNoCov">          0 :             juce::MemoryOutputStream os (mb, false);</span></a>
 <a name="462"><span class="lineNum">     462 </span><span class="lineNoCov">          0 :             v.writeToStream (os);</span></a>
-<a name="463"><span class="lineNum">     463 </span>            :         }</a>
+<a name="463"><span class="lineNum">     463 </span><span class="lineNoCov">          0 :         }</span></a>
 <a name="464"><span class="lineNum">     464 </span>            : </a>
 <a name="465"><span class="lineNum">     465 </span><span class="lineNoCov">          0 :         return mb;</span></a>
-<a name="466"><span class="lineNum">     466 </span>            :     }</a>
+<a name="466"><span class="lineNum">     466 </span><span class="lineNoCov">          0 :     }</span></a>
 <a name="467"><span class="lineNum">     467 </span>            : </a>
 <a name="468"><span class="lineNum">     468 </span><span class="lineNoCov">          0 :     void restoreChannelLayout (ExternalPlugin&amp; plugin)</span></a>
 <a name="469"><span class="lineNum">     469 </span>            :     {</a>
@@ -620,7 +620,7 @@
 <a name="558"><span class="lineNum">     558 </span><span class="lineNoCov">          0 :         v.setProperty (IDs::windowLocked, true, nullptr);</span></a>
 <a name="559"><span class="lineNum">     559 </span>            : </a>
 <a name="560"><span class="lineNum">     560 </span><span class="lineNoCov">          0 :     return v;</span></a>
-<a name="561"><span class="lineNum">     561 </span>            : }</a>
+<a name="561"><span class="lineNum">     561 </span><span class="lineNoCov">          0 : }</span></a>
 <a name="562"><span class="lineNum">     562 </span>            : </a>
 <a name="563"><span class="lineNum">     563 </span>            : const char* ExternalPlugin::xmlTypeName = &quot;vst&quot;;</a>
 <a name="564"><span class="lineNum">     564 </span>            : </a>
@@ -635,7 +635,7 @@
 <a name="573"><span class="lineNum">     573 </span><span class="lineNoCov">          0 :         restorePluginStateFromValueTree (state);</span></a>
 <a name="574"><span class="lineNum">     574 </span><span class="lineNoCov">          0 :         buildParameterList();</span></a>
 <a name="575"><span class="lineNum">     575 </span><span class="lineNoCov">          0 :         restoreChannelLayout (*this);</span></a>
-<a name="576"><span class="lineNum">     576 </span>            :     }</a>
+<a name="576"><span class="lineNum">     576 </span><span class="lineNoCov">          0 :     }</span></a>
 <a name="577"><span class="lineNum">     577 </span><span class="lineNoCov">          0 : }</span></a>
 <a name="578"><span class="lineNum">     578 </span>            : </a>
 <a name="579"><span class="lineNum">     579 </span><span class="lineNoCov">          0 : void ExternalPlugin::forceFullReinitialise()</span></a>
@@ -717,9 +717,9 @@
 <a name="655"><span class="lineNum">     655 </span><span class="lineNoCov">          0 :                 p-&gt;valueChangedByPlugin();</span></a>
 <a name="656"><span class="lineNum">     656 </span>            : </a>
 <a name="657"><span class="lineNum">     657 </span><span class="lineNoCov">          0 :                 if (count &gt;= 2 &amp;&amp; ! emptyName)</span></a>
-<a name="658"><span class="lineNum">     658 </span><span class="lineNoCov">          0 :                     p-&gt;setDisplayName (nm);</span></a>
+<a name="658"><span class="lineNum">     658 </span>            :                     p-&gt;setDisplayName (nm);</a>
 <a name="659"><span class="lineNum">     659 </span>            : </a>
-<a name="660"><span class="lineNum">     660 </span>            :             }</a>
+<a name="660"><span class="lineNum">     660 </span><span class="lineNoCov">          0 :             }</span></a>
 <a name="661"><span class="lineNum">     661 </span>            :             else</a>
 <a name="662"><span class="lineNum">     662 </span>            :             {</a>
 <a name="663"><span class="lineNum">     663 </span><span class="lineNoCov">          0 :                 autoParamForParamNumbers.add (nullptr);</span></a>
@@ -787,14 +787,14 @@
 <a name="725"><span class="lineNum">     725 </span><span class="lineNoCov">          0 :     };</span></a>
 <a name="726"><span class="lineNum">     726 </span>            : </a>
 <a name="727"><span class="lineNum">     727 </span><span class="lineNoCov">          0 :     if (auto p = findName (name))</span></a>
-<a name="728"><span class="lineNum">     728 </span>            :         return p;</a>
+<a name="728"><span class="lineNum">     728 </span><span class="lineNoCov">          0 :         return p;</span></a>
 <a name="729"><span class="lineNum">     729 </span>            : </a>
 <a name="730"><span class="lineNum">     730 </span>            :    #if JUCE_64BIT</a>
 <a name="731"><span class="lineNum">     731 </span><span class="lineNoCov">          0 :     if (auto p = findName (name + &quot; (64 bit)&quot;))</span></a>
-<a name="732"><span class="lineNum">     732 </span>            :         return p;</a>
+<a name="732"><span class="lineNum">     732 </span><span class="lineNoCov">          0 :         return p;</span></a>
 <a name="733"><span class="lineNum">     733 </span>            : </a>
 <a name="734"><span class="lineNum">     734 </span><span class="lineNoCov">          0 :     if (auto p = findName (name + &quot; (64-bit)&quot;))</span></a>
-<a name="735"><span class="lineNum">     735 </span>            :         return p;</a>
+<a name="735"><span class="lineNum">     735 </span><span class="lineNoCov">          0 :         return p;</span></a>
 <a name="736"><span class="lineNum">     736 </span>            :    #endif</a>
 <a name="737"><span class="lineNum">     737 </span>            : </a>
 <a name="738"><span class="lineNum">     738 </span>            :     return {};</a>
@@ -806,22 +806,22 @@
 <a name="744"><span class="lineNum">     744 </span><span class="lineNoCov">          0 :     auto&amp; pm = engine.getPluginManager();</span></a>
 <a name="745"><span class="lineNum">     745 </span>            : </a>
 <a name="746"><span class="lineNum">     746 </span><span class="lineNoCov">          0 :     if (auto p = pm.knownPluginList.getTypeForIdentifierString (createIdentifierString (desc)))</span></a>
-<a name="747"><span class="lineNum">     747 </span>            :         return p;</a>
+<a name="747"><span class="lineNum">     747 </span><span class="lineNoCov">          0 :         return p;</span></a>
 <a name="748"><span class="lineNum">     748 </span>            : </a>
 <a name="749"><span class="lineNum">     749 </span><span class="lineNoCov">          0 :     if (desc.pluginFormatName.isEmpty())</span></a>
 <a name="750"><span class="lineNum">     750 </span>            :     {</a>
 <a name="751"><span class="lineNum">     751 </span><span class="lineNoCov">          0 :         if (auto p = pm.knownPluginList.getTypeForIdentifierString (&quot;VST&quot; + createIdentifierString (desc)))</span></a>
-<a name="752"><span class="lineNum">     752 </span>            :             return p;</a>
+<a name="752"><span class="lineNum">     752 </span><span class="lineNoCov">          0 :             return p;</span></a>
 <a name="753"><span class="lineNum">     753 </span>            : </a>
 <a name="754"><span class="lineNum">     754 </span><span class="lineNoCov">          0 :         if (auto p = pm.knownPluginList.getTypeForIdentifierString (&quot;AudioUnit&quot; + createIdentifierString (desc)))</span></a>
-<a name="755"><span class="lineNum">     755 </span>            :             return p;</a>
+<a name="755"><span class="lineNum">     755 </span><span class="lineNoCov">          0 :             return p;</span></a>
 <a name="756"><span class="lineNum">     756 </span>            :     }</a>
 <a name="757"><span class="lineNum">     757 </span>            : </a>
 <a name="758"><span class="lineNum">     758 </span><span class="lineNoCov">          0 :     if (auto p = findDescForFileOrID (desc.fileOrIdentifier))</span></a>
-<a name="759"><span class="lineNum">     759 </span>            :         return p;</a>
+<a name="759"><span class="lineNum">     759 </span><span class="lineNoCov">          0 :         return p;</span></a>
 <a name="760"><span class="lineNum">     760 </span>            : </a>
 <a name="761"><span class="lineNum">     761 </span><span class="lineNoCov">          0 :     if (auto p = findDescForUID (desc.uniqueId, desc.deprecatedUid))</span></a>
-<a name="762"><span class="lineNum">     762 </span>            :         return p;</a>
+<a name="762"><span class="lineNum">     762 </span><span class="lineNoCov">          0 :         return p;</span></a>
 <a name="763"><span class="lineNum">     763 </span>            : </a>
 <a name="764"><span class="lineNum">     764 </span><span class="lineNoCov">          0 :     auto getPreferredFormat = [] (juce::PluginDescription d)</span></a>
 <a name="765"><span class="lineNum">     765 </span>            :     {</a>
@@ -830,10 +830,10 @@
 <a name="768"><span class="lineNum">     768 </span><span class="lineNoCov">          0 :         if (file.endsWith (&quot;.vst&quot;) || file.endsWith (&quot;.dll&quot;))   return &quot;VST&quot;;</span></a>
 <a name="769"><span class="lineNum">     769 </span><span class="lineNoCov">          0 :         if (file.startsWith (&quot;audiounit:&quot;))                     return &quot;AudioUnit&quot;;</span></a>
 <a name="770"><span class="lineNum">     770 </span>            :         return &quot;&quot;;</a>
-<a name="771"><span class="lineNum">     771 </span>            :     };</a>
+<a name="771"><span class="lineNum">     771 </span><span class="lineNoCov">          0 :     };</span></a>
 <a name="772"><span class="lineNum">     772 </span>            : </a>
 <a name="773"><span class="lineNum">     773 </span><span class="lineNoCov">          0 :     if (auto p = findDescForName (engine, desc.name, getPreferredFormat (desc)))</span></a>
-<a name="774"><span class="lineNum">     774 </span>            :         return p;</a>
+<a name="774"><span class="lineNum">     774 </span><span class="lineNoCov">          0 :         return p;</span></a>
 <a name="775"><span class="lineNum">     775 </span>            : </a>
 <a name="776"><span class="lineNum">     776 </span><span class="lineNoCov">          0 :     for (auto d : pm.knownPluginList.getTypes())</span></a>
 <a name="777"><span class="lineNum">     777 </span><span class="lineNoCov">          0 :         if (d.name == desc.name)</span></a>
@@ -845,10 +845,10 @@
 <a name="783"><span class="lineNum">     783 </span>            : </a>
 <a name="784"><span class="lineNum">     784 </span><span class="lineNoCov">          0 :     if (desc.uniqueId == 0x4d44416a || desc.deprecatedUid == 0x4d44416a) // old JX-10: hack to update to JX-16</span></a>
 <a name="785"><span class="lineNum">     785 </span><span class="lineNoCov">          0 :         if (auto p = findDescForUID (0x4D44414A, 0x4D44414A))</span></a>
-<a name="786"><span class="lineNum">     786 </span>            :             return p;</a>
+<a name="786"><span class="lineNum">     786 </span><span class="lineNoCov">          0 :             return p;</span></a>
 <a name="787"><span class="lineNum">     787 </span>            : </a>
 <a name="788"><span class="lineNum">     788 </span>            :     return {};</a>
-<a name="789"><span class="lineNum">     789 </span>            : }</a>
+<a name="789"><span class="lineNum">     789 </span><span class="lineNoCov">          0 : }</span></a>
 <a name="790"><span class="lineNum">     790 </span>            : </a>
 <a name="791"><span class="lineNum">     791 </span>            : //==============================================================================</a>
 <a name="792"><span class="lineNum">     792 </span><span class="lineNoCov">          0 : void ExternalPlugin::processingChanged()</span></a>
@@ -910,8 +910,8 @@
 <a name="848"><span class="lineNum">     848 </span>            :             {</a>
 <a name="849"><span class="lineNum">     849 </span><span class="lineNoCov">          0 :                 TRACKTION_LOG_ERROR (error);</span></a>
 <a name="850"><span class="lineNum">     850 </span>            :             }</a>
-<a name="851"><span class="lineNum">     851 </span>            :         }</a>
-<a name="852"><span class="lineNum">     852 </span>            :     }</a>
+<a name="851"><span class="lineNum">     851 </span><span class="lineNoCov">          0 :         }</span></a>
+<a name="852"><span class="lineNum">     852 </span><span class="lineNoCov">          0 :     }</span></a>
 <a name="853"><span class="lineNum">     853 </span>            : }</a>
 <a name="854"><span class="lineNum">     854 </span>            : </a>
 <a name="855"><span class="lineNum">     855 </span>            : //==============================================================================</a>
@@ -976,7 +976,7 @@
 <a name="914"><span class="lineNum">     914 </span><span class="lineNoCov">          0 :             state.removeProperty (IDs::state, um);</span></a>
 <a name="915"><span class="lineNum">     915 </span>            : </a>
 <a name="916"><span class="lineNum">     916 </span><span class="lineNoCov">          0 :         flushBusesLayoutToValueTree();</span></a>
-<a name="917"><span class="lineNum">     917 </span>            :     }</a>
+<a name="917"><span class="lineNum">     917 </span><span class="lineNoCov">          0 :     }</span></a>
 <a name="918"><span class="lineNum">     918 </span><span class="lineNoCov">          0 : }</span></a>
 <a name="919"><span class="lineNum">     919 </span>            : </a>
 <a name="920"><span class="lineNum">     920 </span><span class="lineNoCov">          0 : void ExternalPlugin::flushBusesLayoutToValueTree()</span></a>
@@ -994,7 +994,7 @@
 <a name="932"><span class="lineNum">     932 </span><span class="lineNoCov">          0 :             state.setProperty (IDs::layout, mb, um);</span></a>
 <a name="933"><span class="lineNum">     933 </span>            :         else</a>
 <a name="934"><span class="lineNum">     934 </span><span class="lineNoCov">          0 :             state.removeProperty (IDs::layout, um);</span></a>
-<a name="935"><span class="lineNum">     935 </span>            :     }</a>
+<a name="935"><span class="lineNum">     935 </span><span class="lineNoCov">          0 :     }</span></a>
 <a name="936"><span class="lineNum">     936 </span><span class="lineNoCov">          0 : }</span></a>
 <a name="937"><span class="lineNum">     937 </span>            : </a>
 <a name="938"><span class="lineNum">     938 </span><span class="lineNoCov">          0 : void ExternalPlugin::restorePluginStateFromValueTree (const juce::ValueTree&amp; v)</span></a>
@@ -1016,7 +1016,7 @@
 <a name="954"><span class="lineNum">     954 </span><span class="lineNoCov">          0 :             if (s.isEmpty())</span></a>
 <a name="955"><span class="lineNum">     955 </span><span class="lineNoCov">          0 :                 s = vstDataTree.getProperty (IDs::__TEXT).toString();</span></a>
 <a name="956"><span class="lineNum">     956 </span>            :         }</a>
-<a name="957"><span class="lineNum">     957 </span>            :     }</a>
+<a name="957"><span class="lineNum">     957 </span><span class="lineNoCov">          0 :     }</span></a>
 <a name="958"><span class="lineNum">     958 </span>            : </a>
 <a name="959"><span class="lineNum">     959 </span><span class="lineNoCov">          0 :     if (pluginInstance != nullptr &amp;&amp; s.isNotEmpty())</span></a>
 <a name="960"><span class="lineNum">     960 </span>            :     {</a>
@@ -1030,7 +1030,7 @@
 <a name="968"><span class="lineNum">     968 </span>            : </a>
 <a name="969"><span class="lineNum">     969 </span><span class="lineNoCov">          0 :         if (chunk.getSize() &gt; 0)</span></a>
 <a name="970"><span class="lineNum">     970 </span><span class="lineNoCov">          0 :             callBlocking ([this, &amp;chunk]() { pluginInstance-&gt;setStateInformation (chunk.getData(), (int) chunk.getSize()); });</span></a>
-<a name="971"><span class="lineNum">     971 </span>            :     }</a>
+<a name="971"><span class="lineNum">     971 </span><span class="lineNoCov">          0 :     }</span></a>
 <a name="972"><span class="lineNum">     972 </span><span class="lineNoCov">          0 : }</span></a>
 <a name="973"><span class="lineNum">     973 </span>            : </a>
 <a name="974"><span class="lineNum">     974 </span><span class="lineNoCov">          0 : void ExternalPlugin::getPluginStateFromTree (juce::MemoryBlock&amp; mb)</span></a>
@@ -1057,7 +1057,7 @@
 <a name="995"><span class="lineNum">     995 </span>            : </a>
 <a name="996"><span class="lineNum">     996 </span><span class="lineNoCov">          0 :                 if (chunk.getSize() &gt; 0)</span></a>
 <a name="997"><span class="lineNum">     997 </span><span class="lineNoCov">          0 :                     pluginInstance-&gt;setStateInformation (chunk.getData(), (int) chunk.getSize());</span></a>
-<a name="998"><span class="lineNum">     998 </span>            :             }</a>
+<a name="998"><span class="lineNum">     998 </span><span class="lineNoCov">          0 :             }</span></a>
 <a name="999"><span class="lineNum">     999 </span>            :         }</a>
 <a name="1000"><span class="lineNum">    1000 </span>            :     }</a>
 <a name="1001"><span class="lineNum">    1001 </span><span class="lineNoCov">          0 : }</span></a>
@@ -1218,7 +1218,7 @@
 <a name="1156"><span class="lineNum">    1156 </span>            : </a>
 <a name="1157"><span class="lineNum">    1157 </span><span class="lineNoCov">          0 :         if (playhead != nullptr)</span></a>
 <a name="1158"><span class="lineNum">    1158 </span><span class="lineNoCov">          0 :             playhead-&gt;setCurrentContext (nullptr);</span></a>
-<a name="1159"><span class="lineNum">    1159 </span>            :     }</a>
+<a name="1159"><span class="lineNum">    1159 </span><span class="lineNoCov">          0 :     }</span></a>
 <a name="1160"><span class="lineNum">    1160 </span><span class="lineNoCov">          0 : }</span></a>
 <a name="1161"><span class="lineNum">    1161 </span>            : </a>
 <a name="1162"><span class="lineNum">    1162 </span><span class="lineNoCov">          0 : void ExternalPlugin::reset()</span></a>
@@ -1228,7 +1228,7 @@
 <a name="1166"><span class="lineNum">    1166 </span><span class="lineNoCov">          0 :         CRASH_TRACER_PLUGIN (getDebugName());</span></a>
 <a name="1167"><span class="lineNum">    1167 </span><span class="lineNoCov">          0 :         const juce::ScopedLock sl (lock);</span></a>
 <a name="1168"><span class="lineNum">    1168 </span><span class="lineNoCov">          0 :         pluginInstance-&gt;reset();</span></a>
-<a name="1169"><span class="lineNum">    1169 </span>            :     }</a>
+<a name="1169"><span class="lineNum">    1169 </span><span class="lineNoCov">          0 :     }</span></a>
 <a name="1170"><span class="lineNum">    1170 </span><span class="lineNoCov">          0 : }</span></a>
 <a name="1171"><span class="lineNum">    1171 </span>            : </a>
 <a name="1172"><span class="lineNum">    1172 </span><span class="lineNoCov">          0 : void ExternalPlugin::setEnabled (bool shouldEnable)</span></a>
@@ -1284,18 +1284,18 @@
 <a name="1222"><span class="lineNum">    1222 </span>            :         // Reset MPE zone to match MIDI generated by clip</a>
 <a name="1223"><span class="lineNum">    1223 </span><span class="lineNoCov">          0 :         if (supportsMPE)</span></a>
 <a name="1224"><span class="lineNum">    1224 </span>            :         {</a>
-<a name="1225"><span class="lineNum">    1225 </span><span class="lineNoCov">          0 :             juce::MPEZoneLayout layout;</span></a>
+<a name="1225"><span class="lineNum">    1225 </span>            :             juce::MPEZoneLayout layout;</a>
 <a name="1226"><span class="lineNum">    1226 </span><span class="lineNoCov">          0 :             layout.setLowerZone (15);</span></a>
 <a name="1227"><span class="lineNum">    1227 </span>            : </a>
 <a name="1228"><span class="lineNum">    1228 </span><span class="lineNoCov">          0 :             auto layoutBuffer = juce::MPEMessages::setZoneLayout (layout);</span></a>
 <a name="1229"><span class="lineNum">    1229 </span><span class="lineNoCov">          0 :             for (auto itr : layoutBuffer)</span></a>
 <a name="1230"><span class="lineNum">    1230 </span>            :             {</a>
-<a name="1231"><span class="lineNum">    1231 </span><span class="lineNoCov">          0 :                 auto result = itr.getMessage();</span></a>
+<a name="1231"><span class="lineNum">    1231 </span>            :                 auto result = itr.getMessage();</a>
 <a name="1232"><span class="lineNum">    1232 </span>            :                 int samplePosition = itr.samplePosition;</a>
 <a name="1233"><span class="lineNum">    1233 </span>            : </a>
 <a name="1234"><span class="lineNum">    1234 </span><span class="lineNoCov">          0 :                 midiBuffer.addEvent (result, samplePosition);</span></a>
-<a name="1235"><span class="lineNum">    1235 </span>            :             }</a>
-<a name="1236"><span class="lineNum">    1236 </span>            :         }</a>
+<a name="1235"><span class="lineNum">    1235 </span><span class="lineNoCov">          0 :             }</span></a>
+<a name="1236"><span class="lineNum">    1236 </span><span class="lineNoCov">          0 :         }</span></a>
 <a name="1237"><span class="lineNum">    1237 </span>            :     }</a>
 <a name="1238"><span class="lineNum">    1238 </span>            : </a>
 <a name="1239"><span class="lineNum">    1239 </span><span class="lineNoCov">          0 :     for (auto&amp; m : incoming)</span></a>
@@ -1355,7 +1355,7 @@
 <a name="1293"><span class="lineNum">    1293 </span>            : </a>
 <a name="1294"><span class="lineNum">    1294 </span><span class="lineNoCov">          0 :         if (fc.destBuffer != nullptr)</span></a>
 <a name="1295"><span class="lineNum">    1295 </span>            :         {</a>
-<a name="1296"><span class="lineNum">    1296 </span><span class="lineNoCov">          0 :             auto destNumChans = fc.destBuffer-&gt;getNumChannels();</span></a>
+<a name="1296"><span class="lineNum">    1296 </span>            :             auto destNumChans = fc.destBuffer-&gt;getNumChannels();</a>
 <a name="1297"><span class="lineNum">    1297 </span>            :             jassert (destNumChans &gt; 0);</a>
 <a name="1298"><span class="lineNum">    1298 </span>            : </a>
 <a name="1299"><span class="lineNum">    1299 </span><span class="lineNoCov">          0 :             auto numInputChannels = pluginInstance-&gt;getTotalNumInputChannels();</span></a>
@@ -1408,7 +1408,7 @@
 <a name="1346"><span class="lineNum">    1346 </span>            :                     else</a>
 <a name="1347"><span class="lineNum">    1347 </span><span class="lineNoCov">          0 :                         fc.destBuffer-&gt;clear (i, fc.bufferStartSample, fc.bufferNumSamples);</span></a>
 <a name="1348"><span class="lineNum">    1348 </span>            :                 }</a>
-<a name="1349"><span class="lineNum">    1349 </span>            :             }</a>
+<a name="1349"><span class="lineNum">    1349 </span><span class="lineNoCov">          0 :             }</span></a>
 <a name="1350"><span class="lineNum">    1350 </span>            :         }</a>
 <a name="1351"><span class="lineNum">    1351 </span>            :         else</a>
 <a name="1352"><span class="lineNum">    1352 </span>            :         {</a>
@@ -1419,7 +1419,7 @@
 <a name="1357"><span class="lineNum">    1357 </span><span class="lineNoCov">          0 :                 pluginInstance-&gt;processBlockBypassed (asb.buffer, midiBuffer);</span></a>
 <a name="1358"><span class="lineNum">    1358 </span>            :             else</a>
 <a name="1359"><span class="lineNum">    1359 </span><span class="lineNoCov">          0 :                 pluginInstance-&gt;processBlock (asb.buffer, midiBuffer);</span></a>
-<a name="1360"><span class="lineNum">    1360 </span>            :         }</a>
+<a name="1360"><span class="lineNum">    1360 </span><span class="lineNoCov">          0 :         }</span></a>
 <a name="1361"><span class="lineNum">    1361 </span>            : </a>
 <a name="1362"><span class="lineNum">    1362 </span><span class="lineNoCov">          0 :         if (fc.bufferForMidiMessages != nullptr)</span></a>
 <a name="1363"><span class="lineNum">    1363 </span>            :         {</a>
@@ -1429,7 +1429,7 @@
 <a name="1367"><span class="lineNum">    1367 </span>            :             {</a>
 <a name="1368"><span class="lineNum">    1368 </span><span class="lineNoCov">          0 :                 for (auto itr : midiBuffer)</span></a>
 <a name="1369"><span class="lineNum">    1369 </span>            :                 {</a>
-<a name="1370"><span class="lineNum">    1370 </span><span class="lineNoCov">          0 :                     const auto&amp; msg = itr.getMessage();</span></a>
+<a name="1370"><span class="lineNum">    1370 </span>            :                     const auto&amp; msg = itr.getMessage();</a>
 <a name="1371"><span class="lineNum">    1371 </span>            :                     int midiEventPos = itr.samplePosition;</a>
 <a name="1372"><span class="lineNum">    1372 </span>            : </a>
 <a name="1373"><span class="lineNum">    1373 </span>            :                     auto midiData = msg.getRawData();</a>
@@ -1437,10 +1437,10 @@
 <a name="1375"><span class="lineNum">    1375 </span>            : </a>
 <a name="1376"><span class="lineNum">    1376 </span><span class="lineNoCov">          0 :                     fc.bufferForMidiMessages-&gt;addMidiMessage (juce::MidiMessage (midiData, numBytes, fc.midiBufferOffset + midiEventPos / sampleRate),</span></a>
 <a name="1377"><span class="lineNum">    1377 </span>            :                                                               midiSourceID);</a>
-<a name="1378"><span class="lineNum">    1378 </span>            :                 }</a>
+<a name="1378"><span class="lineNum">    1378 </span><span class="lineNoCov">          0 :                 }</span></a>
 <a name="1379"><span class="lineNum">    1379 </span>            :             }</a>
 <a name="1380"><span class="lineNum">    1380 </span>            :         }</a>
-<a name="1381"><span class="lineNum">    1381 </span>            :     }</a>
+<a name="1381"><span class="lineNum">    1381 </span><span class="lineNoCov">          0 :     }</span></a>
 <a name="1382"><span class="lineNum">    1382 </span><span class="lineNoCov">          0 : }</span></a>
 <a name="1383"><span class="lineNum">    1383 </span>            : </a>
 <a name="1384"><span class="lineNum">    1384 </span><span class="lineNoCov">          0 : void ExternalPlugin::processPluginBlock (const PluginRenderContext&amp; fc, bool processedBypass)</span></a>
@@ -1448,8 +1448,8 @@
 <a name="1386"><span class="lineNum">    1386 </span><span class="lineNoCov">          0 :     juce::AudioBuffer&lt;float&gt; asb (fc.destBuffer-&gt;getArrayOfWritePointers(), fc.destBuffer-&gt;getNumChannels(),</span></a>
 <a name="1387"><span class="lineNum">    1387 </span><span class="lineNoCov">          0 :                                   fc.bufferStartSample, fc.bufferNumSamples);</span></a>
 <a name="1388"><span class="lineNum">    1388 </span>            : </a>
-<a name="1389"><span class="lineNum">    1389 </span><span class="lineNoCov">          0 :     auto dry = dryGain-&gt;getCurrentValue();</span></a>
-<a name="1390"><span class="lineNum">    1390 </span><span class="lineNoCov">          0 :     auto wet = wetGain-&gt;getCurrentValue();</span></a>
+<a name="1389"><span class="lineNum">    1389 </span>            :     auto dry = dryGain-&gt;getCurrentValue();</a>
+<a name="1390"><span class="lineNum">    1390 </span>            :     auto wet = wetGain-&gt;getCurrentValue();</a>
 <a name="1391"><span class="lineNum">    1391 </span>            : </a>
 <a name="1392"><span class="lineNum">    1392 </span><span class="lineNoCov">          0 :     if (dry &lt;= 0.00004f)</span></a>
 <a name="1393"><span class="lineNum">    1393 </span>            :     {</a>
@@ -1465,7 +1465,7 @@
 <a name="1403"><span class="lineNum">    1403 </span>            :     }</a>
 <a name="1404"><span class="lineNum">    1404 </span>            :     else</a>
 <a name="1405"><span class="lineNum">    1405 </span>            :     {</a>
-<a name="1406"><span class="lineNum">    1406 </span><span class="lineNoCov">          0 :         auto numChans = asb.getNumChannels();</span></a>
+<a name="1406"><span class="lineNum">    1406 </span>            :         auto numChans = asb.getNumChannels();</a>
 <a name="1407"><span class="lineNum">    1407 </span><span class="lineNoCov">          0 :         AudioScratchBuffer dryAudio (numChans, fc.bufferNumSamples);</span></a>
 <a name="1408"><span class="lineNum">    1408 </span>            : </a>
 <a name="1409"><span class="lineNum">    1409 </span><span class="lineNoCov">          0 :         for (int i = 0; i &lt; numChans; ++i)</span></a>
@@ -1483,7 +1483,7 @@
 <a name="1421"><span class="lineNum">    1421 </span>            : </a>
 <a name="1422"><span class="lineNum">    1422 </span><span class="lineNoCov">          0 :         for (int i = 0; i &lt; numChans; ++i)</span></a>
 <a name="1423"><span class="lineNum">    1423 </span><span class="lineNoCov">          0 :             asb.addFrom (i, 0, dryAudio.buffer.getReadPointer (i), fc.bufferNumSamples, dry);</span></a>
-<a name="1424"><span class="lineNum">    1424 </span>            :     }</a>
+<a name="1424"><span class="lineNum">    1424 </span><span class="lineNoCov">          0 :     }</span></a>
 <a name="1425"><span class="lineNum">    1425 </span><span class="lineNoCov">          0 : }</span></a>
 <a name="1426"><span class="lineNum">    1426 </span>            : </a>
 <a name="1427"><span class="lineNum">    1427 </span>            : //==============================================================================</a>
@@ -1507,39 +1507,39 @@
 <a name="1445"><span class="lineNum">    1445 </span>            : </a>
 <a name="1446"><span class="lineNum">    1446 </span><span class="lineNoCov">          0 :         if (ins != nullptr)</span></a>
 <a name="1447"><span class="lineNum">    1447 </span>            :         {</a>
-<a name="1448"><span class="lineNum">    1448 </span><span class="lineNoCov">          0 :             const int num = pluginInstance-&gt;getTotalNumInputChannels();</span></a>
+<a name="1448"><span class="lineNum">    1448 </span>            :             const int num = pluginInstance-&gt;getTotalNumInputChannels();</a>
 <a name="1449"><span class="lineNum">    1449 </span>            : </a>
 <a name="1450"><span class="lineNum">    1450 </span><span class="lineNoCov">          0 :             for (int i = 0; i &lt; num; ++i)</span></a>
 <a name="1451"><span class="lineNum">    1451 </span>            :             {</a>
 <a name="1452"><span class="lineNum">    1452 </span><span class="lineNoCov">          0 :                 auto name = getChannelName (pluginInstance-&gt;getBus (true, 0), i);</span></a>
 <a name="1453"><span class="lineNum">    1453 </span><span class="lineNoCov">          0 :                 ins-&gt;add (name.isNotEmpty() ? name : TRANS(&quot;Unnamed&quot;));</span></a>
-<a name="1454"><span class="lineNum">    1454 </span>            :             }</a>
+<a name="1454"><span class="lineNum">    1454 </span><span class="lineNoCov">          0 :             }</span></a>
 <a name="1455"><span class="lineNum">    1455 </span>            :         }</a>
 <a name="1456"><span class="lineNum">    1456 </span>            : </a>
 <a name="1457"><span class="lineNum">    1457 </span><span class="lineNoCov">          0 :         if (outs != nullptr)</span></a>
 <a name="1458"><span class="lineNum">    1458 </span>            :         {</a>
-<a name="1459"><span class="lineNum">    1459 </span><span class="lineNoCov">          0 :             const int num = pluginInstance-&gt;getTotalNumOutputChannels();</span></a>
+<a name="1459"><span class="lineNum">    1459 </span>            :             const int num = pluginInstance-&gt;getTotalNumOutputChannels();</a>
 <a name="1460"><span class="lineNum">    1460 </span>            : </a>
 <a name="1461"><span class="lineNum">    1461 </span><span class="lineNoCov">          0 :             for (int i = 0; i &lt; num; ++i)</span></a>
 <a name="1462"><span class="lineNum">    1462 </span>            :             {</a>
 <a name="1463"><span class="lineNum">    1463 </span><span class="lineNoCov">          0 :                 auto name = getChannelName (pluginInstance-&gt;getBus (false, 0), i);</span></a>
 <a name="1464"><span class="lineNum">    1464 </span><span class="lineNoCov">          0 :                 outs-&gt;add (name.isNotEmpty() ? name : TRANS(&quot;Unnamed&quot;));</span></a>
-<a name="1465"><span class="lineNum">    1465 </span>            :             }</a>
+<a name="1465"><span class="lineNum">    1465 </span><span class="lineNoCov">          0 :             }</span></a>
 <a name="1466"><span class="lineNum">    1466 </span>            :         }</a>
-<a name="1467"><span class="lineNum">    1467 </span>            :     }</a>
+<a name="1467"><span class="lineNum">    1467 </span><span class="lineNoCov">          0 :     }</span></a>
 <a name="1468"><span class="lineNum">    1468 </span><span class="lineNoCov">          0 : }</span></a>
 <a name="1469"><span class="lineNum">    1469 </span>            : </a>
 <a name="1470"><span class="lineNum">    1470 </span><span class="lineNoCov">          0 : bool ExternalPlugin::noTail()</span></a>
 <a name="1471"><span class="lineNum">    1471 </span>            : {</a>
 <a name="1472"><span class="lineNum">    1472 </span><span class="lineNoCov">          0 :     CRASH_TRACER_PLUGIN (getDebugName());</span></a>
 <a name="1473"><span class="lineNum">    1473 </span><span class="lineNoCov">          0 :     return pluginInstance == nullptr || pluginInstance-&gt;getTailLengthSeconds() &lt;= 0.0;</span></a>
-<a name="1474"><span class="lineNum">    1474 </span>            : }</a>
+<a name="1474"><span class="lineNum">    1474 </span><span class="lineNoCov">          0 : }</span></a>
 <a name="1475"><span class="lineNum">    1475 </span>            : </a>
 <a name="1476"><span class="lineNum">    1476 </span><span class="lineNoCov">          0 : double ExternalPlugin::getTailLength() const</span></a>
 <a name="1477"><span class="lineNum">    1477 </span>            : {</a>
 <a name="1478"><span class="lineNum">    1478 </span><span class="lineNoCov">          0 :     CRASH_TRACER_PLUGIN (getDebugName());</span></a>
 <a name="1479"><span class="lineNum">    1479 </span><span class="lineNoCov">          0 :     return pluginInstance ? pluginInstance-&gt;getTailLengthSeconds() : 0.0;</span></a>
-<a name="1480"><span class="lineNum">    1480 </span>            : }</a>
+<a name="1480"><span class="lineNum">    1480 </span><span class="lineNoCov">          0 : }</span></a>
 <a name="1481"><span class="lineNum">    1481 </span>            : </a>
 <a name="1482"><span class="lineNum">    1482 </span>            : //==============================================================================</a>
 <a name="1483"><span class="lineNum">    1483 </span><span class="lineNoCov">          0 : juce::File ExternalPlugin::getFile() const</span></a>
@@ -1619,7 +1619,7 @@
 <a name="1557"><span class="lineNum">    1557 </span><span class="lineNoCov">          0 :         s = &quot;(&quot; + TRANS(&quot;Unnamed&quot;) + &quot;)&quot;;</span></a>
 <a name="1558"><span class="lineNum">    1558 </span>            : </a>
 <a name="1559"><span class="lineNum">    1559 </span><span class="lineNoCov">          0 :     return juce::String (i + 1) + &quot; - &quot; + s;</span></a>
-<a name="1560"><span class="lineNum">    1560 </span>            : }</a>
+<a name="1560"><span class="lineNum">    1560 </span><span class="lineNoCov">          0 : }</span></a>
 <a name="1561"><span class="lineNum">    1561 </span>            : </a>
 <a name="1562"><span class="lineNum">    1562 </span><span class="lineNoCov">          0 : juce::String ExternalPlugin::getCurrentProgramName()</span></a>
 <a name="1563"><span class="lineNum">    1563 </span>            : {</a>
@@ -1654,7 +1654,7 @@
 <a name="1592"><span class="lineNum">    1592 </span><span class="lineNoCov">          0 :                 refreshParameterValues();</span></a>
 <a name="1593"><span class="lineNum">    1593 </span>            :             }</a>
 <a name="1594"><span class="lineNum">    1594 </span>            :         }</a>
-<a name="1595"><span class="lineNum">    1595 </span>            :     }</a>
+<a name="1595"><span class="lineNum">    1595 </span><span class="lineNoCov">          0 :     }</span></a>
 <a name="1596"><span class="lineNum">    1596 </span><span class="lineNoCov">          0 : }</span></a>
 <a name="1597"><span class="lineNum">    1597 </span>            : </a>
 <a name="1598"><span class="lineNum">    1598 </span><span class="lineNoCov">          0 : bool ExternalPlugin::takesMidiInput()</span></a>
@@ -1679,7 +1679,7 @@
 <a name="1617"><span class="lineNum">    1617 </span>            : {</a>
 <a name="1618"><span class="lineNum">    1618 </span><span class="lineNoCov">          0 :     if (pluginInstance != nullptr)</span></a>
 <a name="1619"><span class="lineNum">    1619 </span>            :     {</a>
-<a name="1620"><span class="lineNum">    1620 </span>            :         std::unique_ptr&lt;Edit::ScopedRenderStatus&gt; srs;</a>
+<a name="1620"><span class="lineNum">    1620 </span><span class="lineNoCov">          0 :         std::unique_ptr&lt;Edit::ScopedRenderStatus&gt; srs;</span></a>
 <a name="1621"><span class="lineNum">    1621 </span>            : </a>
 <a name="1622"><span class="lineNum">    1622 </span><span class="lineNoCov">          0 :         if (! baseClassNeedsInitialising())</span></a>
 <a name="1623"><span class="lineNum">    1623 </span><span class="lineNoCov">          0 :             srs = std::make_unique&lt;Edit::ScopedRenderStatus&gt; (edit, true);</span></a>
@@ -1698,7 +1698,7 @@
 <a name="1636"><span class="lineNum">    1636 </span>            : </a>
 <a name="1637"><span class="lineNum">    1637 </span>            :             return true;</a>
 <a name="1638"><span class="lineNum">    1638 </span>            :         }</a>
-<a name="1639"><span class="lineNum">    1639 </span>            :     }</a>
+<a name="1639"><span class="lineNum">    1639 </span><span class="lineNoCov">          0 :     }</span></a>
 <a name="1640"><span class="lineNum">    1640 </span>            : </a>
 <a name="1641"><span class="lineNum">    1641 </span>            :     return false;</a>
 <a name="1642"><span class="lineNum">    1642 </span>            : }</a>
@@ -1709,7 +1709,7 @@
 <a name="1647"><span class="lineNum">    1647 </span>            :     {</a>
 <a name="1648"><span class="lineNum">    1648 </span><span class="lineNoCov">          0 :         if (auto bus = pluginInstance-&gt;getBus (isInput, busIndex))</span></a>
 <a name="1649"><span class="lineNum">    1649 </span>            :         {</a>
-<a name="1650"><span class="lineNum">    1650 </span>            :             std::unique_ptr&lt;Edit::ScopedRenderStatus&gt; srs;</a>
+<a name="1650"><span class="lineNum">    1650 </span><span class="lineNoCov">          0 :             std::unique_ptr&lt;Edit::ScopedRenderStatus&gt; srs;</span></a>
 <a name="1651"><span class="lineNum">    1651 </span>            : </a>
 <a name="1652"><span class="lineNum">    1652 </span><span class="lineNoCov">          0 :             if (! baseClassNeedsInitialising())</span></a>
 <a name="1653"><span class="lineNum">    1653 </span><span class="lineNoCov">          0 :                 srs = std::make_unique&lt;Edit::ScopedRenderStatus&gt; (edit, true);</span></a>
@@ -1728,7 +1728,7 @@
 <a name="1666"><span class="lineNum">    1666 </span>            : </a>
 <a name="1667"><span class="lineNum">    1667 </span>            :                 return true;</a>
 <a name="1668"><span class="lineNum">    1668 </span>            :             }</a>
-<a name="1669"><span class="lineNum">    1669 </span>            :         }</a>
+<a name="1669"><span class="lineNum">    1669 </span><span class="lineNoCov">          0 :         }</span></a>
 <a name="1670"><span class="lineNum">    1670 </span>            :     }</a>
 <a name="1671"><span class="lineNum">    1671 </span>            : </a>
 <a name="1672"><span class="lineNum">    1672 </span>            :     return false;</a>
@@ -1751,7 +1751,7 @@
 <a name="1689"><span class="lineNum">    1689 </span>            :     }</a>
 <a name="1690"><span class="lineNum">    1690 </span>            : </a>
 <a name="1691"><span class="lineNum">    1691 </span><span class="lineNoCov">          0 :     return error;</span></a>
-<a name="1692"><span class="lineNum">    1692 </span>            : }</a>
+<a name="1692"><span class="lineNum">    1692 </span><span class="lineNoCov">          0 : }</span></a>
 <a name="1693"><span class="lineNum">    1693 </span>            : </a>
 <a name="1694"><span class="lineNum">    1694 </span><span class="lineNoCov">          0 : void ExternalPlugin::deletePluginInstance()</span></a>
 <a name="1695"><span class="lineNum">    1695 </span>            : {</a>
@@ -1799,7 +1799,7 @@
 <a name="1737"><span class="lineNum">    1737 </span><span class="lineNoCov">          0 :         if (auto vstParam = dynamic_cast&lt;ExternalAutomatableParameter*&gt; (getAutomatableParameter (i).get()))</span></a>
 <a name="1738"><span class="lineNum">    1738 </span><span class="lineNoCov">          0 :             if (! paramsInTree.contains (vstParam-&gt;getParameterIndex()))</span></a>
 <a name="1739"><span class="lineNum">    1739 </span><span class="lineNoCov">          0 :                 paramTree.rootNode-&gt;addSubNode (new AutomatableParameterTree::TreeNode (autoParamForParamNumbers [vstParam-&gt;getParameterIndex()]));</span></a>
-<a name="1740"><span class="lineNum">    1740 </span>            : }</a>
+<a name="1740"><span class="lineNum">    1740 </span><span class="lineNoCov">          0 : }</span></a>
 <a name="1741"><span class="lineNum">    1741 </span>            : </a>
 <a name="1742"><span class="lineNum">    1742 </span><span class="lineNoCov">          0 : void ExternalPlugin::buildParameterTree (const VSTXML::Group* group,</span></a>
 <a name="1743"><span class="lineNum">    1743 </span>            :                                          AutomatableParameterTree::TreeNode* treeNode,</a>
@@ -1849,7 +1849,7 @@
 <a name="1787"><span class="lineNum">    1787 </span>            : </a>
 <a name="1788"><span class="lineNum">    1788 </span><span class="lineNoCov">          0 :             if (stateLayout != ap-&gt;getBusesLayout())</span></a>
 <a name="1789"><span class="lineNum">    1789 </span><span class="lineNoCov">          0 :                 setBusesLayout (stateLayout);</span></a>
-<a name="1790"><span class="lineNum">    1790 </span>            :         }</a>
+<a name="1790"><span class="lineNum">    1790 </span><span class="lineNoCov">          0 :         }</span></a>
 <a name="1791"><span class="lineNum">    1791 </span>            :     }</a>
 <a name="1792"><span class="lineNum">    1792 </span>            :     else</a>
 <a name="1793"><span class="lineNum">    1793 </span>            :     {</a>
