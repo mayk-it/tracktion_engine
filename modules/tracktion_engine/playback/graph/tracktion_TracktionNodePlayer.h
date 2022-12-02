@@ -24,7 +24,7 @@ class TracktionNodePlayer
 public:
     /** Creates an NodePlayer to process a Node. */
     TracktionNodePlayer (ProcessState& processStateToUse,
-                         tracktion::graph::LockFreeMultiThreadedNodePlayer::ThreadPoolCreator poolCreator)
+                         tracktion::graph::LockFreeMultiThreadedNodePlayer::ThreadPoolCreator /*poolCreator*/)
         : playHeadState (processStateToUse.playHeadState),
           processState (processStateToUse)//ddd,
     //dddnodePlayer (std::move (poolCreator))
@@ -109,7 +109,7 @@ public:
     }
     
     /** @internal */
-    void enablePooledMemoryAllocations (bool enablePooledMemory)
+    void enablePooledMemoryAllocations (bool /*enablePooledMemory*/)
     {
         //dddnodePlayer.enablePooledMemoryAllocations (enablePooledMemory);
     }
