@@ -26,8 +26,8 @@ public:
     TracktionNodePlayer (ProcessState& processStateToUse,
                          tracktion::graph::LockFreeMultiThreadedNodePlayer::ThreadPoolCreator poolCreator)
         : playHeadState (processStateToUse.playHeadState),
-          processState (processStateToUse),
-          nodePlayer (std::move (poolCreator))
+          processState (processStateToUse)//ddd,
+    //dddnodePlayer (std::move (poolCreator))
     {
     }
 
@@ -111,14 +111,14 @@ public:
     /** @internal */
     void enablePooledMemoryAllocations (bool enablePooledMemory)
     {
-        nodePlayer.enablePooledMemoryAllocations (enablePooledMemory);
+        //dddnodePlayer.enablePooledMemoryAllocations (enablePooledMemory);
     }
     
 private:
     tracktion::graph::PlayHeadState& playHeadState;
     ProcessState& processState;
     MidiMessageArray scratchMidi;
-    tracktion::graph::LockFreeMultiThreadedNodePlayer nodePlayer;
+    tracktion::graph::MultiThreadedNodePlayer nodePlayer;
 
     tracktion::graph::Node::ProcessContext getSubProcessContext (const tracktion::graph::Node::ProcessContext& pc, juce::Range<int64_t> subReferenceSampleRange)
     {
