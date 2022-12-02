@@ -173,7 +173,7 @@ Public Member Functions</h2></td></tr>
 <p>Sets the number of threads to use for rendering. </p>
 <p>This can be 0 in which case only the process calling thread will be used for processing. N.B. this will pause processing whilst updating the threads so there will be a gap in the audio. </p>
 
-<p class="reference">Referenced by <a class="el" href="classtracktion_1_1engine_1_1MultiThreadedNodePlayer.html#a99329b4d096c74a18f729de0ad7ea1a9">tracktion::engine::MultiThreadedNodePlayer::setNumThreads()</a>.</p>
+<p class="reference">Referenced by <a class="el" href="classtracktion_1_1engine_1_1MultiThreadedNodePlayer.html#a99329b4d096c74a18f729de0ad7ea1a9">tracktion::engine::MultiThreadedNodePlayer::setNumThreads()</a>, and <a class="el" href="classtracktion_1_1engine_1_1TracktionNodePlayer.html#a2083bfccad9e2f11fb9b4300a9ff9537">tracktion::engine::TracktionNodePlayer::setNumThreads()</a>.</p>
 
 </div>
 </div>
@@ -195,7 +195,7 @@ Public Member Functions</h2></td></tr>
 
 <p>Sets the <a class="el" href="classtracktion_1_1graph_1_1Node.html" title="Main graph Node processor class.">Node</a> to process. </p>
 
-<p class="reference">Referenced by <a class="el" href="classtracktion_1_1engine_1_1MultiThreadedNodePlayer.html#a19ff2da3c3ccf9c4ef59ffe29718e754">tracktion::engine::MultiThreadedNodePlayer::MultiThreadedNodePlayer()</a>, and <a class="el" href="classtracktion_1_1engine_1_1MultiThreadedNodePlayer.html#a05451ee9facb31b3a87adc7d38a0c4f8">tracktion::engine::MultiThreadedNodePlayer::setNode()</a>.</p>
+<p class="reference">Referenced by <a class="el" href="classtracktion_1_1engine_1_1MultiThreadedNodePlayer.html#a19ff2da3c3ccf9c4ef59ffe29718e754">tracktion::engine::MultiThreadedNodePlayer::MultiThreadedNodePlayer()</a>, <a class="el" href="classtracktion_1_1engine_1_1MultiThreadedNodePlayer.html#a05451ee9facb31b3a87adc7d38a0c4f8">tracktion::engine::MultiThreadedNodePlayer::setNode()</a>, <a class="el" href="classtracktion_1_1engine_1_1TracktionNodePlayer.html#af87b7f29f11f4ea7ec8b84fa01bee4b1">tracktion::engine::TracktionNodePlayer::setNode()</a>, and <a class="el" href="classtracktion_1_1engine_1_1TracktionNodePlayer.html#a998dc1b13afc1ecc1d52b13bb3f330d1">tracktion::engine::TracktionNodePlayer::TracktionNodePlayer()</a>.</p>
 
 </div>
 </div>
@@ -263,7 +263,7 @@ Public Member Functions</h2></td></tr>
 
 <p>Prepares the current <a class="el" href="classtracktion_1_1graph_1_1Node.html" title="Main graph Node processor class.">Node</a> to be played. </p>
 
-<p class="reference">Referenced by <a class="el" href="classtracktion_1_1engine_1_1MultiThreadedNodePlayer.html#ab0abdca637264c8d41c463daeba6af4a">tracktion::engine::MultiThreadedNodePlayer::prepareToPlay()</a>.</p>
+<p class="reference">Referenced by <a class="el" href="classtracktion_1_1engine_1_1MultiThreadedNodePlayer.html#ab0abdca637264c8d41c463daeba6af4a">tracktion::engine::MultiThreadedNodePlayer::prepareToPlay()</a>, and <a class="el" href="classtracktion_1_1engine_1_1TracktionNodePlayer.html#a5600526ae7206d37bb022e8c998bfd07">tracktion::engine::TracktionNodePlayer::prepareToPlay()</a>.</p>
 
 </div>
 </div>
@@ -284,7 +284,7 @@ Public Member Functions</h2></td></tr>
 
 <p>Returns the current <a class="el" href="classtracktion_1_1graph_1_1Node.html" title="Main graph Node processor class.">Node</a>. </p>
 
-<p class="reference">Referenced by <a class="el" href="classtracktion_1_1engine_1_1MultiThreadedNodePlayer.html#a29335795aea9ffbb2c6b12e2cf3ecef4">tracktion::engine::MultiThreadedNodePlayer::getNode()</a>.</p>
+<p class="reference">Referenced by <a class="el" href="classtracktion_1_1engine_1_1MultiThreadedNodePlayer.html#a29335795aea9ffbb2c6b12e2cf3ecef4">tracktion::engine::MultiThreadedNodePlayer::getNode()</a>, and <a class="el" href="classtracktion_1_1engine_1_1TracktionNodePlayer.html#a9190363bb3dbddf5e1e52c6d344089f1">tracktion::engine::TracktionNodePlayer::getNode()</a>.</p>
 
 </div>
 </div>
@@ -328,7 +328,7 @@ Public Member Functions</h2></td></tr>
 <p>Clears the current <a class="el" href="classtracktion_1_1graph_1_1Node.html" title="Main graph Node processor class.">Node</a>. </p>
 <p>Note that this shouldn't be called concurrently with setNode. If it's called concurrently with process, it will block until the current process call has finished. This should be used sparingly as its a heavyweight operation which has to stop any processing threads and restart them again afterwrds. </p>
 
-<p class="reference">Referenced by <a class="el" href="classtracktion_1_1engine_1_1MultiThreadedNodePlayer.html#a9aa3bcf9bc89b5afffb076a862abbcdf">tracktion::engine::MultiThreadedNodePlayer::clearNode()</a>.</p>
+<p class="reference">Referenced by <a class="el" href="classtracktion_1_1engine_1_1MultiThreadedNodePlayer.html#a9aa3bcf9bc89b5afffb076a862abbcdf">tracktion::engine::MultiThreadedNodePlayer::clearNode()</a>, and <a class="el" href="classtracktion_1_1engine_1_1TracktionNodePlayer.html#a78be00aef303a84fc9252dbe8d51a131">tracktion::engine::TracktionNodePlayer::clearNode()</a>.</p>
 
 </div>
 </div>
@@ -349,7 +349,7 @@ Public Member Functions</h2></td></tr>
 
 <p>Returns the current sample rate. </p>
 
-<p class="reference">Referenced by <a class="el" href="classtracktion_1_1engine_1_1MultiThreadedNodePlayer.html#a3904b5b86acff621e41ff21861c37aff">tracktion::engine::MultiThreadedNodePlayer::getSampleRate()</a>, and <a class="el" href="classtracktion_1_1engine_1_1MultiThreadedNodePlayer.html#a5b35282c647f688f77fc7aeccebfb144">tracktion::engine::MultiThreadedNodePlayer::process()</a>.</p>
+<p class="reference">Referenced by <a class="el" href="classtracktion_1_1engine_1_1MultiThreadedNodePlayer.html#a3904b5b86acff621e41ff21861c37aff">tracktion::engine::MultiThreadedNodePlayer::getSampleRate()</a>, <a class="el" href="classtracktion_1_1engine_1_1TracktionNodePlayer.html#a9c1d0e6802b5731a7af5349221a7a9ab">tracktion::engine::TracktionNodePlayer::getSampleRate()</a>, and <a class="el" href="classtracktion_1_1engine_1_1MultiThreadedNodePlayer.html#a5b35282c647f688f77fc7aeccebfb144">tracktion::engine::MultiThreadedNodePlayer::process()</a>.</p>
 
 </div>
 </div>
@@ -359,7 +359,7 @@ Public Member Functions</h2></td></tr>
 </div><!-- contents -->
 <!-- start footer part -->
 <hr class="footer"/><address class="footer"><small>
-Generated on Thu Dec 1 2022 19:14:57 for TracktionEngine by&#160;<a href="https://www.doxygen.org/index.html"><img class="footer" src="doxygen.svg" width="104" height="31" alt="doxygen"/></a> 1.9.1
+Generated on Fri Dec 2 2022 10:04:54 for TracktionEngine by&#160;<a href="https://www.doxygen.org/index.html"><img class="footer" src="doxygen.svg" width="104" height="31" alt="doxygen"/></a> 1.9.1
 </small></address>
 </body>
 </html>

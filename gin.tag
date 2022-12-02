@@ -70408,8 +70408,8 @@
       <type></type>
       <name>TracktionNodePlayer</name>
       <anchorfile>classtracktion_1_1engine_1_1TracktionNodePlayer.html</anchorfile>
-      <anchor>aa725d3a478835f0debaf6dfca29e70db</anchor>
-      <arglist>(ProcessState &amp;processStateToUse, tracktion::graph::LockFreeMultiThreadedNodePlayer::ThreadPoolCreator poolCreator)</arglist>
+      <anchor>ab9e546f6bb26f4db070b5b17d7218d73</anchor>
+      <arglist>(ProcessState &amp;processStateToUse, tracktion::graph::LockFreeMultiThreadedNodePlayer::ThreadPoolCreator)</arglist>
     </member>
     <member kind="function">
       <type></type>
@@ -70478,8 +70478,8 @@
       <type>void</type>
       <name>enablePooledMemoryAllocations</name>
       <anchorfile>classtracktion_1_1engine_1_1TracktionNodePlayer.html</anchorfile>
-      <anchor>a08c507ab4fdf33f8fb00adb00b3fdc5c</anchor>
-      <arglist>(bool enablePooledMemory)</arglist>
+      <anchor>ab70d58ba48cad41f3c23be6c5045a14d</anchor>
+      <arglist>(bool)</arglist>
     </member>
   </compound>
   <compound kind="class">

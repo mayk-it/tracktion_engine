@@ -37,7 +37,7 @@
           </tr>
           <tr>
             <td class="headerItem">Date:</td>
-            <td class="headerValue">2022-12-01 19:30:47</td>
+            <td class="headerValue">2022-12-02 10:22:13</td>
             <td></td>
             <td class="headerItem">Functions:</td>
             <td class="headerCovTableEntry">16</td>
@@ -196,19 +196,19 @@
 <a name="134"><span class="lineNum">     134 </span><span class="lineCov">         16 :             p-&gt;updateToFollowCurve (time);</span></a>
 <a name="135"><span class="lineNum">     135 </span><span class="lineCov">        219 : }</span></a>
 <a name="136"><span class="lineNum">     136 </span>            : </a>
-<a name="137"><span class="lineNum">     137 </span><span class="lineCov">     156763 : void AutomatableEditItem::updateParameterStreams (TimePosition time)</span></a>
+<a name="137"><span class="lineNum">     137 </span><span class="lineCov">     156668 : void AutomatableEditItem::updateParameterStreams (TimePosition time)</span></a>
 <a name="138"><span class="lineNum">     138 </span>            : {</a>
-<a name="139"><span class="lineNum">     139 </span><span class="lineCov">     156763 :     const juce::ScopedLock sl (activeParameterLock);</span></a>
+<a name="139"><span class="lineNum">     139 </span><span class="lineCov">     156668 :     const juce::ScopedLock sl (activeParameterLock);</span></a>
 <a name="140"><span class="lineNum">     140 </span>            : </a>
-<a name="141"><span class="lineNum">     141 </span><span class="lineCov">     239589 :     for (auto p : activeParameters)</span></a>
-<a name="142"><span class="lineNum">     142 </span><span class="lineCov">      82823 :         p-&gt;updateFromAutomationSources (time);</span></a>
-<a name="143"><span class="lineNum">     143 </span><span class="lineCov">     156770 : }</span></a>
+<a name="141"><span class="lineNum">     141 </span><span class="lineCov">     239484 :     for (auto p : activeParameters)</span></a>
+<a name="142"><span class="lineNum">     142 </span><span class="lineCov">      82809 :         p-&gt;updateFromAutomationSources (time);</span></a>
+<a name="143"><span class="lineNum">     143 </span><span class="lineCov">     156675 : }</span></a>
 <a name="144"><span class="lineNum">     144 </span>            : </a>
-<a name="145"><span class="lineNum">     145 </span><span class="lineCov">       7618 : void AutomatableEditItem::resetRecordingStatus()</span></a>
+<a name="145"><span class="lineNum">     145 </span><span class="lineCov">       7508 : void AutomatableEditItem::resetRecordingStatus()</span></a>
 <a name="146"><span class="lineNum">     146 </span>            : {</a>
-<a name="147"><span class="lineNum">     147 </span><span class="lineCov">      19330 :     for (auto p : automatableParams)</span></a>
+<a name="147"><span class="lineNum">     147 </span><span class="lineCov">      19220 :     for (auto p : automatableParams)</span></a>
 <a name="148"><span class="lineNum">     148 </span>            :         p-&gt;resetRecordingStatus();</a>
-<a name="149"><span class="lineNum">     149 </span><span class="lineCov">       7618 : }</span></a>
+<a name="149"><span class="lineNum">     149 </span><span class="lineCov">       7508 : }</span></a>
 <a name="150"><span class="lineNum">     150 </span>            : </a>
 <a name="151"><span class="lineNum">     151 </span>            : //==============================================================================</a>
 <a name="152"><span class="lineNum">     152 </span><span class="lineNoCov">          0 : void AutomatableEditItem::buildParameterTree() const</span></a>
@@ -217,10 +217,10 @@
 <a name="155"><span class="lineNum">     155 </span><span class="lineNoCov">          0 :         parameterTree.rootNode-&gt;addSubNode (new AutomatableParameterTree::TreeNode (p));</span></a>
 <a name="156"><span class="lineNum">     156 </span><span class="lineNoCov">          0 : }</span></a>
 <a name="157"><span class="lineNum">     157 </span>            : </a>
-<a name="158"><span class="lineNum">     158 </span><span class="lineCov">   26944936 : void AutomatableEditItem::updateLastPlaybackTime()</span></a>
+<a name="158"><span class="lineNum">     158 </span><span class="lineCov">   26777794 : void AutomatableEditItem::updateLastPlaybackTime()</span></a>
 <a name="159"><span class="lineNum">     159 </span>            : {</a>
-<a name="160"><span class="lineNum">     160 </span><span class="lineCov">   26944936 :     systemTimeOfLastPlayedBlock = juce::Time::getApproximateMillisecondCounter();</span></a>
-<a name="161"><span class="lineNum">     161 </span><span class="lineCov">   26927536 : }</span></a>
+<a name="160"><span class="lineNum">     160 </span><span class="lineCov">   26777794 :     systemTimeOfLastPlayedBlock = juce::Time::getApproximateMillisecondCounter();</span></a>
+<a name="161"><span class="lineNum">     161 </span><span class="lineCov">   26721377 : }</span></a>
 <a name="162"><span class="lineNum">     162 </span>            : </a>
 <a name="163"><span class="lineNum">     163 </span><span class="lineNoCov">          0 : void AutomatableEditItem::clearParameterList()</span></a>
 <a name="164"><span class="lineNum">     164 </span>            : {</a>
