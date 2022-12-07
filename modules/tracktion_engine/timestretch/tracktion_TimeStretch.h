@@ -76,6 +76,7 @@ public:
         /** Compare these options with another set. */
         bool operator!= (const ElastiqueProOptions&) const;
 
+        bool formantPitchHalf = false;      /**< Sets the pitch to half for the EnvelopeFactor. */
         bool midSideStereo = false;         /**< Optomise algorthim for mid/side channel layouts. */
         bool syncTimeStrPitchShft = false;  /**< Synchronises timestretch and pitchshifting. */
         bool preserveFormants = false;      /**< Preserve formats. */
