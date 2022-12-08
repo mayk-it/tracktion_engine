@@ -39,12 +39,13 @@ TimeStretcher::ElastiqueProOptions::ElastiqueProOptions (const juce::String& str
         juce::StringArray tokens;
         tokens.addTokens (string, "/", {});
 
-        if (tokens.size() == 5)
+        if (tokens.size() == 6)
         {
-            midSideStereo        = tokens[1].getIntValue() != 0;
-            syncTimeStrPitchShft = tokens[2].getIntValue() != 0;
-            preserveFormants     = tokens[3].getIntValue() != 0;
-            envelopeOrder        = tokens[4].getIntValue();
+            formantPitchHalf     = tokens[1].getIntValue() != 0;
+            midSideStereo        = tokens[2].getIntValue() != 0;
+            syncTimeStrPitchShft = tokens[3].getIntValue() != 0;
+            preserveFormants     = tokens[4].getIntValue() != 0;
+            envelopeOrder        = tokens[5].getIntValue();
             return;
         }
     }
@@ -55,7 +56,8 @@ TimeStretcher::ElastiqueProOptions::ElastiqueProOptions (const juce::String& str
 juce::String TimeStretcher::ElastiqueProOptions::toString() const
 {
     // version / midside / sync / preserve / order
-    return juce::String::formatted ("1/%d/%d/%d/%d",
+    return juce::String::formatted ("1/%d/%d/%d/%d/%d",
+                                    formantPitchHalf     ? 1 : 0,
                                     midSideStereo        ? 1 : 0,
                                     syncTimeStrPitchShft ? 1 : 0,
                                     preserveFormants     ? 1 : 0,
@@ -64,7 +66,8 @@ juce::String TimeStretcher::ElastiqueProOptions::toString() const
 
 bool TimeStretcher::ElastiqueProOptions::operator== (const ElastiqueProOptions& other) const
 {
-    return midSideStereo        == other.midSideStereo
+    return formantPitchHalf     == other.formantPitchHalf
+        && midSideStereo        == other.midSideStereo
         && syncTimeStrPitchShft == other.syncTimeStrPitchShft
         && preserveFormants     == other.preserveFormants
         && envelopeOrder        == other.envelopeOrder;
@@ -140,7 +143,8 @@ struct ElastiqueStretcher  : public TimeStretcher::Stretcher
 
         if (elastiqueMode == TimeStretcher::elastiquePro && elastiqueProOptions.preserveFormants)
         {
-            elastique->SetEnvelopeFactor (pitch);
+            float formantPitch = elastiqueProOptions.formantPitchHalf ? juce::jlimit (0.25f, 4.0f, Pitch::semitonesToRatio (semitonesUp * 0.5f)) : pitch;
+            elastique->SetEnvelopeFactor (formantPitch);
             elastique->SetEnvelopeOrder (elastiqueProOptions.envelopeOrder);
         }
 
