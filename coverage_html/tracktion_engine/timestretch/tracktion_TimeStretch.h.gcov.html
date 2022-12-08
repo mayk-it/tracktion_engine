@@ -37,7 +37,7 @@
           </tr>
           <tr>
             <td class="headerItem">Date:</td>
-            <td class="headerValue">2022-12-02 10:22:13</td>
+            <td class="headerValue">2022-12-08 10:26:58</td>
             <td></td>
             <td class="headerItem">Functions:</td>
             <td class="headerCovTableEntry">0</td>
@@ -138,123 +138,124 @@
 <a name="76"><span class="lineNum">      76 </span>            :         /** Compare these options with another set. */</a>
 <a name="77"><span class="lineNum">      77 </span>            :         bool operator!= (const ElastiqueProOptions&amp;) const;</a>
 <a name="78"><span class="lineNum">      78 </span>            : </a>
-<a name="79"><span class="lineNum">      79 </span>            :         bool midSideStereo = false;         /**&lt; Optomise algorthim for mid/side channel layouts. */</a>
-<a name="80"><span class="lineNum">      80 </span>            :         bool syncTimeStrPitchShft = false;  /**&lt; Synchronises timestretch and pitchshifting. */</a>
-<a name="81"><span class="lineNum">      81 </span>            :         bool preserveFormants = false;      /**&lt; Preserve formats. */</a>
-<a name="82"><span class="lineNum">      82 </span>            :         int envelopeOrder = 64;             /**&lt; Sets a spectral envelope shift factor. */</a>
-<a name="83"><span class="lineNum">      83 </span>            :     };</a>
-<a name="84"><span class="lineNum">      84 </span>            : </a>
-<a name="85"><span class="lineNum">      85 </span>            :     //==============================================================================</a>
-<a name="86"><span class="lineNum">      86 </span>            :     /** Checks if the given mode is available for use. */</a>
-<a name="87"><span class="lineNum">      87 </span>            :     static Mode checkModeIsAvailable (Mode);</a>
-<a name="88"><span class="lineNum">      88 </span>            : </a>
-<a name="89"><span class="lineNum">      89 </span>            :     /** Returns the names of the availabel Modes. */</a>
-<a name="90"><span class="lineNum">      90 </span>            :     static juce::StringArray getPossibleModes (Engine&amp;, bool excludeMelodyne);</a>
-<a name="91"><span class="lineNum">      91 </span>            : </a>
-<a name="92"><span class="lineNum">      92 </span>            :     /** Returns the Mode for a given name @see getPossibleModes. */</a>
-<a name="93"><span class="lineNum">      93 </span>            :     static Mode getModeFromName (Engine&amp;, const juce::String&amp; name);</a>
-<a name="94"><span class="lineNum">      94 </span>            : </a>
-<a name="95"><span class="lineNum">      95 </span>            :     /** Returns the name of a given Mode for display purposes. */</a>
-<a name="96"><span class="lineNum">      96 </span>            :     static juce::String getNameOfMode (Mode);</a>
-<a name="97"><span class="lineNum">      97 </span>            : </a>
-<a name="98"><span class="lineNum">      98 </span>            :     /** Returns true if the given Mode is a Melodyne mode. */</a>
-<a name="99"><span class="lineNum">      99 </span>            :     static bool isMelodyne (Mode);</a>
-<a name="100"><span class="lineNum">     100 </span>            : </a>
-<a name="101"><span class="lineNum">     101 </span>            :     /** Checks that the given Mode is a valid mode and not disabled. */</a>
-<a name="102"><span class="lineNum">     102 </span>            :     static bool canProcessFor (Mode);</a>
-<a name="103"><span class="lineNum">     103 </span>            : </a>
-<a name="104"><span class="lineNum">     104 </span>            :     //==============================================================================</a>
-<a name="105"><span class="lineNum">     105 </span>            :     /** Initialises the TimeStretcher ready to perform timestretching.</a>
-<a name="106"><span class="lineNum">     106 </span>            :         This must be called at least once before calling the processData methods.</a>
-<a name="107"><span class="lineNum">     107 </span>            :         @param sourceSampleRate     The sample rate this will be processed at</a>
-<a name="108"><span class="lineNum">     108 </span>            :         @param samplesPerBlock      The expected number of samples per process block</a>
-<a name="109"><span class="lineNum">     109 </span>            :         @param numChannels          The number of channels to process</a>
-<a name="110"><span class="lineNum">     110 </span>            :         @param Mode                 The Mode to enable</a>
-<a name="111"><span class="lineNum">     111 </span>            :         @param ElastiqueProOptions  The Elastique options to use, ignored in non-ElastiquePro modes</a>
-<a name="112"><span class="lineNum">     112 </span>            :         @param realtime             Indicates this is for real-time or offline use</a>
-<a name="113"><span class="lineNum">     113 </span>            :     */</a>
-<a name="114"><span class="lineNum">     114 </span>            :     void initialise (double sourceSampleRate, int samplesPerBlock,</a>
-<a name="115"><span class="lineNum">     115 </span>            :                      int numChannels, Mode, ElastiqueProOptions, bool realtime);</a>
-<a name="116"><span class="lineNum">     116 </span>            : </a>
-<a name="117"><span class="lineNum">     117 </span>            :     /** Returns true if this has been fully initialised. */</a>
-<a name="118"><span class="lineNum">     118 </span>            :     bool isInitialised() const;</a>
-<a name="119"><span class="lineNum">     119 </span>            :     </a>
-<a name="120"><span class="lineNum">     120 </span>            :     /** Resets the TimeStretcher ready for a new set of audio data, maintains mode, speed and pitch ratios. */</a>
-<a name="121"><span class="lineNum">     121 </span>            :     void reset();</a>
-<a name="122"><span class="lineNum">     122 </span>            :     </a>
-<a name="123"><span class="lineNum">     123 </span>            :     /** Sets the timestretch speed ratio and semitones pitch shift.</a>
-<a name="124"><span class="lineNum">     124 </span>            :         @param speedRatio   The ratio for timestretched speed. 1 = no stretching, 2 = half as fast, 0.5 = twice as fast etc.</a>
-<a name="125"><span class="lineNum">     125 </span>            :         @param semitones    The number of semitones to adjust the pitch by 0 = not shift, 12 = up one oct, -12 = down one oct etc.</a>
-<a name="126"><span class="lineNum">     126 </span>            :     */</a>
-<a name="127"><span class="lineNum">     127 </span>            :     bool setSpeedAndPitch (float speedRatio, float semitones);</a>
-<a name="128"><span class="lineNum">     128 </span>            : </a>
-<a name="129"><span class="lineNum">     129 </span>            :     /** Returns the maximum number of frames that will ever be returned by getFramesNeeded.</a>
-<a name="130"><span class="lineNum">     130 </span>            :         This can be used to size FIFOs for real-time use accordingly.</a>
-<a name="131"><span class="lineNum">     131 </span>            :     */</a>
-<a name="132"><span class="lineNum">     132 </span>            :     int getMaxFramesNeeded() const;</a>
-<a name="133"><span class="lineNum">     133 </span>            :     </a>
-<a name="134"><span class="lineNum">     134 </span>            :     /** Returns the expected number of frames required to generate some output.</a>
-<a name="135"><span class="lineNum">     135 </span>            :         This should be queried each block and the returned number of frames be passes to processData.</a>
-<a name="136"><span class="lineNum">     136 </span>            :     */</a>
-<a name="137"><span class="lineNum">     137 </span>            :     int getFramesNeeded() const;</a>
-<a name="138"><span class="lineNum">     138 </span>            :     </a>
-<a name="139"><span class="lineNum">     139 </span>            :     /** Processes some input frames and fills some output frames with the applied speed ratio and pitch shift.</a>
-<a name="140"><span class="lineNum">     140 </span>            :         @param inChannels   The input sample data in non-interleaved format</a>
-<a name="141"><span class="lineNum">     141 </span>            :         @param numSamples   The number of input frames to read from inChannels</a>
-<a name="142"><span class="lineNum">     142 </span>            :         @param outChannels  The destination for non-interleaved output samples. This should be as big as samplesPerBlock</a>
-<a name="143"><span class="lineNum">     143 </span>            :                             passed to the constructor but it may not fill the whole buffer. In cases where less than</a>
-<a name="144"><span class="lineNum">     144 </span>            :                             samplesPerBlock is returned, you should query getFramesNeeded and call this method again,</a>
-<a name="145"><span class="lineNum">     145 </span>            :                             incrementing destination buffers as required.</a>
-<a name="146"><span class="lineNum">     146 </span>            :         @returns            The number of frames read and hence written to outChannels</a>
-<a name="147"><span class="lineNum">     147 </span>            :     */</a>
-<a name="148"><span class="lineNum">     148 </span>            :     int processData (const float* const* inChannels, int numSamples, float* const* outChannels);</a>
-<a name="149"><span class="lineNum">     149 </span>            : </a>
-<a name="150"><span class="lineNum">     150 </span>            :     /** Processes some input frames and fills some output frames from a pair of AudioFifos, useful for real-time use.</a>
-<a name="151"><span class="lineNum">     151 </span>            :         @param inFifo       The input sample data to read from</a>
-<a name="152"><span class="lineNum">     152 </span>            :         @param numSamples   The number of input frames to read from inFifo. In inFifo must have this number of frames ready</a>
-<a name="153"><span class="lineNum">     153 </span>            :         @param outFifo      The destination for output samples. This should have at lest samplesPerBlock free.</a>
-<a name="154"><span class="lineNum">     154 </span>            :         @returns            The number of frames read and hence written to outFifo</a>
-<a name="155"><span class="lineNum">     155 </span>            :     */</a>
-<a name="156"><span class="lineNum">     156 </span>            :     int processData (AudioFifo&amp; inFifo, int numSamples, AudioFifo&amp; outFifo);</a>
-<a name="157"><span class="lineNum">     157 </span>            :     </a>
-<a name="158"><span class="lineNum">     158 </span>            :     /** Flushes the end of the stream when input data is exhausted but there is still output data available.</a>
-<a name="159"><span class="lineNum">     159 </span>            :         Once you have called this, you can no longer call processData.</a>
-<a name="160"><span class="lineNum">     160 </span>            :         @param outChannels  The destination for non-interleaved output samples. This should be as big as samplesPerBlock</a>
-<a name="161"><span class="lineNum">     161 </span>            :                             passed to the constructor but it may not fill the whole buffer. In cases where less than</a>
-<a name="162"><span class="lineNum">     162 </span>            :                             samplesPerBlock is returned, you should query getFramesNeeded and call this method again,</a>
-<a name="163"><span class="lineNum">     163 </span>            :                             incrementing destination buffers as required.</a>
-<a name="164"><span class="lineNum">     164 </span>            :         @returns            The number of frames read and hence written to outChannels</a>
-<a name="165"><span class="lineNum">     165 </span>            :     */</a>
-<a name="166"><span class="lineNum">     166 </span>            :     int flush (float* const* outChannels);</a>
-<a name="167"><span class="lineNum">     167 </span>            : </a>
-<a name="168"><span class="lineNum">     168 </span>            :     /** @internal */</a>
-<a name="169"><span class="lineNum">     169 </span>            :     struct Stretcher;</a>
-<a name="170"><span class="lineNum">     170 </span>            : </a>
-<a name="171"><span class="lineNum">     171 </span>            : private:</a>
-<a name="172"><span class="lineNum">     172 </span>            :     std::unique_ptr&lt;Stretcher&gt; stretcher;</a>
-<a name="173"><span class="lineNum">     173 </span>            :     int samplesPerBlockRequested = 0;</a>
-<a name="174"><span class="lineNum">     174 </span>            : </a>
-<a name="175"><span class="lineNum">     175 </span>            :     JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR (TimeStretcher)</a>
-<a name="176"><span class="lineNum">     176 </span>            : };</a>
-<a name="177"><span class="lineNum">     177 </span>            : </a>
-<a name="178"><span class="lineNum">     178 </span>            : }} // namespace tracktion { inline namespace engine</a>
-<a name="179"><span class="lineNum">     179 </span>            : </a>
-<a name="180"><span class="lineNum">     180 </span>            : namespace juce</a>
-<a name="181"><span class="lineNum">     181 </span>            : {</a>
-<a name="182"><span class="lineNum">     182 </span>            :     template &lt;&gt;</a>
-<a name="183"><span class="lineNum">     183 </span>            :     struct VariantConverter&lt;tracktion::engine::TimeStretcher::Mode&gt;</a>
-<a name="184"><span class="lineNum">     184 </span>            :     {</a>
-<a name="185"><span class="lineNum">     185 </span><span class="lineCov">       3387 :         static tracktion::engine::TimeStretcher::Mode fromVar (const var&amp; v)   { return (tracktion::engine::TimeStretcher::Mode) static_cast&lt;int&gt; (v); }</span></a>
-<a name="186"><span class="lineNum">     186 </span><span class="lineCov">       3387 :         static var toVar (tracktion::engine::TimeStretcher::Mode v)            { return static_cast&lt;int&gt; (v); }</span></a>
-<a name="187"><span class="lineNum">     187 </span>            :     };</a>
-<a name="188"><span class="lineNum">     188 </span>            : </a>
-<a name="189"><span class="lineNum">     189 </span>            :     template &lt;&gt;</a>
-<a name="190"><span class="lineNum">     190 </span>            :     struct VariantConverter&lt;tracktion::engine::TimeStretcher::ElastiqueProOptions&gt;</a>
-<a name="191"><span class="lineNum">     191 </span>            :     {</a>
-<a name="192"><span class="lineNum">     192 </span><span class="lineNoCov">          0 :         static tracktion::engine::TimeStretcher::ElastiqueProOptions fromVar (const var&amp; v) { return tracktion::engine::TimeStretcher::ElastiqueProOptions (v.toString()); }</span></a>
-<a name="193"><span class="lineNum">     193 </span><span class="lineNoCov">          0 :         static var toVar (const tracktion::engine::TimeStretcher::ElastiqueProOptions&amp; v)   { return v.toString(); }</span></a>
-<a name="194"><span class="lineNum">     194 </span>            :     };</a>
-<a name="195"><span class="lineNum">     195 </span>            : }</a>
+<a name="79"><span class="lineNum">      79 </span>            :         bool formantPitchHalf = false;      /**&lt; Sets the pitch to half for the EnvelopeFactor. */</a>
+<a name="80"><span class="lineNum">      80 </span>            :         bool midSideStereo = false;         /**&lt; Optomise algorthim for mid/side channel layouts. */</a>
+<a name="81"><span class="lineNum">      81 </span>            :         bool syncTimeStrPitchShft = false;  /**&lt; Synchronises timestretch and pitchshifting. */</a>
+<a name="82"><span class="lineNum">      82 </span>            :         bool preserveFormants = false;      /**&lt; Preserve formats. */</a>
+<a name="83"><span class="lineNum">      83 </span>            :         int envelopeOrder = 64;             /**&lt; Sets a spectral envelope shift factor. */</a>
+<a name="84"><span class="lineNum">      84 </span>            :     };</a>
+<a name="85"><span class="lineNum">      85 </span>            : </a>
+<a name="86"><span class="lineNum">      86 </span>            :     //==============================================================================</a>
+<a name="87"><span class="lineNum">      87 </span>            :     /** Checks if the given mode is available for use. */</a>
+<a name="88"><span class="lineNum">      88 </span>            :     static Mode checkModeIsAvailable (Mode);</a>
+<a name="89"><span class="lineNum">      89 </span>            : </a>
+<a name="90"><span class="lineNum">      90 </span>            :     /** Returns the names of the availabel Modes. */</a>
+<a name="91"><span class="lineNum">      91 </span>            :     static juce::StringArray getPossibleModes (Engine&amp;, bool excludeMelodyne);</a>
+<a name="92"><span class="lineNum">      92 </span>            : </a>
+<a name="93"><span class="lineNum">      93 </span>            :     /** Returns the Mode for a given name @see getPossibleModes. */</a>
+<a name="94"><span class="lineNum">      94 </span>            :     static Mode getModeFromName (Engine&amp;, const juce::String&amp; name);</a>
+<a name="95"><span class="lineNum">      95 </span>            : </a>
+<a name="96"><span class="lineNum">      96 </span>            :     /** Returns the name of a given Mode for display purposes. */</a>
+<a name="97"><span class="lineNum">      97 </span>            :     static juce::String getNameOfMode (Mode);</a>
+<a name="98"><span class="lineNum">      98 </span>            : </a>
+<a name="99"><span class="lineNum">      99 </span>            :     /** Returns true if the given Mode is a Melodyne mode. */</a>
+<a name="100"><span class="lineNum">     100 </span>            :     static bool isMelodyne (Mode);</a>
+<a name="101"><span class="lineNum">     101 </span>            : </a>
+<a name="102"><span class="lineNum">     102 </span>            :     /** Checks that the given Mode is a valid mode and not disabled. */</a>
+<a name="103"><span class="lineNum">     103 </span>            :     static bool canProcessFor (Mode);</a>
+<a name="104"><span class="lineNum">     104 </span>            : </a>
+<a name="105"><span class="lineNum">     105 </span>            :     //==============================================================================</a>
+<a name="106"><span class="lineNum">     106 </span>            :     /** Initialises the TimeStretcher ready to perform timestretching.</a>
+<a name="107"><span class="lineNum">     107 </span>            :         This must be called at least once before calling the processData methods.</a>
+<a name="108"><span class="lineNum">     108 </span>            :         @param sourceSampleRate     The sample rate this will be processed at</a>
+<a name="109"><span class="lineNum">     109 </span>            :         @param samplesPerBlock      The expected number of samples per process block</a>
+<a name="110"><span class="lineNum">     110 </span>            :         @param numChannels          The number of channels to process</a>
+<a name="111"><span class="lineNum">     111 </span>            :         @param Mode                 The Mode to enable</a>
+<a name="112"><span class="lineNum">     112 </span>            :         @param ElastiqueProOptions  The Elastique options to use, ignored in non-ElastiquePro modes</a>
+<a name="113"><span class="lineNum">     113 </span>            :         @param realtime             Indicates this is for real-time or offline use</a>
+<a name="114"><span class="lineNum">     114 </span>            :     */</a>
+<a name="115"><span class="lineNum">     115 </span>            :     void initialise (double sourceSampleRate, int samplesPerBlock,</a>
+<a name="116"><span class="lineNum">     116 </span>            :                      int numChannels, Mode, ElastiqueProOptions, bool realtime);</a>
+<a name="117"><span class="lineNum">     117 </span>            : </a>
+<a name="118"><span class="lineNum">     118 </span>            :     /** Returns true if this has been fully initialised. */</a>
+<a name="119"><span class="lineNum">     119 </span>            :     bool isInitialised() const;</a>
+<a name="120"><span class="lineNum">     120 </span>            :     </a>
+<a name="121"><span class="lineNum">     121 </span>            :     /** Resets the TimeStretcher ready for a new set of audio data, maintains mode, speed and pitch ratios. */</a>
+<a name="122"><span class="lineNum">     122 </span>            :     void reset();</a>
+<a name="123"><span class="lineNum">     123 </span>            :     </a>
+<a name="124"><span class="lineNum">     124 </span>            :     /** Sets the timestretch speed ratio and semitones pitch shift.</a>
+<a name="125"><span class="lineNum">     125 </span>            :         @param speedRatio   The ratio for timestretched speed. 1 = no stretching, 2 = half as fast, 0.5 = twice as fast etc.</a>
+<a name="126"><span class="lineNum">     126 </span>            :         @param semitones    The number of semitones to adjust the pitch by 0 = not shift, 12 = up one oct, -12 = down one oct etc.</a>
+<a name="127"><span class="lineNum">     127 </span>            :     */</a>
+<a name="128"><span class="lineNum">     128 </span>            :     bool setSpeedAndPitch (float speedRatio, float semitones);</a>
+<a name="129"><span class="lineNum">     129 </span>            : </a>
+<a name="130"><span class="lineNum">     130 </span>            :     /** Returns the maximum number of frames that will ever be returned by getFramesNeeded.</a>
+<a name="131"><span class="lineNum">     131 </span>            :         This can be used to size FIFOs for real-time use accordingly.</a>
+<a name="132"><span class="lineNum">     132 </span>            :     */</a>
+<a name="133"><span class="lineNum">     133 </span>            :     int getMaxFramesNeeded() const;</a>
+<a name="134"><span class="lineNum">     134 </span>            :     </a>
+<a name="135"><span class="lineNum">     135 </span>            :     /** Returns the expected number of frames required to generate some output.</a>
+<a name="136"><span class="lineNum">     136 </span>            :         This should be queried each block and the returned number of frames be passes to processData.</a>
+<a name="137"><span class="lineNum">     137 </span>            :     */</a>
+<a name="138"><span class="lineNum">     138 </span>            :     int getFramesNeeded() const;</a>
+<a name="139"><span class="lineNum">     139 </span>            :     </a>
+<a name="140"><span class="lineNum">     140 </span>            :     /** Processes some input frames and fills some output frames with the applied speed ratio and pitch shift.</a>
+<a name="141"><span class="lineNum">     141 </span>            :         @param inChannels   The input sample data in non-interleaved format</a>
+<a name="142"><span class="lineNum">     142 </span>            :         @param numSamples   The number of input frames to read from inChannels</a>
+<a name="143"><span class="lineNum">     143 </span>            :         @param outChannels  The destination for non-interleaved output samples. This should be as big as samplesPerBlock</a>
+<a name="144"><span class="lineNum">     144 </span>            :                             passed to the constructor but it may not fill the whole buffer. In cases where less than</a>
+<a name="145"><span class="lineNum">     145 </span>            :                             samplesPerBlock is returned, you should query getFramesNeeded and call this method again,</a>
+<a name="146"><span class="lineNum">     146 </span>            :                             incrementing destination buffers as required.</a>
+<a name="147"><span class="lineNum">     147 </span>            :         @returns            The number of frames read and hence written to outChannels</a>
+<a name="148"><span class="lineNum">     148 </span>            :     */</a>
+<a name="149"><span class="lineNum">     149 </span>            :     int processData (const float* const* inChannels, int numSamples, float* const* outChannels);</a>
+<a name="150"><span class="lineNum">     150 </span>            : </a>
+<a name="151"><span class="lineNum">     151 </span>            :     /** Processes some input frames and fills some output frames from a pair of AudioFifos, useful for real-time use.</a>
+<a name="152"><span class="lineNum">     152 </span>            :         @param inFifo       The input sample data to read from</a>
+<a name="153"><span class="lineNum">     153 </span>            :         @param numSamples   The number of input frames to read from inFifo. In inFifo must have this number of frames ready</a>
+<a name="154"><span class="lineNum">     154 </span>            :         @param outFifo      The destination for output samples. This should have at lest samplesPerBlock free.</a>
+<a name="155"><span class="lineNum">     155 </span>            :         @returns            The number of frames read and hence written to outFifo</a>
+<a name="156"><span class="lineNum">     156 </span>            :     */</a>
+<a name="157"><span class="lineNum">     157 </span>            :     int processData (AudioFifo&amp; inFifo, int numSamples, AudioFifo&amp; outFifo);</a>
+<a name="158"><span class="lineNum">     158 </span>            :     </a>
+<a name="159"><span class="lineNum">     159 </span>            :     /** Flushes the end of the stream when input data is exhausted but there is still output data available.</a>
+<a name="160"><span class="lineNum">     160 </span>            :         Once you have called this, you can no longer call processData.</a>
+<a name="161"><span class="lineNum">     161 </span>            :         @param outChannels  The destination for non-interleaved output samples. This should be as big as samplesPerBlock</a>
+<a name="162"><span class="lineNum">     162 </span>            :                             passed to the constructor but it may not fill the whole buffer. In cases where less than</a>
+<a name="163"><span class="lineNum">     163 </span>            :                             samplesPerBlock is returned, you should query getFramesNeeded and call this method again,</a>
+<a name="164"><span class="lineNum">     164 </span>            :                             incrementing destination buffers as required.</a>
+<a name="165"><span class="lineNum">     165 </span>            :         @returns            The number of frames read and hence written to outChannels</a>
+<a name="166"><span class="lineNum">     166 </span>            :     */</a>
+<a name="167"><span class="lineNum">     167 </span>            :     int flush (float* const* outChannels);</a>
+<a name="168"><span class="lineNum">     168 </span>            : </a>
+<a name="169"><span class="lineNum">     169 </span>            :     /** @internal */</a>
+<a name="170"><span class="lineNum">     170 </span>            :     struct Stretcher;</a>
+<a name="171"><span class="lineNum">     171 </span>            : </a>
+<a name="172"><span class="lineNum">     172 </span>            : private:</a>
+<a name="173"><span class="lineNum">     173 </span>            :     std::unique_ptr&lt;Stretcher&gt; stretcher;</a>
+<a name="174"><span class="lineNum">     174 </span>            :     int samplesPerBlockRequested = 0;</a>
+<a name="175"><span class="lineNum">     175 </span>            : </a>
+<a name="176"><span class="lineNum">     176 </span>            :     JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR (TimeStretcher)</a>
+<a name="177"><span class="lineNum">     177 </span>            : };</a>
+<a name="178"><span class="lineNum">     178 </span>            : </a>
+<a name="179"><span class="lineNum">     179 </span>            : }} // namespace tracktion { inline namespace engine</a>
+<a name="180"><span class="lineNum">     180 </span>            : </a>
+<a name="181"><span class="lineNum">     181 </span>            : namespace juce</a>
+<a name="182"><span class="lineNum">     182 </span>            : {</a>
+<a name="183"><span class="lineNum">     183 </span>            :     template &lt;&gt;</a>
+<a name="184"><span class="lineNum">     184 </span>            :     struct VariantConverter&lt;tracktion::engine::TimeStretcher::Mode&gt;</a>
+<a name="185"><span class="lineNum">     185 </span>            :     {</a>
+<a name="186"><span class="lineNum">     186 </span><span class="lineCov">       3387 :         static tracktion::engine::TimeStretcher::Mode fromVar (const var&amp; v)   { return (tracktion::engine::TimeStretcher::Mode) static_cast&lt;int&gt; (v); }</span></a>
+<a name="187"><span class="lineNum">     187 </span><span class="lineCov">       3387 :         static var toVar (tracktion::engine::TimeStretcher::Mode v)            { return static_cast&lt;int&gt; (v); }</span></a>
+<a name="188"><span class="lineNum">     188 </span>            :     };</a>
+<a name="189"><span class="lineNum">     189 </span>            : </a>
+<a name="190"><span class="lineNum">     190 </span>            :     template &lt;&gt;</a>
+<a name="191"><span class="lineNum">     191 </span>            :     struct VariantConverter&lt;tracktion::engine::TimeStretcher::ElastiqueProOptions&gt;</a>
+<a name="192"><span class="lineNum">     192 </span>            :     {</a>
+<a name="193"><span class="lineNum">     193 </span><span class="lineNoCov">          0 :         static tracktion::engine::TimeStretcher::ElastiqueProOptions fromVar (const var&amp; v) { return tracktion::engine::TimeStretcher::ElastiqueProOptions (v.toString()); }</span></a>
+<a name="194"><span class="lineNum">     194 </span><span class="lineNoCov">          0 :         static var toVar (const tracktion::engine::TimeStretcher::ElastiqueProOptions&amp; v)   { return v.toString(); }</span></a>
+<a name="195"><span class="lineNum">     195 </span>            :     };</a>
+<a name="196"><span class="lineNum">     196 </span>            : }</a>
 </pre>
       </td>
     </tr>

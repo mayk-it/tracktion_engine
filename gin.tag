@@ -29902,6 +29902,13 @@
     </member>
     <member kind="variable">
       <type>bool</type>
+      <name>formantPitchHalf</name>
+      <anchorfile>structtracktion_1_1engine_1_1TimeStretcher_1_1ElastiqueProOptions.html</anchorfile>
+      <anchor>acf63b90bc8aa5f4db83d3c8550a56f87</anchor>
+      <arglist></arglist>
+    </member>
+    <member kind="variable">
+      <type>bool</type>
       <name>midSideStereo</name>
       <anchorfile>structtracktion_1_1engine_1_1TimeStretcher_1_1ElastiqueProOptions.html</anchorfile>
       <anchor>a1cafc593c5133eb3ae373fd6961ac33e</anchor>

@@ -31,13 +31,13 @@
             <td class="headerValue">coverage.info</td>
             <td></td>
             <td class="headerItem">Lines:</td>
-            <td class="headerCovTableEntry">37</td>
+            <td class="headerCovTableEntry">39</td>
             <td class="headerCovTableEntry">197</td>
-            <td class="headerCovTableEntryLo">18.8 %</td>
+            <td class="headerCovTableEntryLo">19.8 %</td>
           </tr>
           <tr>
             <td class="headerItem">Date:</td>
-            <td class="headerValue">2022-12-02 10:22:13</td>
+            <td class="headerValue">2022-12-08 10:26:58</td>
             <td></td>
             <td class="headerItem">Functions:</td>
             <td class="headerCovTableEntry">9</td>
@@ -257,49 +257,49 @@
 <a name="195"><span class="lineNum">     195 </span><span class="lineCov">        176 :         threads.clear();</span></a>
 <a name="196"><span class="lineNum">     196 </span><span class="lineCov">        176 :     }</span></a>
 <a name="197"><span class="lineNum">     197 </span>            : </a>
-<a name="198"><span class="lineNum">     198 </span><span class="lineCov">     172326 :     void signalOne() override</span></a>
+<a name="198"><span class="lineNum">     198 </span><span class="lineCov">     172550 :     void signalOne() override</span></a>
 <a name="199"><span class="lineNum">     199 </span>            :     {</a>
-<a name="200"><span class="lineNum">     200 </span><span class="lineCov">     172326 :     }</span></a>
+<a name="200"><span class="lineNum">     200 </span><span class="lineCov">     172550 :     }</span></a>
 <a name="201"><span class="lineNum">     201 </span>            : </a>
-<a name="202"><span class="lineNum">     202 </span><span class="lineCov">      36924 :     void signal (int) override</span></a>
+<a name="202"><span class="lineNum">     202 </span><span class="lineCov">      36980 :     void signal (int) override</span></a>
 <a name="203"><span class="lineNum">     203 </span>            :     {</a>
-<a name="204"><span class="lineNum">     204 </span><span class="lineCov">      36924 :     }</span></a>
+<a name="204"><span class="lineNum">     204 </span><span class="lineCov">      36980 :     }</span></a>
 <a name="205"><span class="lineNum">     205 </span>            : </a>
 <a name="206"><span class="lineNum">     206 </span><span class="lineCov">        176 :     void signalAll() override</span></a>
 <a name="207"><span class="lineNum">     207 </span>            :     {</a>
 <a name="208"><span class="lineNum">     208 </span><span class="lineCov">        176 :     }</span></a>
 <a name="209"><span class="lineNum">     209 </span>            : </a>
-<a name="210"><span class="lineNum">     210 </span><span class="lineCov">      28966 :     void wait()</span></a>
+<a name="210"><span class="lineNum">     210 </span><span class="lineCov">      23591 :     void wait()</span></a>
 <a name="211"><span class="lineNum">     211 </span>            :     {</a>
 <a name="212"><span class="lineNum">     212 </span>            :         // The pause and sleep counts avoid starving the CPU if there aren't enough queued nodes</a>
 <a name="213"><span class="lineNum">     213 </span>            :         // This only happens on the worker threads so the main audio thread never interacts with the thread scheduler</a>
 <a name="214"><span class="lineNum">     214 </span>            :         thread_local int pauseCount = 0;</a>
 <a name="215"><span class="lineNum">     215 </span>            : </a>
-<a name="216"><span class="lineNum">     216 </span><span class="lineCov">      28966 :         if (shouldWait())</span></a>
+<a name="216"><span class="lineNum">     216 </span><span class="lineCov">      23591 :         if (shouldWait())</span></a>
 <a name="217"><span class="lineNum">     217 </span>            :         {</a>
-<a name="218"><span class="lineNum">     218 </span><span class="lineCov">      28706 :             ++pauseCount;</span></a>
+<a name="218"><span class="lineNum">     218 </span><span class="lineCov">      23436 :             ++pauseCount;</span></a>
 <a name="219"><span class="lineNum">     219 </span>            : </a>
-<a name="220"><span class="lineNum">     220 </span><span class="lineCov">      28706 :             if (pauseCount &lt; 50)</span></a>
+<a name="220"><span class="lineNum">     220 </span><span class="lineCov">      23436 :             if (pauseCount &lt; 50)</span></a>
 <a name="221"><span class="lineNum">     221 </span>            :                 pause();</a>
-<a name="222"><span class="lineNum">     222 </span><span class="lineCov">      12126 :             else if (pauseCount &lt; 100)</span></a>
+<a name="222"><span class="lineNum">     222 </span><span class="lineCov">      10889 :             else if (pauseCount &lt; 100)</span></a>
 <a name="223"><span class="lineNum">     223 </span>            :                 std::this_thread::yield();</a>
-<a name="224"><span class="lineNum">     224 </span><span class="lineCov">       1416 :             else if (pauseCount &lt; 150)</span></a>
-<a name="225"><span class="lineNum">     225 </span><span class="lineCov">       1416 :                 std::this_thread::sleep_for (std::chrono::milliseconds (1));</span></a>
-<a name="226"><span class="lineNum">     226 </span><span class="lineNoCov">          0 :             else if (pauseCount &lt; 200)</span></a>
-<a name="227"><span class="lineNum">     227 </span><span class="lineNoCov">          0 :                 std::this_thread::sleep_for (std::chrono::milliseconds (5));</span></a>
+<a name="224"><span class="lineNum">     224 </span><span class="lineCov">       1637 :             else if (pauseCount &lt; 150)</span></a>
+<a name="225"><span class="lineNum">     225 </span><span class="lineCov">       1632 :                 std::this_thread::sleep_for (std::chrono::milliseconds (1));</span></a>
+<a name="226"><span class="lineNum">     226 </span><span class="lineCov">          5 :             else if (pauseCount &lt; 200)</span></a>
+<a name="227"><span class="lineNum">     227 </span><span class="lineCov">          5 :                 std::this_thread::sleep_for (std::chrono::milliseconds (5));</span></a>
 <a name="228"><span class="lineNum">     228 </span>            :             else</a>
 <a name="229"><span class="lineNum">     229 </span><span class="lineNoCov">          0 :                 pauseCount = 0;</span></a>
 <a name="230"><span class="lineNum">     230 </span>            :         }</a>
 <a name="231"><span class="lineNum">     231 </span>            :         else</a>
 <a name="232"><span class="lineNum">     232 </span>            :         {</a>
-<a name="233"><span class="lineNum">     233 </span><span class="lineCov">        260 :             pauseCount = 0;</span></a>
+<a name="233"><span class="lineNum">     233 </span><span class="lineCov">        155 :             pauseCount = 0;</span></a>
 <a name="234"><span class="lineNum">     234 </span>            :         }</a>
-<a name="235"><span class="lineNum">     235 </span><span class="lineCov">      28966 :     }</span></a>
+<a name="235"><span class="lineNum">     235 </span><span class="lineCov">      23591 :     }</span></a>
 <a name="236"><span class="lineNum">     236 </span>            : </a>
-<a name="237"><span class="lineNum">     237 </span><span class="lineCov">     211502 :     void waitForFinalNode() override</span></a>
+<a name="237"><span class="lineNum">     237 </span><span class="lineCov">     319675 :     void waitForFinalNode() override</span></a>
 <a name="238"><span class="lineNum">     238 </span>            :     {</a>
 <a name="239"><span class="lineNum">     239 </span>            :         pause();</a>
-<a name="240"><span class="lineNum">     240 </span><span class="lineCov">     211502 :     }</span></a>
+<a name="240"><span class="lineNum">     240 </span><span class="lineCov">     319675 :     }</span></a>
 <a name="241"><span class="lineNum">     241 </span>            : </a>
 <a name="242"><span class="lineNum">     242 </span>            : private:</a>
 <a name="243"><span class="lineNum">     243 </span>            :     std::vector&lt;std::thread&gt; threads;</a>
@@ -308,11 +308,11 @@
 <a name="246"><span class="lineNum">     246 </span>            :     {</a>
 <a name="247"><span class="lineNum">     247 </span>            :         for (;;)</a>
 <a name="248"><span class="lineNum">     248 </span>            :         {</a>
-<a name="249"><span class="lineNum">     249 </span><span class="lineCov">      30148 :             if (shouldExit())</span></a>
+<a name="249"><span class="lineNum">     249 </span><span class="lineCov">      24618 :             if (shouldExit())</span></a>
 <a name="250"><span class="lineNum">     250 </span><span class="lineCov">        176 :                 return;</span></a>
 <a name="251"><span class="lineNum">     251 </span>            : </a>
-<a name="252"><span class="lineNum">     252 </span><span class="lineCov">      29972 :             if (! process())</span></a>
-<a name="253"><span class="lineNum">     253 </span><span class="lineCov">      28966 :                 wait();</span></a>
+<a name="252"><span class="lineNum">     252 </span><span class="lineCov">      24442 :             if (! process())</span></a>
+<a name="253"><span class="lineNum">     253 </span><span class="lineCov">      23591 :                 wait();</span></a>
 <a name="254"><span class="lineNum">     254 </span>            :         }</a>
 <a name="255"><span class="lineNum">     255 </span>            :     }</a>
 <a name="256"><span class="lineNum">     256 </span>            : </a>
@@ -325,7 +325,7 @@
 <a name="263"><span class="lineNum">     263 </span>            :         __asm__ __volatile__ (&quot;yield&quot;);</a>
 <a name="264"><span class="lineNum">     264 </span>            :         __asm__ __volatile__ (&quot;yield&quot;);</a>
 <a name="265"><span class="lineNum">     265 </span>            :        #endif</a>
-<a name="266"><span class="lineNum">     266 </span><span class="lineCov">      16580 :     }</span></a>
+<a name="266"><span class="lineNum">     266 </span><span class="lineCov">      12547 :     }</span></a>
 <a name="267"><span class="lineNum">     267 </span>            : };</a>
 <a name="268"><span class="lineNum">     268 </span>            : </a>
 <a name="269"><span class="lineNum">     269 </span>            : </a>
