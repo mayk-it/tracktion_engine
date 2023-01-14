@@ -39,12 +39,13 @@ TimeStretcher::ElastiqueProOptions::ElastiqueProOptions (const juce::String& str
         juce::StringArray tokens;
         tokens.addTokens (string, "/", {});
 
-        if (tokens.size() == 5)
+        if (tokens.size() == 6)
         {
-            midSideStereo        = tokens[1].getIntValue() != 0;
-            syncTimeStrPitchShft = tokens[2].getIntValue() != 0;
-            preserveFormants     = tokens[3].getIntValue() != 0;
-            envelopeOrder        = tokens[4].getIntValue();
+            formantPitchHalf     = tokens[1].getIntValue() != 0;
+            midSideStereo        = tokens[2].getIntValue() != 0;
+            syncTimeStrPitchShft = tokens[3].getIntValue() != 0;
+            preserveFormants     = tokens[4].getIntValue() != 0;
+            envelopeOrder        = tokens[5].getIntValue();
             return;
         }
     }
@@ -55,7 +56,8 @@ TimeStretcher::ElastiqueProOptions::ElastiqueProOptions (const juce::String& str
 juce::String TimeStretcher::ElastiqueProOptions::toString() const
 {
     // version / midside / sync / preserve / order
-    return juce::String::formatted ("1/%d/%d/%d/%d",
+    return juce::String::formatted ("1/%d/%d/%d/%d/%d",
+                                    formantPitchHalf     ? 1 : 0,
                                     midSideStereo        ? 1 : 0,
                                     syncTimeStrPitchShft ? 1 : 0,
                                     preserveFormants     ? 1 : 0,
@@ -64,7 +66,8 @@ juce::String TimeStretcher::ElastiqueProOptions::toString() const
 
 bool TimeStretcher::ElastiqueProOptions::operator== (const ElastiqueProOptions& other) const
 {
-    return midSideStereo        == other.midSideStereo
+    return formantPitchHalf     == other.formantPitchHalf
+        && midSideStereo        == other.midSideStereo
         && syncTimeStrPitchShft == other.syncTimeStrPitchShft
         && preserveFormants     == other.preserveFormants
         && envelopeOrder        == other.envelopeOrder;
@@ -140,7 +143,8 @@ struct ElastiqueStretcher  : public TimeStretcher::Stretcher
 
         if (elastiqueMode == TimeStretcher::elastiquePro && elastiqueProOptions.preserveFormants)
         {
-            elastique->SetEnvelopeFactor (pitch);
+            float formantPitch = elastiqueProOptions.formantPitchHalf ? juce::jlimit (0.25f, 4.0f, Pitch::semitonesToRatio (semitonesUp * 0.5f)) : pitch;
+            elastique->SetEnvelopeFactor (formantPitch);
             elastique->SetEnvelopeOrder (elastiqueProOptions.envelopeOrder);
         }
 
@@ -240,7 +244,7 @@ struct SoundTouchStretcher  : public TimeStretcher::Stretcher,
         setTempo (1.0f / speedRatio);
         setPitchSemiTones (semitonesUp);
         inputOutputSampleRatio = getInputOutputSampleRatio();
-        
+
         return true;
     }
 
@@ -248,7 +252,7 @@ struct SoundTouchStretcher  : public TimeStretcher::Stretcher,
     {
         const int numAvailable = (int) numSamples();
         const int numRequiredForOneBlock = juce::roundToInt (samplesPerOutputBuffer * inputOutputSampleRatio);
-        
+
         return std::max (0, numRequiredForOneBlock - numAvailable);
     }
 
@@ -266,9 +270,9 @@ struct SoundTouchStretcher  : public TimeStretcher::Stretcher,
 
         const int numAvailable = (int) soundtouch::SoundTouch::numSamples();
         jassert (numAvailable >= 0);
-        
+
         const int numToRead = std::min (numAvailable, samplesPerOutputBuffer);
-        
+
         if (numToRead > 0)
             return readOutput (outChannels, 0, numToRead);
 
@@ -286,7 +290,7 @@ struct SoundTouchStretcher  : public TimeStretcher::Stretcher,
 
         const int numAvailable = (int) numSamples();
         const int numToRead = std::min (numAvailable, samplesPerOutputBuffer);
-        
+
         return readOutput (outChannels, 0, numToRead);
     }
 
@@ -294,7 +298,7 @@ private:
     int numChannels = 0, samplesPerOutputBuffer = 0;
     bool hasDoneFinalBlock = false;
     double inputOutputSampleRatio = 1.0;
-    
+
     int readOutput (float* const* outChannels, int offset, int numNeeded)
     {
         float* interleaved = ptrBegin();
@@ -391,7 +395,7 @@ private:
  #endif
 #endif
 namespace tracktion { inline namespace engine {
-    
+
 #undef WIN32_LEAN_AND_MEAN
 #undef Point
 #undef Component
@@ -413,7 +417,7 @@ struct RubberBandStretcher  : public TimeStretcher::Stretcher
             | RubberBand::RubberBandStretcher::OptionPitchHighConsistency
             | RubberBand::RubberBandStretcher::OptionWindowShort;
     }
-    
+
     RubberBandStretcher (double sourceSampleRate, int samplesPerBlock, int numChannels, bool percussive)
         : rubberBandStretcher ((size_t) sourceSampleRate, (size_t) numChannels,
                                getOptionFlags (percussive)),
@@ -437,18 +441,18 @@ struct RubberBandStretcher  : public TimeStretcher::Stretcher
 
         rubberBandStretcher.setPitchScale (pitch);
         rubberBandStretcher.setTimeRatio (speedRatio);
-        
+
         if (numSamplesToDrop == -1)
         {
             // This is the first speed and pitch change so set up the padding and dropping
             numSamplesToDrop = int (rubberBandStretcher.getLatency());
             int numSamplesToPad = juce::roundToInt (numSamplesToDrop * pitch);
-            
+
             if (numSamplesToPad > 0)
             {
                 AudioScratchBuffer scratch (int (rubberBandStretcher.getChannelCount()), samplesPerOutputBuffer);
                 scratch.buffer.clear();
-                
+
                 while (numSamplesToPad > 0)
                 {
                     const int numThisTime = std::min (numSamplesToPad, samplesPerOutputBuffer);
@@ -456,10 +460,10 @@ struct RubberBandStretcher  : public TimeStretcher::Stretcher
                     numSamplesToPad -= numThisTime;
                 }
             }
-            
+
             jassert (numSamplesToPad == 0);
         }
-        
+
         const bool r = rubberBandStretcher.getPitchScale() == pitch
                     && rubberBandStretcher.getTimeRatio() == speedRatio;
         jassert (r);
@@ -486,20 +490,20 @@ struct RubberBandStretcher  : public TimeStretcher::Stretcher
         // Once there is output, read this in to the output buffer
         int numAvailable = rubberBandStretcher.available();
         jassert (numAvailable >= 0);
-        
+
         if (numSamplesToDrop > 0)
         {
             auto numToDropThisTime = std::min (numSamplesToDrop, std::min (numAvailable, samplesPerOutputBuffer));
             rubberBandStretcher.retrieve (outChannels, (size_t) numToDropThisTime);
             numSamplesToDrop -= numToDropThisTime;
             jassert (numSamplesToDrop >= 0);
-            
+
             numAvailable -= numToDropThisTime;
         }
-        
+
         if (numAvailable > 0)
             return (int) rubberBandStretcher.retrieve (outChannels, (size_t) numAvailable);
-        
+
         return 0;
     }
 
@@ -512,11 +516,11 @@ struct RubberBandStretcher  : public TimeStretcher::Stretcher
             rubberBandStretcher.process (inChannels, 0, true);
             hasDoneFinalBlock = true;
         }
-        
+
         // Then get the rest of the data out of the stretcher
         const int numAvailable = rubberBandStretcher.available();
         const int numThisBlock = std::min (numAvailable, samplesPerOutputBuffer);
-        
+
         if (numThisBlock > 0)
             return (int) rubberBandStretcher.retrieve (outChannels, (size_t) numThisBlock);
 
@@ -609,7 +613,7 @@ juce::StringArray TimeStretcher::getPossibleModes (Engine& e, bool excludeMelody
     s.add (getSoundTouchNormal());
     s.add (getSoundTouchBetter());
    #endif
-    
+
    #if TRACKTION_ENABLE_TIMESTRETCH_RUBBERBAND
     s.add (getRubberBandMelodic());
     s.add (getRubberBandPercussive());
@@ -731,7 +735,7 @@ void TimeStretcher::initialise (double sourceSampleRate, int samplesPerBlock,
         case soundtouchBetter:
             break;
        #endif
-            
+
        #if TRACKTION_ENABLE_TIMESTRETCH_RUBBERBAND
         case rubberbandMelodic:
         case rubberbandPercussive:
@@ -806,7 +810,7 @@ int TimeStretcher::processData (AudioFifo& inFifo, int numSamples, AudioFifo& ou
 {
     if (stretcher == nullptr)
         return 0;
-    
+
     jassert (numSamples == stretcher->getFramesNeeded());
     AudioScratchBuffer inBuffer (inFifo.getNumChannels(), numSamples);
     AudioScratchBuffer outBuffer (outFifo.getNumChannels(), samplesPerBlockRequested);
@@ -825,7 +829,7 @@ int TimeStretcher::flush (float* const* outChannels)
 {
     if (stretcher != nullptr)
         return stretcher->flush (outChannels);
-    
+
     return 0;
 }
 
