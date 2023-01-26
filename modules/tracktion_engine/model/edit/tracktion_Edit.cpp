@@ -665,6 +665,7 @@ void Edit::setProjectItemID (ProjectItemID newID)
 Edit::ScopedRenderStatus::ScopedRenderStatus (Edit& ed, bool shouldReallocateOnDestruction)
     : edit (ed), reallocateOnDestruction (shouldReallocateOnDestruction)
 {
+    const juce::MessageManagerLock mml;
     TRACKTION_ASSERT_MESSAGE_THREAD
     jassert (edit.performingRenderCount >= 0);
     ++edit.performingRenderCount;
@@ -673,6 +674,7 @@ Edit::ScopedRenderStatus::ScopedRenderStatus (Edit& ed, bool shouldReallocateOnD
 
 Edit::ScopedRenderStatus::~ScopedRenderStatus()
 {
+    const juce::MessageManagerLock mml;
     TRACKTION_ASSERT_MESSAGE_THREAD
     jassert (edit.performingRenderCount > 0);
     --edit.performingRenderCount;
