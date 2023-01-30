@@ -418,14 +418,13 @@ void DeviceManager::changeListenerCallback (ChangeBroadcaster*)
 {
     CRASH_TRACER
 
-    if (! rebuildWaveDeviceListIfNeeded())
-    {
-        // force all plugins to be restarted, to cope with changes in rate + buffer size
-        const juce::ScopedLock sl (contextLock);
+    rebuildWaveDeviceList();
 
-        for (auto c : activeContexts)
-            c->edit.restartPlayback();
-    }
+    // force all plugins to be restarted, to cope with changes in rate + buffer size
+    const juce::ScopedLock sl (contextLock);
+
+    for (auto c : activeContexts)
+        c->edit.restartPlayback();
 }
 
 bool DeviceManager::rebuildWaveDeviceListIfNeeded()
