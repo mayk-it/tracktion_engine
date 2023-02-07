@@ -53,6 +53,7 @@ FreezePointPlugin::ScopedTrackUnsoloer::~ScopedTrackUnsoloer()
 FreezePointPlugin::ScopedTrackSoloIsolator::ScopedTrackSoloIsolator (Edit& e, Track::Array& trks)
     : edit (e), tracks (trks)
 {
+    const juce::MessageManagerLock mml;
     int i = 0;
 
     for (auto t : tracks)
@@ -75,6 +76,7 @@ FreezePointPlugin::ScopedTrackSoloIsolator::ScopedTrackSoloIsolator (Edit& e, Tr
 
 FreezePointPlugin::ScopedTrackSoloIsolator::~ScopedTrackSoloIsolator()
 {
+    const juce::MessageManagerLock mml;
     int i = 0;
 
     for (auto t : tracks)
