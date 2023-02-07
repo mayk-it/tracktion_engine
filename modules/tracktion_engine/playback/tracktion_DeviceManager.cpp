@@ -418,7 +418,14 @@ void DeviceManager::changeListenerCallback (ChangeBroadcaster*)
 {
     CRASH_TRACER
 
-    rebuildWaveDeviceList();
+    auto transports = TransportControl::getAllActiveTransports(engine);
+    auto anyTransportsPlaying = false;
+    for (auto t : transports)
+        if (t->isPlaying())
+            anyTransportsPlaying = true;
+
+    if (!anyTransportsPlaying)
+        rebuildWaveDeviceList();
 
     // force all plugins to be restarted, to cope with changes in rate + buffer size
     const juce::ScopedLock sl (contextLock);
