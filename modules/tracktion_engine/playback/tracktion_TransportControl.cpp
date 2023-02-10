@@ -1488,16 +1488,17 @@ void TransportControl::performStop()
 
         // grab this before stopping the playhead
         auto recEndTime = playHeadWrapper->getUnloopedPosition();
-        auto recEndPos  = playHeadWrapper->getPosition();
+        // auto recEndPos  = playHeadWrapper->getPosition(); -- Edited by Jamie re changes below (to suppress a warning).
 
         clearPlayingFlags();
         playHeadWrapper->stop();
         playbackContext->recordingFinished ({ transportState->startTime, recEndTime },
                                             transportState->discardRecordings);
 
-        position = transportState->discardRecordings ? transportState->startTime.get()
-                                                     : (looping ? recEndPos
-                                                                : recEndTime);
+        // We don't want tracktion to move the playhead position around. -- Edited by Jamie.
+        // position = transportState->discardRecordings ? transportState->startTime.get()
+        //                                              : (looping ? recEndPos
+        //                                                         : recEndTime);
     }
     else
     {
