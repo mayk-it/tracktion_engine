@@ -621,6 +621,7 @@ TransportControl::~TransportControl()
 
     CRASH_TRACER
     stop (false, true);
+    stopTimer();
 }
 
 //==============================================================================
