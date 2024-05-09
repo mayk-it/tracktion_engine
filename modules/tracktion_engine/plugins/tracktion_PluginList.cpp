@@ -44,6 +44,7 @@ struct PluginList::ObjectList  : public ValueTreeObjectList<Plugin>
         if (auto p = list.edit.getPluginCache().getOrCreatePluginFor (v))
         {
             p->incReferenceCount();
+            p->trackPropertiesChanged();
             return p.get();
         }
 
@@ -88,7 +89,8 @@ void PluginList::initialise (const juce::ValueTree& v)
               || v.hasType (IDs::AUDIOCLIP)
               || v.hasType (IDs::MIDICLIP)
               || v.hasType (IDs::STEPCLIP)
-              || v.hasType (IDs::EDITCLIP));
+              || v.hasType (IDs::EDITCLIP)
+              || v.hasType (IDs::CONTAINERCLIP));
 
     state = v;
     list.reset (new ObjectList (*this, state));
@@ -159,6 +161,12 @@ void PluginList::setTrackAndClip (Track* track, Clip* clip)
 {
     ownerTrack = track;
     ownerClip = clip;
+}
+
+void PluginList::updateTrackProperties()
+{
+    for (auto p : *this)
+        p->trackPropertiesChanged();
 }
 
 void PluginList::sendMirrorUpdateToAllPlugins (Plugin& plugin) const

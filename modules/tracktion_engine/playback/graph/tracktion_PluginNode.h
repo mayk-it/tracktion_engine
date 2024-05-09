@@ -74,10 +74,12 @@ private:
     TimeDuration automationAdjustmentTime;
     
     std::shared_ptr<tracktion::graph::LatencyProcessor> latencyProcessor;
+    std::optional<NodeProperties> cachedNodeProperties;
+    bool isPrepared = false;
 
     //==============================================================================
     void initialisePlugin (double sampleRateToUse, int blockSizeToUse);
-    PluginRenderContext getPluginRenderContext (TimePosition, juce::AudioBuffer<float>&);
+    PluginRenderContext getPluginRenderContext (TimeRange, juce::AudioBuffer<float>&);
     void replaceLatencyProcessorIfPossible (NodeGraph*);
 };
 

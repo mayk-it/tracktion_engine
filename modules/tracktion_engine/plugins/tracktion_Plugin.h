@@ -50,7 +50,7 @@ struct PluginRenderContext
                          const juce::AudioChannelSet& bufferChannels,
                          int bufferStart, int bufferSize,
                          MidiMessageArray* midiBuffer, double midiOffset,
-                         TimePosition editTime, bool playing, bool scrubbing, bool rendering,
+                         TimeRange editTime, bool playing, bool scrubbing, bool rendering,
                          bool allowBypassedProcessing) noexcept;
 
     /** Creates a copy of another PluginRenderContext. */
@@ -83,8 +83,8 @@ struct PluginRenderContext
     /** A time offset to add to the timestamp of any events in the MIDI buffer. */
     double midiBufferOffset = 0.0;
 
-    /** The time in seconds that the start of this context represents. */
-    TimePosition editTime;
+    /** The edit time range this context represents. */
+    TimeRange editTime;
 
     /** True if the the playhead is currently playing. */
     bool isPlaying = false;
@@ -134,7 +134,7 @@ public:
 
     //==============================================================================
     /** The name of the type, e.g. "Compressor" */
-    virtual juce::String getName() override = 0;
+    virtual juce::String getName() const override = 0;
     virtual juce::String getPluginType() = 0;
 
     virtual juce::String getVendor()                              { return "Tracktion"; }
@@ -149,7 +149,7 @@ public:
     //==============================================================================
     /** Enable/disable the plugin.  */
     virtual void setEnabled (bool);
-    bool isEnabled() const noexcept                         { return enabled; }
+    bool isEnabled() const noexcept                         { return enabled.get(); }
 
     /** This is a bit different to being enabled as when frozen a plugin can't be interacted with. */
     void setFrozen (bool shouldBeFrozen);
@@ -162,18 +162,23 @@ public:
 
     //==============================================================================
     /** Gives the plugin a chance to set itself up before being played.
+        This won't be called concurrently with the process thread.
 
         The sample rate and the average block size - although the blocks
         won't always be the same, and may be bigger.
-        
+
         Don't call this directly or the initialise count will become out of sync.
         @see baseClassInitialise
+        [[ message_thread ]]
     */
     virtual void initialise (const PluginInitialisationInfo&) = 0;
 
     /** Tells the plugin that the audio graph has changed but the plugin isn't being
         re-initialised - i.e. it's being re-used, maybe by being moved to a different
         track, etc.
+        This can be called concurrently whilst the plugin is being processed so
+        implementations of it must be thread safe.
+        [[ message_thread ]]
     */
     virtual void initialiseWithoutStopping (const PluginInitialisationInfo&)  {}
 
@@ -185,6 +190,9 @@ public:
 
     /** Should reset synth voices, tails, clear delay buffers, etc. */
     virtual void reset();
+
+    /** Track name or colour has changed. */
+    virtual void trackPropertiesChanged()                    {}
 
     //==============================================================================
     /** Process the next block of data.
@@ -377,7 +385,8 @@ public:
 
 protected:
     //==============================================================================
-    juce::CachedValue<bool> enabled, frozen, processing;
+    juce::CachedValue<AtomicWrapper<bool>> enabled;
+    juce::CachedValue<bool> frozen, processing;
     juce::CachedValue<juce::String> quickParamName;
     juce::CachedValue<EditItemID> masterPluginID, sidechainSourceID;
 
@@ -406,7 +415,7 @@ protected:
 private:
     mutable AutomatableParameter::Ptr quickControlParameter;
 
-    int initialiseCount = 0;
+    std::atomic<int> initialiseCount { 0 };
     double timeToCpuScale = 0;
     std::atomic<double> cpuUsageMs { 0 };
     std::atomic<bool> isClipEffect { false };
@@ -414,6 +423,10 @@ private:
     juce::ValueTree getConnectionsTree();
     struct WireList;
     std::unique_ptr<WireList> sidechainWireList;
+
+   #if JUCE_DEBUG
+    std::atomic<bool> isInitialisingFlag { false };
+   #endif
 
     JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR (Plugin)
 };

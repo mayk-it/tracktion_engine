@@ -58,6 +58,9 @@ PluginNode::~PluginNode()
 //==============================================================================
 tracktion::graph::NodeProperties PluginNode::getNodeProperties()
 {
+    if (cachedNodeProperties)
+        return *cachedNodeProperties;
+
     auto props = input->getNodeProperties();
 
     // Assume a stereo output here to corretly initialise plugins
@@ -72,6 +75,9 @@ tracktion::graph::NodeProperties PluginNode::getNodeProperties()
     props.latencyNumSamples = props.latencyNumSamples + latencyNumSamples;
     props.nodeID = (size_t) plugin->itemID.getRawID();
 
+    if (isPrepared)
+        cachedNodeProperties = props;
+
     return props;
 }
 
@@ -79,7 +85,8 @@ void PluginNode::prepareToPlay (const tracktion::graph::PlaybackInitialisationIn
 {
     juce::ignoreUnused (info);
     jassert (sampleRate == info.sampleRate);
-    
+    jassert (! isPrepared); // Is this being called multiple times?
+
     auto props = getNodeProperties();
 
     if (props.latencyNumSamples > 0)
@@ -103,6 +110,8 @@ void PluginNode::prepareToPlay (const tracktion::graph::PlaybackInitialisationIn
             latencyProcessor->prepareToPlay (info.sampleRate, info.blockSize, props.numberOfChannels);
         }
     }
+
+    isPrepared = true;
 }
 
 void PluginNode::prefetchBlock (juce::Range<int64_t>)
@@ -195,7 +204,9 @@ void PluginNode::process (ProcessContext& pc)
         
         // Process the plugin
         if (shouldProcessPlugin)
-            plugin->applyToBufferWithAutomation (getPluginRenderContext (blockTimeRange.getStart() + toDuration (subBlockTimeRange.getStart()), outputAudioBuffer));
+            plugin->applyToBufferWithAutomation (getPluginRenderContext ({ blockTimeRange.getStart() + toDuration (subBlockTimeRange.getStart()),
+                                                                           blockTimeRange.getStart() + toDuration (subBlockTimeRange.getEnd()) },
+                                                                         outputAudioBuffer));
 
         // Then copy the buffers to the outputs
         if (subBlockNum == 0)
@@ -245,7 +256,7 @@ void PluginNode::initialisePlugin (double sampleRateToUse, int blockSizeToUse)
     latencyNumSamples = juce::roundToInt (plugin->getLatencySeconds() * sampleRate);
 }
 
-PluginRenderContext PluginNode::getPluginRenderContext (TimePosition editTime, juce::AudioBuffer<float>& destBuffer)
+PluginRenderContext PluginNode::getPluginRenderContext (TimeRange editTime, juce::AudioBuffer<float>& destBuffer)
 {
     return { &destBuffer,
              juce::AudioChannelSet::canonicalChannelSet (destBuffer.getNumChannels()),

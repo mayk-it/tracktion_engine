@@ -105,7 +105,7 @@ public: \
     className (PluginCreationInfo); \
     ~className() override                                                   { notifyListenersOfDeletion(); } \
     \
-    virtual juce::String getName() override                                 { return TRANS(pluginName); } \
+    virtual juce::String getName() const override                           { return TRANS(pluginName); } \
     juce::String getPluginType() override                                   { return xmlTypeName; } \
     \
     Type getPluginCategory() override                                       { return pluginType; } \

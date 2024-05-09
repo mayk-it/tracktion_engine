@@ -15,12 +15,12 @@ PluginRenderContext::PluginRenderContext (juce::AudioBuffer<float>* buffer,
                                           const juce::AudioChannelSet& bufferChannels,
                                           int bufferStart, int bufferSize,
                                           MidiMessageArray* midiBuffer, double midiOffset,
-                                          TimePosition editStartTime, bool playing, bool scrubbing, bool rendering,
+                                          TimeRange editTimeRange, bool playing, bool scrubbing, bool rendering,
                                           bool shouldAllowBypassedProcessing) noexcept
     : destBuffer (buffer), destBufferChannels (bufferChannels),
       bufferStartSample (bufferStart), bufferNumSamples (bufferSize),
       bufferForMidiMessages (midiBuffer), midiBufferOffset (midiOffset),
-      editTime (editStartTime),
+      editTime (editTimeRange),
       isPlaying (playing), isScrubbing (scrubbing), isRendering (rendering),
       allowBypassedProcessing (shouldAllowBypassedProcessing)
 {}
@@ -423,7 +423,7 @@ void Plugin::setEnabled (bool b)
 {
     enabled = (b || ! canBeDisabled());
     
-    if (! enabled)
+    if (! enabled.get())
         cpuUsageMs = 0.0;
 }
 
@@ -447,6 +447,7 @@ void Plugin::reset()
 //==============================================================================
 void Plugin::baseClassInitialise (const PluginInitialisationInfo& info)
 {
+    TRACKTION_ASSERT_MESSAGE_THREAD
     const bool sampleRateOrBlockSizeChanged = (sampleRate != info.sampleRate) || (blockSizeSamples != info.blockSizeSamples);
     bool isUpdatingWithoutStopping = false;
     sampleRate = info.sampleRate;
@@ -459,13 +460,18 @@ void Plugin::baseClassInitialise (const PluginInitialisationInfo& info)
     }
 
     {
-        auto& dm = engine.getDeviceManager();
-        const juce::ScopedLock sl (dm.deviceManager.getAudioCallbackLock());
-
         if (initialiseCount++ == 0 || sampleRateOrBlockSizeChanged)
         {
             CRASH_TRACER
+           #if JUCE_DEBUG
+            isInitialisingFlag = true;
+           #endif
+
             initialise (info);
+
+           #if JUCE_DEBUG
+            isInitialisingFlag = true;
+           #endif
         }
         else
         {
@@ -473,6 +479,10 @@ void Plugin::baseClassInitialise (const PluginInitialisationInfo& info)
             initialiseWithoutStopping (info);
             isUpdatingWithoutStopping = true;
         }
+
+       #if JUCE_DEBUG
+        isInitialisingFlag = false;
+       #endif
     }
 
     {
@@ -658,6 +668,9 @@ void Plugin::applyToBufferWithAutomation (const PluginRenderContext& pc)
 
     auto& arm = edit.getAutomationRecordManager();
     jassert (initialiseCount > 0);
+   #if JUCE_DEBUG
+    jassert (! isInitialisingFlag);
+   #endif
 
     updateLastPlaybackTime();
 
@@ -670,13 +683,13 @@ void Plugin::applyToBufferWithAutomation (const PluginRenderContext& pc)
             auto& tc = edit.getTransport();
             updateParameterStreams (tc.isPlayContextActive() && ! pc.isRendering
                                         ? tc.getPosition()
-                                        : pc.editTime);
+                                        : pc.editTime.getStart());
             applyToBuffer (pc);
         }
         else
         {
             SCOPED_REALTIME_CHECK
-            updateParameterStreams (pc.editTime);
+            updateParameterStreams (pc.editTime.getStart());
             applyToBuffer (pc);
         }
     }
